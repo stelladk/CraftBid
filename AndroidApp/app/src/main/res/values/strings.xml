@@ -1,7 +1,3 @@
 <resources>
     <string name="app_name">CraftBid</string>
-    <string name="profile">Προφίλ</string>
-    <string name="login">Σύνδεση</string>
-    <string name="logout">Αποσύνδεση</string>
-    <string name="signup">Εγγραφή</string>
 </resources>
