@@ -7,6 +7,9 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.material.appbar.AppBarLayout;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,18 +21,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //set custom support action bar
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
-        getSupportActionBar().setCustomView(R.layout.app_bar);
-        getSupportActionBar().setElevation(0);
+//        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+//        getSupportActionBar().setDisplayShowCustomEnabled(true);
+//        getSupportActionBar().setCustomView(R.layout.app_bar);
+//        getSupportActionBar().setElevation(0);
 
 //        //Set Back Arrow
 //        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 //        //Change Toolbar Title
-//        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 //        toolbar.setTitle("feed");
+
+//        AppBarLayout appBar = findViewById(R.id.appBar);
+//        appBar.setExpanded(true);
     }
 
     @Override
