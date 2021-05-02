@@ -4,4 +4,5 @@
     <string name="login">Σύνδεση</string>
     <string name="logout">Αποσύνδεση</string>
     <string name="signup">Εγγραφή</string>
+    <string name="new_creations">Νέες Δημιουργίες</string>
 </resources>
