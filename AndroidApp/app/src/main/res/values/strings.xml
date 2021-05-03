@@ -10,4 +10,8 @@
     <string name="signup_creator">Εγγραφείτε ως Δημιουργός</string>
     <string name="signup_customer">Εγγραφείτε ως Πελάτης</string>
     <string name="continue_guest">Συνεχίστε ως επισκέπτης</string>
+    <string name="fullname">Ονοματεπώνυμο</string>
+    <string name="email">Email</string>
+    <string name="phone">Τηλέφωνο</string>
+    <string name="cancel">Άκυρο</string>
 </resources>

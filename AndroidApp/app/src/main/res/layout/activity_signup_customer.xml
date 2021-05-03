@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
+
+    <TextView
+        android:id="@+id/app_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textColor="?attr/android:textColor"
+        android:textSize="60sp"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/activity_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/app_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="10dp"
+        android:gravity="center"
+        android:text="@string/signup_customer"
+        android:textColor="?attr/android:textColor"
+        android:textSize="25sp"/>
+
+    <ImageView
+        android:id="@+id/photo_profile"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintTop_toBottomOf="@id/activity_label"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="10dp"
+        android:background="@drawable/ic_insert_photo"
+        android:contentDescription="Profile" />
+
+    <TextView
+        android:id="@+id/fullname_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/activity_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/photo_profile"
+        android:layout_marginHorizontal="10dp"
+        android:gravity="start"
+        android:text="@string/fullname"
+        android:textColor="?attr/android:textColor"
+        android:textSize="25sp"/>
+
+    <EditText
+        android:id="@+id/fullname"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/fullname_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/photo_profile"
+        android:layout_marginHorizontal="10dp"
+        android:hint=""
+        android:textColor="?attr/android:textColor"
+        android:textSize="25sp"/>
+
+    <TextView
+        android:id="@+id/email_label"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/photo_profile"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="10dp"
+        android:gravity="start"
+        android:text="@string/email"
+        android:textColor="?attr/android:textColor"
+        android:textSize="25sp"/>
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/photo_profile"
+        app:layout_constraintStart_toEndOf="@id/email_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="10dp"
+        android:hint=""
+        android:textSize="20sp"
+        android:textColor="?attr/android:textColor"
+        android:inputType="textEmailAddress"
+        android:importantForAutofill="no" />
+
+    <TextView
+        android:id="@+id/phone_label"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/email"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="10dp"
+        android:gravity="start"
+        android:text="@string/phone"
+        android:textColor="?attr/android:textColor"
+        android:textSize="25sp"/>
+    <EditText
+        android:id="@+id/phone"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/email"
+        app:layout_constraintStart_toEndOf="@id/phone_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="10dp"
+        android:hint=""
+        android:textSize="20sp"
+        android:textColor="?attr/android:textColor"
+        android:inputType="phone"
+        android:importantForAutofill="no" />
+
+
+
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/phone"
+        android:layout_margin="10dp"
+        android:hint="@string/username_en"
+        android:textSize="40sp"
+        android:textColor="?attr/android:textColor"
+        android:inputType="text"
+        android:importantForAutofill="no" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/username"
+        android:layout_margin="10dp"
+        android:hint="@string/password_en"
+        android:textSize="40sp"
+        android:textColor="?attr/android:textColor"
+        android:inputType="textPassword"
+        android:importantForAutofill="no" />
+
+    <EditText
+        android:id="@+id/repeat_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/password"
+        android:layout_margin="10dp"
+        android:hint="@string/password_en"
+        android:textSize="40sp"
+        android:textColor="?attr/android:textColor"
+        android:inputType="textPassword"
+        android:importantForAutofill="no" />
+
+    <Button
+        android:id="@+id/signup_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/signup"
+        android:textSize="20sp"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        app:backgroundTint="@android:color/darker_gray"
+        app:layout_constraintTop_toBottomOf="@id/repeat_password"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="10dp"
+        android:background="@android:color/holo_orange_dark"/>
+
+    <Button
+        android:id="@+id/cancel_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel"
+        android:textSize="20sp"
+        android:textAllCaps="false"
+        android:textColor="?attr/android:textColor"
+        app:backgroundTint="@android:color/transparent"
+        android:background="@null"
+        style="?android:attr/borderlessButtonStyle"
+        app:layout_constraintTop_toBottomOf="@id/signup_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="10dp"
+        android:padding="0dp"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

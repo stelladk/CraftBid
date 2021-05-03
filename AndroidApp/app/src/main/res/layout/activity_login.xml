@@ -86,7 +86,8 @@
         app:layout_constraintTop_toBottomOf="@id/login_btn"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="30dp"
-        android:padding="0dp"/>
+        android:padding="0dp"
+        android:onClick="openSignupCustomer"/>
 
     <Button
         android:id="@+id/guest_btn"
