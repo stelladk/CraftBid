@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="LoginButton" parent="Widget.AppCompat.Button">
+        <item name="backgroundTint">@android:color/darker_gray</item>
+<!--        <item name="android:textColor">?attr/android:textColor</item>-->
+
+    </style>
+</resources>

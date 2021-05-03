@@ -5,4 +5,9 @@
     <string name="logout">Αποσύνδεση</string>
     <string name="signup">Εγγραφή</string>
     <string name="new_creations">Νέες Δημιουργίες</string>
+    <string name="username_en">Username</string>
+    <string name="password_en">Password</string>
+    <string name="signup_creator">Εγγραφείτε ως Δημιουργός</string>
+    <string name="signup_customer">Εγγραφείτε ως Πελάτης</string>
+    <string name="continue_guest">Συνεχίστε ως επισκέπτης</string>
 </resources>
