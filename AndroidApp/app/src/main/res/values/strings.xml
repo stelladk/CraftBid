@@ -16,4 +16,6 @@
     <string name="cancel">Άκυρο</string>
     <string name="repeat_password">Επανάληψη Password</string>
     <string name="pass_note">*Ο κωδικός πρέπει να περιέχει τουλάχιστον έναν ειδικό χαρακτήρα</string>
+    <string name="photo_profile">Φωτογραφία προφίλ</string>
+    <string name="add_photo">Προσθήκη Φωτογραφίας</string>
 </resources>
