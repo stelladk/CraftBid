@@ -10,8 +10,10 @@
     <string name="signup_creator">Εγγραφείτε ως Δημιουργός</string>
     <string name="signup_customer">Εγγραφείτε ως Πελάτης</string>
     <string name="continue_guest">Συνεχίστε ως επισκέπτης</string>
-    <string name="fullname">Ονοματεπώνυμο</string>
+    <string name="fullname">Όνομα</string>
     <string name="email">Email</string>
     <string name="phone">Τηλέφωνο</string>
     <string name="cancel">Άκυρο</string>
+    <string name="repeat_password">Επανάληψη Password</string>
+    <string name="pass_note">*Ο κωδικός πρέπει να περιέχει τουλάχιστον έναν ειδικό χαρακτήρα</string>
 </resources>
