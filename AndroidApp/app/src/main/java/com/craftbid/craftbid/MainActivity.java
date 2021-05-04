@@ -1,5 +1,6 @@
 package com.craftbid.craftbid;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public boolean logged_in = false;
+    public boolean logged_in = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,11 +84,18 @@ public class MainActivity extends AppCompatActivity {
             case R.id.logout:
                 logged_in = false;
                 break;
+            case R.id.profile:
+                openProfile();
             default:
                 return super.onOptionsItemSelected(item);
         }
         invalidateOptionsMenu();
         return true;
+    }
+
+    private void openProfile() {
+        Intent profile = new Intent(MainActivity.this, CustomerProfile.class);
+        startActivity(profile);
     }
 
 }
