@@ -105,4 +105,14 @@ public class S3Bucket {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Deletes file in specific folder in S3 bucket
+	 * @param folderName folder in S3 bucket
+	 * @param fileName file's name to be deleted
+	 * @param s3Connection
+	 */
+	public static void deleteFile(String folderName, String fileName, AmazonS3 s3Connection) {
+		s3Connection.deleteObject(Constants.BUCKET_NAME, folderName+"/"+fileName);
+	}
 }
