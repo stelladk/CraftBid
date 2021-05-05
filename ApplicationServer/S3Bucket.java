@@ -1,5 +1,9 @@
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import com.amazonaws.auth.AWSCredentials;
@@ -9,6 +13,8 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 
@@ -66,5 +72,37 @@ public class S3Bucket {
 		}
 		// delete folder
 		s3Connection.deleteObject(Constants.BUCKET_NAME, folderName);
+	}
+	
+	/**
+	 * Uploads file to specific folder in S3 bucket
+	 * @param folderName the name of the folder in S3 bucket
+	 * @param fileName the name of the file shown in S3 bucket
+	 * @param file File object to be uploaded
+	 * @param s3Connection
+	 */
+	public static void addToFolder(String folderName, String fileName, File file, AmazonS3 s3Connection) {
+		PutObjectRequest request = new PutObjectRequest(Constants.BUCKET_NAME, folderName+"/"+fileName, file);
+		s3Connection.putObject(request);
+	}
+	
+	/**
+	 * Gets file from specific folder in S3 bucket and stores it locally
+	 * @param folderName the name of the folder in S3 bucket
+	 * @param fileName the file to be retrieved and stored locally
+	 * @param s3Connection
+	 */
+	public static void getFromFolder(String folderName, String fileName, AmazonS3 s3Connection) {
+		S3Object image = s3Connection.getObject(Constants.BUCKET_NAME, folderName+"/"+fileName);
+		S3ObjectInputStream in = image.getObjectContent();
+		
+		// where the images will be stored locally (to be changed for Android)
+		String outPath = "src/"+fileName;
+		
+		try {
+			Files.copy(in, Paths.get(outPath));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
