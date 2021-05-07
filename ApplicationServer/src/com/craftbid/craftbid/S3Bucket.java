@@ -1,3 +1,5 @@
+package com.craftbid.craftbid;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;

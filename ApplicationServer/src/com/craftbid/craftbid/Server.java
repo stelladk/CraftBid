@@ -1,3 +1,5 @@
+package com.craftbid.craftbid;
+
 import java.net.*;
 import java.io.*;
 
@@ -7,6 +9,7 @@ public class Server {
     ServerSocket requests;
 
     public Server(String ip,int port,int concurrent_requests) {
+        System.out.println("Starting server in ip "+ip+" and port "+port);
         this.ip = ip;
         this.port = port;
         this.concurrent_requests = concurrent_requests;
@@ -57,5 +60,9 @@ public class Server {
             System.err.println("Unable to process request");
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) {
+        new Server("192.168.2.2",6500,100);
     }
 }
