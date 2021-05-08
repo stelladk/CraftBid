@@ -66,33 +66,36 @@ public class Server {
             output = new ObjectOutputStream(request.getOutputStream());
             input = new ObjectInputStream(request.getInputStream());
             switch((String)input.readObject()) { //clients send a request type
+                //LOGIN
                 case "LOGIN":
                     System.out.println("Received a new LOGIN request");
-                    username = (String)input.readObject();
-                    password = (String)input.readObject();
-                    System.out.println("Username= "+username+",password = "+password);
+                    username = (String) input.readObject();
+                    password = (String) input.readObject();
+                    System.out.println("Username= " + username + ",password = " + password);
                     //check if credentials are correct
-                    query = "SELECT * FROM UserInfo WHERE username= \'"+username+"\';";
+                    query = "SELECT * FROM UserInfo WHERE username= \'" + username + "\';";
                     stm = db_connect.createStatement();
                     res = stm.executeQuery(query);
-                    if(res.next()) {
+                    if (res.next()) {
                         System.out.println("Username is correct.");
                         String pass = res.getString("password");
-                        if(pass.equals(password)) {
+                        if (pass.equals(password)) {
                             System.out.println("Password correct! Login Successful");
                             output.writeObject("LOGIN SUCCESSFUL");
                             output.flush();
-                        }else {
+                        } else {
                             System.out.println("Password incorrect!");
                             output.writeObject("WRONG PASSWORD");
                             output.flush();
                         }
-                    }else{
+                    } else {
                         System.out.println("Username doesn't exist");
                         output.writeObject("WRONG USERNAME");
                         output.flush();
                     }
                     break;
+
+                //SIGNUP FOR CUSTOMERS
                 case "SIGNUP_USER":
                     System.out.println("Received a new SIGNUP_USER request");
                     username = (String)input.readObject();
@@ -113,8 +116,11 @@ public class Server {
                         output.flush();
                     }else {
                         System.out.println("Username doesn't exist. Registering user!");
-                        //TODO: insert new tuple to db
-
+                        //insert new tuple to db
+                        query = "INSERT INTO UserInfo (username,password,fullname,email,phoneNumber,description,photo) "+
+                                "VALUES(\'"+username+"\',\'"+password+"\',\'"+fullname+"\',\'"+email+"\' " +
+                                ",NULL,NULL,NULL);"; //TODO: insert nulls to table only if user sent "NULL"
+                        stm.executeUpdate(query);
                         output.writeObject("REGISTER SUCCESSFUL");
                         output.flush();
                     }
