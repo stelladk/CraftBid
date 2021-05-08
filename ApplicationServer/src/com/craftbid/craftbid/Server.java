@@ -45,41 +45,61 @@ public class Server {
     }
 
     public void serve_request(Socket request) {
+        //load jdbc driver and connect to the database
+        Connection db_connect = null;
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            String db_url = "jdbc:sqlserver://"+Constants.HOST+":"+Constants.PORT+";databaseName="+Constants.DATABASE;
+            db_connect = DriverManager.getConnection(db_url,Constants.USER,Constants.PASSWORD);
+        }catch (ClassNotFoundException | SQLException e) {
+            System.err.println("Unable to connect to database!");
+            return;
+        }
+
+        //serve the request
         ObjectInputStream input; 
         ObjectOutputStream output;
         try {
             output = new ObjectOutputStream(request.getOutputStream());
             input = new ObjectInputStream(request.getInputStream());
             switch((String)input.readObject()) { //clients send a request type
-                case "REQUEST TYPE 1":
-                    //execute code for this request type (read database info, write to database tables, process data)
+                case "LOGIN":
+                    String username = (String)input.readObject();
+                    String password = (String)input.readObject();
+                    System.out.println("Received a new LOGIN request with username= "+username+" and password= "+password);
+                    //check if credentials are correct
+                    String query = "SELECT * FROM UserInfo WHERE username=="+username+";";
+                    Statement stm = db_connect.createStatement();
+                    ResultSet res = stm.executeQuery(query);
+                    if(res.next()) {
+                        System.out.println("Username is correct.");
+                        String pass = res.getString("password");
+                        if(pass.equals(password)) {
+                            System.out.println("Password correct! Login Successful");
+                            output.writeObject("LOGIN SUCCESSFUL");
+                            output.flush();
+                        }else {
+                            System.out.println("Password incorrect!");
+                            output.writeObject("WRONG PASSWORD");
+                            output.flush();
+                        }
+                    }else{
+                        System.out.println("Username doesn't exist");
+                        output.writeObject("WRONG USERNAME");
+                        output.flush();
+                    }
                     break;
                 case "REQUEST TYPE 2":
                     //execute code for this request type (read database info, write to database tables, process data)
                     break;
             }
-        }catch(IOException | ClassNotFoundException e) {
+        }catch(IOException | ClassNotFoundException | SQLException e) {
             System.err.println("Unable to process request");
             e.printStackTrace();
         }
     }
 
     public static void main(String[] args) {
-        //new Server("192.168.2.2",6500,100);
-
-        //load jdbc driver
-        try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            //test connection to database
-            Connection db_connect = null;
-            String db_url = "jdbc:sqlserver://"+Constants.HOST+":"+Constants.PORT+";databaseName="+Constants.DATABASE;
-            db_connect = DriverManager.getConnection(db_url,Constants.USER,Constants.PASSWORD);
-
-            String query = "SELECT * FROM Creator;";
-            Statement stm = db_connect.createStatement();
-            ResultSet res = stm.executeQuery(query);
-        }catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
+        new Server("192.168.2.2",6500,100);
     }
 }
