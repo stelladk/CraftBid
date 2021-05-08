@@ -60,6 +60,7 @@ public class Server {
         ObjectInputStream input; 
         ObjectOutputStream output;
         String query,username,password,fullname,email,phone,desc;
+        boolean is_creator;
         Statement stm;
         ResultSet res;
         try {
@@ -95,7 +96,7 @@ public class Server {
                     }
                     break;
 
-                //SIGNUP FOR CUSTOMERS
+                //SIGNUP FOR CUSTOMERS AND CREATORS
                 case "SIGNUP_USER":
                     System.out.println("Received a new SIGNUP_USER request");
                     username = (String)input.readObject();
@@ -104,6 +105,7 @@ public class Server {
                     email = (String)input.readObject();
                     phone = (String)input.readObject(); //send "NULL" if none given
                     desc = (String)input.readObject(); //send "NULL" if none given
+                    is_creator = (boolean)input.readObject();
                     System.out.println("Username= "+username+",password = "+password+
                                         ",FullName= "+fullname+",email= "+email+",phone= "+phone+",description= "+desc);
                     //check if username already exists
@@ -120,6 +122,12 @@ public class Server {
                         query = "INSERT INTO UserInfo (username,password,fullname,email,phoneNumber,description,photo) "+
                                 "VALUES(\'"+username+"\',\'"+password+"\',\'"+fullname+"\',\'"+email+"\' " +
                                 ",NULL,NULL,NULL);"; //TODO: insert nulls to table only if user sent "NULL"
+
+                        //if is creator
+                        if(is_creator) {
+                            System.out.println("User is a creator. Adding more info");
+                            //TODO: signup creator
+                        }
                         stm.executeUpdate(query);
                         output.writeObject("REGISTER SUCCESSFUL");
                         output.flush();
