@@ -59,18 +59,22 @@ public class Server {
         //serve the request
         ObjectInputStream input; 
         ObjectOutputStream output;
+        String query,username,password,fullname,email,phone,desc;
+        Statement stm;
+        ResultSet res;
         try {
             output = new ObjectOutputStream(request.getOutputStream());
             input = new ObjectInputStream(request.getInputStream());
             switch((String)input.readObject()) { //clients send a request type
                 case "LOGIN":
-                    String username = (String)input.readObject();
-                    String password = (String)input.readObject();
-                    System.out.println("Received a new LOGIN request with username= "+username+" and password= "+password);
+                    System.out.println("Received a new LOGIN request");
+                    username = (String)input.readObject();
+                    password = (String)input.readObject();
+                    System.out.println("Username= "+username+",password = "+password);
                     //check if credentials are correct
-                    String query = "SELECT * FROM UserInfo WHERE username=="+username+";";
-                    Statement stm = db_connect.createStatement();
-                    ResultSet res = stm.executeQuery(query);
+                    query = "SELECT * FROM UserInfo WHERE username= \'"+username+"\';";
+                    stm = db_connect.createStatement();
+                    res = stm.executeQuery(query);
                     if(res.next()) {
                         System.out.println("Username is correct.");
                         String pass = res.getString("password");
@@ -86,6 +90,32 @@ public class Server {
                     }else{
                         System.out.println("Username doesn't exist");
                         output.writeObject("WRONG USERNAME");
+                        output.flush();
+                    }
+                    break;
+                case "SIGNUP_USER":
+                    System.out.println("Received a new SIGNUP_USER request");
+                    username = (String)input.readObject();
+                    password = (String)input.readObject();
+                    fullname = (String)input.readObject();
+                    email = (String)input.readObject();
+                    phone = (String)input.readObject(); //send "NULL" if none given
+                    desc = (String)input.readObject(); //send "NULL" if none given
+                    System.out.println("Username= "+username+",password = "+password+
+                                        ",FullName= "+fullname+",email= "+email+",phone= "+phone+",description= "+desc);
+                    //check if username already exists
+                    query = "SELECT * FROM UserInfo WHERE username= \'"+username+"\';";
+                    stm = db_connect.createStatement();
+                    res = stm.executeQuery(query);
+                    if(res.next()) {
+                        System.out.println("Username already exists!");
+                        output.writeObject("USER ALREADY EXISTS");
+                        output.flush();
+                    }else {
+                        System.out.println("Username doesn't exist. Registering user!");
+                        //TODO: insert new tuple to db
+
+                        output.writeObject("REGISTER SUCCESSFUL");
                         output.flush();
                     }
                     break;
