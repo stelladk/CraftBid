@@ -19,10 +19,10 @@ CREATE TABLE Listing (
 	reward_points INT DEFAULT(0),
 	quantity INT DEFAULT(1),
 	is_located INT FOREIGN KEY REFERENCES Location(id) NOT NULL,
-	published_by VARCHAR(20) FOREIGN KEY REFERENCES Creator(username)
+	published_by VARCHAR(20) FOREIGN KEY REFERENCES Creator(username) NOT NULL
 );
 
 CREATE TABLE Photo (
-	id INT PRIMARY KEY FOREIGN KEY REFERENCES Listing(id),
-	path VARCHAR(40) NOT NULL
+	path VARCHAR(40) PRIMARY KEY,
+	listing INT FOREIGN KEY REFERENCES Listing(id) NOT NULL
 );
