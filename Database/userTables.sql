@@ -19,3 +19,9 @@ CREATE TABLE Expertise (
 );
 ALTER TABLE Creator 
 ADD hasExpertise VARCHAR(20) FOREIGN KEY REFERENCES Expertise(name) NOT NULL;
+-- Later changes
+ALTER TABLE UserInfo
+ADD UNIQUE(email);
+
+ALTER TABLE Creator
+ALTER COLUMN username VARCHAR(20) NOT NULL; 
