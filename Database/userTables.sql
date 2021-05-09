@@ -13,6 +13,7 @@ CREATE TABLE Creator (
 	isFreelancer BIT NOT NULL,
 	phoneNumber VARCHAR(15) NOT NULL
 );
+ALTER TABLE Creator ADD PRIMARY KEY(username);
 
 CREATE TABLE Expertise (
 	name VARCHAR(20) PRIMARY KEY
