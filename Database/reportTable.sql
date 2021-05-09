@@ -6,3 +6,10 @@ CREATE TABLE Report(
 	date DATE NOT NULL,
 	description VARCHAR(MAX)
 );
+
+-- Later changes
+ALTER TABLE Report
+ALTER COLUMN submitted_by VARCHAR(20) NOT NULL;
+
+ALTER TABLE Report
+ALTER COLUMN refers_to VARCHAR(20) NOT NULL;
