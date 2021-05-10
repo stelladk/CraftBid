@@ -80,7 +80,6 @@ public class Server {
                     break;
                 case "REQUEST_PROFILE":
                     request_profile(db_connect,input,output);
-                    //TODO request user and creator profile info
                     break;
                 case "CREATE_LISTING":
                     //TODO add listing to database
@@ -107,7 +106,7 @@ public class Server {
                     //TODO add report to database
                     break;
                 case "VIEW_REWARDS":
-                    //TODO request list of creator's rewards
+                    view_rewards(db_connect,input,output);
                     break;
                 case "ADD_REWARD":
                     //TODO add reward for creator in database
@@ -249,7 +248,7 @@ public class Server {
     /** REQUEST PROFILE
      * Request the profile information of a user or creator */
     public void request_profile(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
-        System.out.println("Received a new LOGIN request");
+        System.out.println("Received a new REQUEST_PROFILE request");
         try {
             String username = (String) input.readObject();
             boolean is_creator = (boolean)input.readObject();
@@ -305,6 +304,49 @@ public class Server {
             e.printStackTrace();
         }
     }//request_profile
+
+
+    /** VIEW REWARDS
+     * A list of all rewards a creator offers */
+    public void view_rewards(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new VIEW_REWARDS request");
+        try {
+            String username = (String) input.readObject();
+            boolean is_creator = (boolean)input.readObject();
+            String query = "SELECT * FROM UserInfo WHERE username= \'" + username + "\';";
+            Statement stm = db_connect.createStatement();
+            ResultSet res = stm.executeQuery(query);
+            ArrayList<Reward> rewards =new ArrayList<Reward>();
+            while(res.next()) {
+                //TODO create a list of rewards
+                int price_in_points = res.getInt("price_in_points");
+                int id = res.getInt("id");
+                String name = res.getString("name");
+                String photo = res.getString("photo");
+                rewards.add(new Reward(id,price_in_points,name,photo,username));
+            }
+            output.writeObject(rewards);
+            output.flush();
+
+            //if the user is not the creator, get number of points for this creator
+            if(!is_creator) {
+                //get the username of the customer
+                String customer = (String)input.readObject();
+                query = "SELECT * FROM RewardPoint WHERE creator= \'" + username + "\' AND client = \'" + customer + "\' ;";
+                stm = db_connect.createStatement();
+                res = stm.executeQuery(query);
+                int points = 0;
+                if(res.next()) {
+                    points = res.getInt("points");
+                }
+                output.writeObject(points);
+                output.flush();
+            }
+        }catch(IOException | ClassNotFoundException| SQLException e) {
+            System.err.println("Unable to process login request");
+            e.printStackTrace();
+        }
+    }//load main screen
 
 
     public static void main(String[] args) {
