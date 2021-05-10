@@ -103,7 +103,7 @@ public class Server {
                     //TODO add evaluation to database
                     break;
                 case "CREATE_REPORT":
-                    //TODO add report to database
+                    create_report(db_connect,input,output);
                     break;
                 case "VIEW_REWARDS":
                     view_rewards(db_connect,input,output);
@@ -345,6 +345,24 @@ public class Server {
         }
     }//request_profile
 
+
+    /** CREATE REPORT
+     * Customer submits a new report for a creator */
+    public void create_report(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new CREATE_REPORT request");
+        try {
+            Report report = (Report)input.readObject(); //android client sends a Report object with all the info for this Report
+            //add the reward to the database
+            String query = "INSERT INTO Report(id,submitted_by,refers_to,reason,date,description) "+
+                    "VALUES(\'"+report.getId()+"\',"+report.getSubmitted_by()+",\'"+report.getRefers_to()+"\',\'"
+                    +report.getReason()+"\',\'"+report.getDate()+"\',\'"+report.getDescription()+"\');";
+            Statement stm = db_connect.createStatement();
+            stm.executeUpdate(query);
+        }catch(IOException | ClassNotFoundException| SQLException e) {
+            System.err.println("Unable to process create report request");
+            e.printStackTrace();
+        }
+    }//create report
 
     /** VIEW REWARDS
      * A list of all rewards a creator offers */
