@@ -79,6 +79,7 @@ public class Server {
                     //TODO request search results
                     break;
                 case "REQUEST_PROFILE":
+                    request_profile(db_connect,input,output);
                     //TODO request user and creator profile info
                     break;
                 case "CREATE_LISTING":
@@ -243,6 +244,68 @@ public class Server {
             e.printStackTrace();
         }
     }//load main screen
+
+
+    /** REQUEST PROFILE
+     * Request the profile information of a user or creator */
+    public void request_profile(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new LOGIN request");
+        try {
+            String username = (String) input.readObject();
+            boolean is_creator = (boolean)input.readObject();
+            //FOR ALL USERS: Full name, email,phone number, description, photo
+            String query = "SELECT * FROM UserInfo WHERE username= \'" + username + "\';";
+            Statement stm = db_connect.createStatement();
+            ResultSet res = stm.executeQuery(query);
+            if (res.next()) {
+                System.out.println("Got all information for this user.");
+                ArrayList<String> info = new ArrayList<String>();
+                info.add(res.getString("fullname"));
+                info.add(res.getString("email"));
+                info.add(res.getString("phoneNumber"));
+                info.add(res.getString("description"));
+                String photo = res.getString("photo");
+                output.writeObject(info); //send basic info
+                //TODO send photo too
+                output.flush();
+            }
+
+            //FOR CUSTOMERS: list of all evaluations they've posted
+            if(!is_creator) {
+                query = "SELECT * FROM Evaluation WHERE submitted_by= \'" + username + "\' ORDER BY date;";
+                stm = db_connect.createStatement();
+                res = stm.executeQuery(query);
+                ArrayList<Evaluation> evaluations =new ArrayList<Evaluation>();
+                while(res.next()) {
+                    //TODO create a list of Evaluations
+                }
+            }
+            //TODO FOR CREATORS: list of all listings they've posted, list of all evaluations
+            else {
+                //evaluations
+                query = "SELECT * FROM Evaluation WHERE refers_to= \'" + username + "\' ORDER BY date;";
+                stm = db_connect.createStatement();
+                res = stm.executeQuery(query);
+                ArrayList<Evaluation> evaluations =new ArrayList<Evaluation>();
+                while(res.next()) {
+                    //TODO create a list of Evaluations
+                }
+                //listings
+                //evaluations
+                query = "SELECT * FROM Listing WHERE published_by= \'" + username + "\' ;"; //TODO orderby date
+                stm = db_connect.createStatement();
+                res = stm.executeQuery(query);
+                ArrayList<Listing> listings =new ArrayList<Listing>();
+                while(res.next()) {
+                    //TODO create a list of Listings
+                }
+            }
+        }catch(IOException | ClassNotFoundException | SQLException e) {
+            System.err.println("Unable to process login request");
+            e.printStackTrace();
+        }
+    }//request_profile
+
 
     public static void main(String[] args) {
         new Server("192.168.2.2",6500,100);
