@@ -78,32 +78,31 @@ public class S3Bucket {
 	
 	/**
 	 * Uploads file to specific folder in S3 bucket
-	 * @param folderName the name of the folder in S3 bucket
-	 * @param fileName the name of the file shown in S3 bucket
+	 * @param filepath the new file's path in S3 bucket (folderName/fileName)
 	 * @param file File object to be uploaded
 	 * @param s3Connection
 	 */
-	public static void addToFolder(String folderName, String fileName, File file, AmazonS3 s3Connection) {
-		PutObjectRequest request = new PutObjectRequest(Constants.BUCKET_NAME, folderName+"/"+fileName, file);
+	public static void addToFolder(String filepath, File file, AmazonS3 s3Connection) {
+		PutObjectRequest request = new PutObjectRequest(Constants.BUCKET_NAME, filepath, file);
 		s3Connection.putObject(request);
 	}
 	
 	/**
 	 * Gets file from specific folder in S3 bucket and stores it locally
-	 * @param folderName the name of the folder in S3 bucket
-	 * @param fileName the file to be retrieved and stored locally
+	 * @param filepath the file's path in S3 bucket to be retrieved and stored locally (folderName/fileName)
 	 * @param s3Connection
 	 */
-	public static void getFromFolder(String folderName, String fileName, AmazonS3 s3Connection) {
-		S3Object image = s3Connection.getObject(Constants.BUCKET_NAME, folderName+"/"+fileName);
+	public static void getFromFolder(String filepath, AmazonS3 s3Connection) {
+		S3Object image = s3Connection.getObject(Constants.BUCKET_NAME, filepath);
 		S3ObjectInputStream in = image.getObjectContent();
 		
 		// where the images will be stored locally (to be changed for Android)
-		String outPath = "src/"+fileName;
+		String outPath = "src/S3Output/"+filepath.substring(filepath.indexOf("/")+1);
 		
 		try {
 			Files.copy(in, Paths.get(outPath));
 		} catch (IOException e) {
+			// exception if file already exists
 			e.printStackTrace();
 		}
 	}
@@ -114,7 +113,7 @@ public class S3Bucket {
 	 * @param fileName file's name to be deleted
 	 * @param s3Connection
 	 */
-	public static void deleteFile(String folderName, String fileName, AmazonS3 s3Connection) {
-		s3Connection.deleteObject(Constants.BUCKET_NAME, folderName+"/"+fileName);
+	public static void deleteFile(String filepath, AmazonS3 s3Connection) {
+		s3Connection.deleteObject(Constants.BUCKET_NAME, filepath);
 	}
 }
