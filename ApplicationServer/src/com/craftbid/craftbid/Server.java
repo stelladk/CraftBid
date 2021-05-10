@@ -153,7 +153,7 @@ public class Server {
             System.err.println("Unable to process login request");
             e.printStackTrace();
         }
-    }
+    }//login
 
     /** SIGNUP
      * Basic signup first, same for all users. Check if username and email already exist and register user
@@ -183,30 +183,44 @@ public class Server {
                 output.flush();
             }else {
                 //TODO: check if email already exists
-                //...
+                query = "SELECT * FROM UserInfo WHERE email= \'"+email+"\';";
+                stm = db_connect.createStatement();
+                res = stm.executeQuery(query);
+                if(res.next()) {
+                    System.out.println("Email already exists!");
+                    output.writeObject("EMAIL ALREADY EXISTS");
+                    output.flush();
+                }else {
+                    System.out.println("Username and email don't exist. Registering user!");
+                    //insert new tuple to db
+                    query = "INSERT INTO UserInfo (username,password,fullname,email,phoneNumber,description,photo) "+
+                            "VALUES(\'"+username+"\',\'"+password+"\',\'"+fullname+"\',\'"+email+"\'," +
+                            (phone.equals("NULL")?phone : "\'"+phone+"\'")+","+
+                            (desc.equals("NULL")?desc : "\'"+desc+"\'")+","+
+                            (photo.equals("NULL")?photo : "\'"+photo+"\'")+");"; //insert nulls to table only if user sent "NULL"
+                    stm.executeUpdate(query);
+                    output.writeObject("BASIC REGISTER SUCCESSFUL");
+                    output.flush();
 
-                System.out.println("Username and email don't exist. Registering user!");
-                //insert new tuple to db
-                query = "INSERT INTO UserInfo (username,password,fullname,email,phoneNumber,description,photo) "+
-                        "VALUES(\'"+username+"\',\'"+password+"\',\'"+fullname+"\',\'"+email+"\' " +
-                        ",NULL,NULL,NULL);"; //TODO: insert nulls to table only if user sent "NULL"
-                stm.executeUpdate(query);
-                output.writeObject("BASIC REGISTER SUCCESSFUL");
-                output.flush();
-
-                //if is creator
-                //creators must send phone, also some additional info (the android clients perform validation checking)
-                if(is_creator) {
-                    System.out.println("User is a creator. Adding more info");
-                    //TODO: signup creator
+                    //if is creator
+                    //creators phone is never null, also some additional info (the android clients perform validation checking)
+                    if(is_creator) {
+                        System.out.println("User is a creator. Adding more info");
+                        int bit = (Integer)input.readObject();
+                        String expertise = (String)input.readObject();
+                        query = "INSERT INTO Creator (username,isFreelancer,phoneNumber,hasExpertise) "+
+                                "VALUES(\'"+username+"\',"+bit+",\'"+phone+"\',\'"+expertise+"\');";
+                        stm.executeUpdate(query);
+                        output.writeObject("CREATOR REGISTER SUCCESSFUL");
+                        output.flush();
+                    }
                 }
-
             }
         }catch(IOException | ClassNotFoundException | SQLException e) {
             System.err.println("Unable to process login request");
             e.printStackTrace();
         }
-    }
+    }//signup
 
     public static void main(String[] args) {
         new Server("192.168.2.2",6500,100);
