@@ -26,3 +26,20 @@ CREATE TABLE Photo (
 	path VARCHAR(40) PRIMARY KEY,
 	listing INT FOREIGN KEY REFERENCES Listing(id) NOT NULL
 );
+
+-- issue related changes
+ALTER TABLE Listing
+ADD date_published DATE NOT NULL, 
+    thumbnail VARCHAR(40) NOT NULL;
+
+ALTER TABLE Listing DROP CONSTRAINT FK__Listing__is_loca__5AEE82B9;
+
+ALTER TABLE Location DROP CONSTRAINT PK__Location__3213E83F8AFA903D;
+
+ALTER TABLE Location ALTER COLUMN name VARCHAR(50) NOT NULL;
+ALTER TABLE Location ADD PRIMARY KEY(name);
+
+ALTER TABLE Location DROP COLUMN id;
+
+ALTER TABLE Listing ALTER COLUMN is_located VARCHAR(50) NOT NULL;
+ALTER TABLE Listing ADD FOREIGN KEY(is_located) REFERENCES Location(name);

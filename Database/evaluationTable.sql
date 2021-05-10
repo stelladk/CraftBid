@@ -5,3 +5,6 @@ CREATE TABLE Evaluation (
 	rating INT NOT NULL,
 	date DATE NOT NULL
 );
+
+-- github issue related
+ALTER TABLE Evaluation ADD comment VARCHAR(100);
