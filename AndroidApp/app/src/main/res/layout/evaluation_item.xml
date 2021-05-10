@@ -50,7 +50,7 @@
         android:textStyle="bold"/>
 
     <TextView
-        android:id="@+id/reviewed_username"
+        android:id="@+id/refered_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/reviewer_username"
@@ -81,7 +81,7 @@
         android:id="@+id/comments"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/reviewed_username"
+        app:layout_constraintTop_toBottomOf="@id/refered_username"
         app:layout_constraintStart_toEndOf="@id/reviewer_profile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

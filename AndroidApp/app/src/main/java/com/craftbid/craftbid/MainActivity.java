@@ -6,15 +6,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.craftbid.craftbid.adapters.FeedRecyclerAdapter;
-import com.craftbid.craftbid.model.Listing;
-import com.google.android.material.appbar.AppBarLayout;
+import com.craftbid.craftbid.model.Thumbnail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,18 +44,18 @@ public class MainActivity extends AppCompatActivity {
 //        AppBarLayout appBar = findViewById(R.id.appBar);
 //        appBar.setExpanded(true);
 
-        List<Listing> listings = new ArrayList<>();
-        listings.add(new Listing(0, "Πλεκτή τσάντα", "Πλεκτά, Τσάντες", 0, 5, R.drawable.bag));
-        listings.add(new Listing(1, "Βραχιόλια", "Κοσμήματα", 5, 0, R.drawable.bracelet));
-        listings.add(new Listing(2, "Πλεκτά για όλους", "Πλεκτά", 15, 15, R.drawable.knit));
-        listings.add(new Listing(3, "Πασχαλινό κερί χειροποίητο", "Κεριά", 0, 20, R.drawable.candle));
+        List<Thumbnail> thumbnails = new ArrayList<>();
+        thumbnails.add(new Thumbnail(0, "Πλεκτή τσάντα", "Ωραιότατη πλεκτή τσάντα πάρε πάρε όλα 5 ευρώ αρχική","Πλεκτά, Τσάντες", "R.drawable.bag", 5));
+        thumbnails.add(new Thumbnail(1, "Βραχιόλια", "Βραχιολι χειροποιητο αν θες το παιρνεις", "Κοσμήματα",  "R.drawable.bracelet", 5));
+        thumbnails.add(new Thumbnail(2, "Πλεκτά για όλους", "Πλεκτά ρούχα για όλες τις ηλικίε δεχόμαστε παραγγελίες", "Πλεκτά",  "R.drawable.knit", 15));
+        thumbnails.add(new Thumbnail(3, "Πασχαλινό κερί χειροποίητο", "Κεριά Πασχαλινά για την Ανάσταση. Χρόνια Πολλά!", "Κεριά", "R.drawable.candle",  20));
 
         RecyclerView recycler = findViewById(R.id.feed_recyclerview);
 //        RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         GridLayoutManager manager = new GridLayoutManager(this, 2);
         manager.setOrientation(RecyclerView.VERTICAL);
         recycler.setLayoutManager(manager);
-        FeedRecyclerAdapter adapter = new FeedRecyclerAdapter(listings);
+        FeedRecyclerAdapter adapter = new FeedRecyclerAdapter(thumbnails);
         recycler.setAdapter(adapter);
     }
 

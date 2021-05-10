@@ -54,7 +54,7 @@
             android:ellipsize="end" />
 
         <TextView
-            android:id="@+id/label_item"
+            android:id="@+id/category_item"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_alignParentStart="true"
@@ -63,6 +63,7 @@
             android:layout_marginHorizontal="10dp"
             android:gravity="start"
             android:text="grocery"
+            android:textAllCaps="true"
             android:textColor="?attr/colorOnPrimary"
             android:textSize="15sp"
             android:lines="1"
@@ -76,8 +77,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_below="@id/title_item"
-            android:layout_alignEnd="@id/label_item"
-            android:layout_alignRight="@id/label_item"
+            android:layout_alignEnd="@id/category_item"
+            android:layout_alignRight="@id/category_item"
             android:layout_marginHorizontal="10dp"
             android:gravity="end"
             android:text="15€"

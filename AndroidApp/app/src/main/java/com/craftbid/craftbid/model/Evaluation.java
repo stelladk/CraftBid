@@ -1,20 +1,20 @@
 package com.craftbid.craftbid.model;
 
-public class Evaluation {
-    private int id;
-    private String date;
-    private int rating;
-//    private User reviewer;
-//    private Creator reviewed;
-    private String reviewer, reviewed;
-    private String comments;
+import java.io.Serializable;
+import java.util.Date;
 
-    public Evaluation(int id, String date, int rating, String reviewer, String reviewed, String comments) {
+public class Evaluation implements Serializable{
+    private int id;
+    private String submitted_by, reffers_to, comments;
+    private int rating;
+    private Date date;
+
+    public Evaluation(int id, String submitted_by, String reffers_to, int rating,Date date, String comments) {
         this.id = id;
+        this.submitted_by = submitted_by;
+        this.reffers_to = reffers_to;
         this.date = date;
         this.rating = rating;
-        this.reviewer = reviewer;
-        this.reviewed = reviewed;
         this.comments = comments;
     }
 
@@ -26,14 +26,6 @@ public class Evaluation {
         this.id = id;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     public int getRating() {
         return rating;
     }
@@ -42,27 +34,35 @@ public class Evaluation {
         this.rating = rating;
     }
 
-    public String getReviewer() {
-        return reviewer;
-    }
-
-    public void setReviewer(String reviewer) {
-        this.reviewer = reviewer;
-    }
-
-    public String getReviewed() {
-        return reviewed;
-    }
-
-    public void setReviewed(String reviewed) {
-        this.reviewed = reviewed;
-    }
-
     public String getComments() {
         return comments;
     }
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public String getSubmitted_by() {
+        return submitted_by;
+    }
+
+    public void setSubmitted_by(String submitted_by) {
+        this.submitted_by = submitted_by;
+    }
+
+    public String getReffers_to() {
+        return reffers_to;
+    }
+
+    public void setReffers_to(String reffers_to) {
+        this.reffers_to = reffers_to;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

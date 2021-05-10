@@ -34,8 +34,8 @@ public class EvaluationsRecyclerAdapter extends RecyclerView.Adapter<Evaluations
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int i) {
         holder.image.setImageResource(R.drawable.karen);
-        holder.reviewer.setText(evaluations.get(i).getReviewer());
-        holder.reviewed.setText(evaluations.get(i).getReviewed());
+        holder.reviewer.setText(evaluations.get(i).getSubmitted_by());
+        holder.refered.setText(evaluations.get(i).getReffers_to());
         holder.comments.setText(evaluations.get(i).getComments());
         holder.rating.setRating(evaluations.get(i).getRating());
     }
@@ -49,7 +49,7 @@ public class EvaluationsRecyclerAdapter extends RecyclerView.Adapter<Evaluations
         //        public ConstraintLayout item;
         public ImageView image;
         public TextView reviewer;
-        public TextView reviewed;
+        public TextView refered;
         public TextView comments;
         public RatingBar rating;
 
@@ -58,7 +58,7 @@ public class EvaluationsRecyclerAdapter extends RecyclerView.Adapter<Evaluations
 //            item = itemView.findViewById(R.id.item);
             image = itemView.findViewById(R.id.reviewer_profile);
             reviewer = itemView.findViewById(R.id.reviewer_username);
-            reviewed = itemView.findViewById(R.id.reviewed_username);
+            refered = itemView.findViewById(R.id.refered_username);
             comments = itemView.findViewById(R.id.comments);
             rating = itemView.findViewById(R.id.ratingBar);
 

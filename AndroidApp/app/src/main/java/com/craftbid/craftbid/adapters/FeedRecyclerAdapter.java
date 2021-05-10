@@ -10,20 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.craftbid.craftbid.R;
-import com.craftbid.craftbid.model.Listing;
+import com.craftbid.craftbid.model.Thumbnail;
 import com.google.android.material.snackbar.Snackbar;
 import com.stelladk.arclib.ArcLayout;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
 public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapter.ViewHolder> {
 
-    private List<Listing> listings;
+    private List<Thumbnail> thumbnails;
 
-    public FeedRecyclerAdapter(List<Listing> listings) {
-        this.listings = listings;
+    public FeedRecyclerAdapter(List<Thumbnail> thumbnails) {
+        this.thumbnails = thumbnails;
     }
 
     @NonNull
@@ -36,31 +34,31 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        if(position == listings.size()){
+        if(position == thumbnails.size()){
             holder.image.setBackgroundResource(0);
             holder.title.setText("Δείτε Περισσότερα");
-            holder.label.setText("");
+            holder.category.setText("");
             holder.price.setText("");
             holder.plus_sign.setVisibility(View.VISIBLE);
             return;
         }
-        holder.image.setBackgroundResource(listings.get(position).getPhoto());
-        holder.title.setText(listings.get(position).getName());
-        holder.label.setText(listings.get(position).getDescription());
-        holder.price.setText(listings.get(position).getMin_price()+"");
+//        holder.image.setBackgroundResource(thumbnails.get(position).getThumbnail());
+        holder.image.setBackgroundResource(R.drawable.bag);
+        holder.title.setText(thumbnails.get(position).getName());
+        holder.category.setText(thumbnails.get(position).getCategory());
+        holder.description.setText(thumbnails.get(position).getDescription());
+        holder.price.setText(thumbnails.get(position).getMin_price()+"");
     }
 
     @Override
     public int getItemCount() {
-        return listings.size() + 1;
+        return thumbnails.size() + 1;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ArcLayout item;
         public ArcLayout image;
-        public TextView title;
-        public TextView label;
-        public TextView price;
+        public TextView title, category, description, price;
         public ImageView plus_sign;
 
         public ViewHolder(@NonNull View itemView) {
@@ -68,7 +66,8 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
             item = itemView.findViewById(R.id.item);
             image = itemView.findViewById(R.id.img_item);
             title = itemView.findViewById(R.id.title_item);
-            label = itemView.findViewById(R.id.label_item);
+            category = itemView.findViewById(R.id.category_item);
+            description = itemView.findViewById(R.id.description_item);
             price = itemView.findViewById(R.id.price_item);
             plus_sign = itemView.findViewById(R.id.plus_sign);
 
