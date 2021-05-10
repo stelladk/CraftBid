@@ -91,7 +91,7 @@ public class Server {
                     //TODO update listing info in database
                     break;
                 case "CREATE_BID":
-                    //TODO add offer to database
+                    add_offer(db_connect,input,output);
                     break;
                 case "VIEW_OFFERS":
                     //TODO request list of offers for a listing
@@ -346,13 +346,32 @@ public class Server {
     }//request_profile
 
 
+    /** CREATE BID
+     * Customer submits a new offer for a listing */
+    public void add_offer(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new CREATE_BID request");
+        try {
+            Offer offer = (Offer)input.readObject(); //android client sends an Offer object with all the info for this Offer
+            //add the offer to the database
+            String query = "INSERT INTO Offer(id,price,submitted_by,submitted_for) "+
+                    "VALUES(\'"+offer.getId()+"\',"+offer.getPrice()+",\'"+
+                    offer.getSubmitted_by()+"\',\'"+offer.getSubmitted_for()+"\');";
+            Statement stm = db_connect.createStatement();
+            stm.executeUpdate(query);
+        }catch(IOException | ClassNotFoundException| SQLException e) {
+            System.err.println("Unable to process create offer request");
+            e.printStackTrace();
+        }
+    }//add offer
+
+
     /** CREATE REPORT
      * Customer submits a new report for a creator */
     public void create_report(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
         System.out.println("Received a new CREATE_REPORT request");
         try {
             Report report = (Report)input.readObject(); //android client sends a Report object with all the info for this Report
-            //add the reward to the database
+            //add the report to the database
             String query = "INSERT INTO Report(id,submitted_by,refers_to,reason,date,description) "+
                     "VALUES(\'"+report.getId()+"\',"+report.getSubmitted_by()+",\'"+report.getRefers_to()+"\',\'"
                     +report.getReason()+"\',\'"+report.getDate()+"\',\'"+report.getDescription()+"\');";
