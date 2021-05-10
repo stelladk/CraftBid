@@ -76,7 +76,7 @@ public class Server {
                     load_main(db_connect,input,output);
                     break;
                 case "SEARCH":
-                    //TODO request search results
+                    search(db_connect,input,output);
                     break;
                 case "REQUEST_PROFILE":
                     request_profile(db_connect,input,output);
@@ -219,7 +219,7 @@ public class Server {
                 }
             }
         }catch(IOException | ClassNotFoundException | SQLException e) {
-            System.err.println("Unable to process login request");
+            System.err.println("Unable to process sign up request");
             e.printStackTrace();
         }
     }//signup
@@ -248,10 +248,41 @@ public class Server {
             output.writeObject(listing_thumbnails); //send thumbnails
             output.flush();
         }catch(IOException | SQLException e) {
-            System.err.println("Unable to process login request");
+            System.err.println("Unable to process load main screen request");
             e.printStackTrace();
         }
     }//load main screen
+
+
+    /** SEARCH
+     * When a user searches a word, a list of listings' thumbnails appears,
+     * if the name, category, or creator username matches */
+    public void search(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new SEARCH request");
+        try {
+            String search_text = (String)input.readObject();
+            //get a list of all listings, if name, category, or creator username matches
+            String query = "SELECT * FROM Listing WHERE name LIKE \'%"+search_text+"%\' OR published_by LIKE \'%"+search_text+"%\' OR category LIKE \'%"+search_text+"%\';";
+            Statement stm = db_connect.createStatement();
+            ResultSet res = stm.executeQuery(query);
+            ArrayList<Thumbnail> listing_thumbnails =new ArrayList<Thumbnail>();
+            while(res.next()) {
+                //create a list of listing thumbnails
+                int id = res.getInt("id");
+                String name =  res.getString("name");
+                String desc = res.getString("description");
+                String category = res.getString("category");
+                String thumbnail = res.getString("thumbnail");
+                float min_price = res.getFloat("min_price");
+                listing_thumbnails.add(new Thumbnail(id,name,desc,category,thumbnail,min_price));
+            }
+            output.writeObject(listing_thumbnails); //send thumbnails
+            output.flush();
+        }catch(IOException | ClassNotFoundException | SQLException e) {
+            System.err.println("Unable to process search request");
+            e.printStackTrace();
+        }
+    }//search
 
 
     /** REQUEST PROFILE
@@ -309,7 +340,7 @@ public class Server {
                 }
             }
         }catch(IOException | ClassNotFoundException | SQLException e) {
-            System.err.println("Unable to process login request");
+            System.err.println("Unable to process request profile request");
             e.printStackTrace();
         }
     }//request_profile
@@ -352,7 +383,7 @@ public class Server {
                 output.flush();
             }
         }catch(IOException | ClassNotFoundException| SQLException e) {
-            System.err.println("Unable to process login request");
+            System.err.println("Unable to process view rewards request");
             e.printStackTrace();
         }
     }//view rewards
@@ -370,7 +401,7 @@ public class Server {
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
         }catch(IOException | ClassNotFoundException| SQLException e) {
-            System.err.println("Unable to process login request");
+            System.err.println("Unable to process add reward request");
             e.printStackTrace();
         }
     }//add reward
