@@ -226,19 +226,27 @@ public class Server {
 
 
     /** LOAD MAIN SCREEN
-     * When a user logs into the app, a list of most recently posted listings appears */
+     * When a user logs into the app, a list of most recently posted listings' thumbnails appears */
     public void load_main(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
         System.out.println("Received a new LOAD_MAIN_SCREEN request");
         try {
             //get a list of all listings, ordered by date added
-            String query = "SELECT * FROM Listing;"; //TODO orderby date
+            String query = "SELECT * FROM Listing ORDER BY date_published;";
             Statement stm = db_connect.createStatement();
             ResultSet res = stm.executeQuery(query);
-            ArrayList<Listing> listings =new ArrayList<Listing>();
+            ArrayList<Thumbnail> listing_thumbnails =new ArrayList<Thumbnail>();
             while(res.next()) {
-                //TODO create a list of listings
+                //create a list of listing thumbnails
+                String name =  res.getString("name");
+                String desc = res.getString("description");
+                String category = res.getString("category");
+                String thumbnail = res.getString("thumbnail");
+                float min_price = res.getFloat("min_price");
+                listing_thumbnails.add(new Thumbnail(name,desc,category,thumbnail,min_price));
             }
-        }catch(/*IOException | ClassNotFoundException| */ SQLException e) {
+            output.writeObject(listing_thumbnails); //send thumbnails
+            output.flush();
+        }catch(IOException | SQLException e) {
             System.err.println("Unable to process login request");
             e.printStackTrace();
         }
