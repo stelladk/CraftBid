@@ -17,7 +17,7 @@
         android:layout_marginTop="50dp"
         android:gravity="center"
         android:text="@string/app_name"
-        android:textColor="?attr/android:textColor"
+        android:textColor="?android:attr/textColor"
         android:textSize="60sp"
         android:textStyle="bold"/>
     <TextView
@@ -30,7 +30,7 @@
         android:layout_marginHorizontal="10dp"
         android:gravity="center|top"
         android:text="@string/signup_customer"
-        android:textColor="?attr/android:textColor"
+        android:textColor="?android:attr/textColor"
         android:textSize="25sp"/>
 
     <LinearLayout
@@ -66,14 +66,14 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:text="@string/fullname"
-                android:textColor="?attr/android:textColor"
+                android:textColor="?android:attr/textColor"
                 android:textSize="25sp"
                 android:labelFor="@id/fullname_edit"/>
             <EditText
                 android:id="@+id/fullname_edit"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:textColor="?attr/android:textColor"
+                android:textColor="?android:attr/textColor"
                 android:textSize="25sp"
                 android:inputType="text"
                 android:importantForAutofill="no"
@@ -115,7 +115,7 @@
             android:layout_weight="1"
             android:gravity="start"
             android:text="@string/email"
-            android:textColor="?attr/android:textColor"
+            android:textColor="?android:attr/textColor"
             android:textSize="25sp"/>
         <EditText
             android:id="@+id/email_edit"
@@ -125,7 +125,7 @@
             android:layout_weight="1"
             android:hint=""
             android:textSize="20sp"
-            android:textColor="?attr/android:textColor"
+            android:textColor="?android:attr/textColor"
             android:inputType="textEmailAddress"
             android:importantForAutofill="no" />
     </LinearLayout>
@@ -149,7 +149,7 @@
             android:layout_weight="1"
             android:gravity="start"
             android:text="@string/phone"
-            android:textColor="?attr/android:textColor"
+            android:textColor="?android:attr/textColor"
             android:textSize="25sp"/>
         <EditText
             android:id="@+id/phone_edit"
@@ -159,7 +159,7 @@
             android:layout_weight="1"
             android:hint=""
             android:textSize="20sp"
-            android:textColor="?attr/android:textColor"
+            android:textColor="?android:attr/textColor"
             android:inputType="phone"
             android:importantForAutofill="no" />
     </LinearLayout>
@@ -183,7 +183,7 @@
             android:layout_weight="1"
             android:gravity="start"
             android:text="@string/username_en"
-            android:textColor="?attr/android:textColor"
+            android:textColor="?android:attr/textColor"
             android:textSize="25sp"/>
         <EditText
             android:id="@+id/username_edit"
@@ -193,7 +193,7 @@
             android:layout_weight="1"
             android:hint=""
             android:textSize="20sp"
-            android:textColor="?attr/android:textColor"
+            android:textColor="?android:attr/textColor"
             android:inputType="phone"
             android:importantForAutofill="no" />
     </LinearLayout>
@@ -217,7 +217,7 @@
             android:layout_weight="1"
             android:gravity="start"
             android:text="@string/password_en"
-            android:textColor="?attr/android:textColor"
+            android:textColor="?android:attr/textColor"
             android:textSize="25sp"/>
         <EditText
             android:id="@+id/password_edit"
@@ -227,7 +227,7 @@
             android:layout_weight="1"
             android:hint=""
             android:textSize="20sp"
-            android:textColor="?attr/android:textColor"
+            android:textColor="?android:attr/textColor"
             android:inputType="textPassword"
             android:importantForAutofill="no" />
     </LinearLayout>
@@ -263,7 +263,7 @@
             android:layout_weight="1"
             android:gravity="start"
             android:text="@string/repeat_password"
-            android:textColor="?attr/android:textColor"
+            android:textColor="?android:attr/textColor"
             android:textSize="25sp"/>
         <EditText
             android:id="@+id/repeat_password_edit"
@@ -273,7 +273,7 @@
             android:layout_weight="1"
             android:hint=""
             android:textSize="20sp"
-            android:textColor="?attr/android:textColor"
+            android:textColor="?android:attr/textColor"
             android:inputType="textPassword"
 
             android:importantForAutofill="no" />
@@ -302,7 +302,7 @@
         android:text="@string/cancel"
         android:textSize="20sp"
         android:textAllCaps="false"
-        android:textColor="?attr/android:textColor"
+        android:textColor="?android:attr/textColor"
         app:backgroundTint="@android:color/transparent"
         android:background="@null"
         style="?android:attr/borderlessButtonStyle"

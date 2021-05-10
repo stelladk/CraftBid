@@ -19,6 +19,11 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(signupCustomer);
     }
 
+    public void openSignupCreator(View view) {
+        Intent signupCreator = new Intent(LoginActivity.this, SignupCreatorActivity.class);
+        startActivity(signupCreator);
+    }
+
     public void openMain(View view){
         Intent main = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(main);
