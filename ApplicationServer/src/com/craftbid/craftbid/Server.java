@@ -237,12 +237,13 @@ public class Server {
             ArrayList<Thumbnail> listing_thumbnails =new ArrayList<Thumbnail>();
             while(res.next()) {
                 //create a list of listing thumbnails
+                int id = res.getInt("id");
                 String name =  res.getString("name");
                 String desc = res.getString("description");
                 String category = res.getString("category");
                 String thumbnail = res.getString("thumbnail");
                 float min_price = res.getFloat("min_price");
-                listing_thumbnails.add(new Thumbnail(name,desc,category,thumbnail,min_price));
+                listing_thumbnails.add(new Thumbnail(id,name,desc,category,thumbnail,min_price));
             }
             output.writeObject(listing_thumbnails); //send thumbnails
             output.flush();

@@ -3,10 +3,12 @@ package com.craftbid.craftbid;
 import java.io.Serializable;
 
 public class Thumbnail implements Serializable{
+    private int id;
     private String name, description,category,thumbnail;
     private float min_price;
 
-    public Thumbnail(String name, String description, String category,String thumbnail,float min_price) {
+    public Thumbnail(int id, String name, String description, String category,String thumbnail,float min_price) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.category = category;
@@ -54,4 +56,11 @@ public class Thumbnail implements Serializable{
         this.thumbnail = thumbnail;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }
