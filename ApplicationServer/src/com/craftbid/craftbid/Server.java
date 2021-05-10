@@ -3,6 +3,7 @@ package com.craftbid.craftbid;
 import java.net.*;
 import java.io.*;
 import java.sql.*;
+import java.util.*;
 
 public class Server {
 
@@ -72,7 +73,7 @@ public class Server {
                     signup(db_connect,input,output);
                     break;
                 case "LOAD_MAIN_SCREEN":
-                    //TODO request most recent listings
+                    load_main(db_connect,input,output);
                     break;
                 case "SEARCH":
                     //TODO request search results
@@ -155,6 +156,7 @@ public class Server {
         }
     }//login
 
+
     /** SIGNUP
      * Basic signup first, same for all users. Check if username and email already exist and register user
      * Then additional signup for creators only, with mandatory phone number and extra info */
@@ -182,7 +184,7 @@ public class Server {
                 output.writeObject("USER ALREADY EXISTS");
                 output.flush();
             }else {
-                //TODO: check if email already exists
+                //check if email already exists
                 query = "SELECT * FROM UserInfo WHERE email= \'"+email+"\';";
                 stm = db_connect.createStatement();
                 res = stm.executeQuery(query);
@@ -221,6 +223,26 @@ public class Server {
             e.printStackTrace();
         }
     }//signup
+
+
+    /** LOAD MAIN SCREEN
+     * When a user logs into the app, a list of most recently posted listings appears */
+    public void load_main(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new LOAD_MAIN_SCREEN request");
+        try {
+            //get a list of all listings, ordered by date added
+            String query = "SELECT * FROM Listing;"; //TODO orderby date
+            Statement stm = db_connect.createStatement();
+            ResultSet res = stm.executeQuery(query);
+            ArrayList<Listing> listings =new ArrayList<Listing>();
+            while(res.next()) {
+                //TODO create a list of listings
+            }
+        }catch(/*IOException | ClassNotFoundException| */ SQLException e) {
+            System.err.println("Unable to process login request");
+            e.printStackTrace();
+        }
+    }//load main screen
 
     public static void main(String[] args) {
         new Server("192.168.2.2",6500,100);
