@@ -1,11 +1,14 @@
 package com.craftbid.craftbid;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.craftbid.craftbid.adapters.EvaluationsRecyclerAdapter;
 import com.craftbid.craftbid.model.Evaluation;
@@ -26,8 +29,8 @@ public class CustomerProfile extends AppCompatActivity {
         toolbar.setTitle("Profile");
 
         //Set Back Arrow
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Date now = new Date();
         List<Evaluation> evaluations = new ArrayList<>();
@@ -43,5 +46,20 @@ public class CustomerProfile extends AppCompatActivity {
         recycler.setLayoutManager(manager);
         EvaluationsRecyclerAdapter adapter = new EvaluationsRecyclerAdapter(evaluations);
         recycler.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                goBack();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void goBack() {
+        Intent main = new Intent(CustomerProfile.this, MainActivity.class);
+        startActivity(main);
     }
 }

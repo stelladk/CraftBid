@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".CreatorProfile">
+
+    <include layout="@layout/app_bar"/>
+
+    <!--    <RelativeLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content">-->
+
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/report_btn"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="end|top"-->
+<!--        android:padding="0dp"-->
+<!--        app:backgroundTint="@android:color/transparent"-->
+<!--        app:rippleColor="?attr/colorPrimary"-->
+<!--        app:strokeColor="?android:attr/textColor"-->
+<!--        app:strokeWidth="2dp"-->
+<!--        android:text="@string/report"-->
+<!--        android:textSize="15sp"-->
+<!--        android:textColor="?android:attr/textColor"-->
+<!--        android:textAllCaps="false"/>-->
+
+    <LinearLayout
+        android:id="@+id/profile_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <com.stelladk.arclib.ArcLayout
+            android:id="@+id/profile_photo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            app:ArcType="inner"
+            app:ArcRadius="75dp"
+            android:background="@drawable/mitsos"
+            android:contentDescription="@string/photo_profile"/>
+
+        <LinearLayout
+            android:id="@+id/profile_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/report_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|top"
+                android:padding="0dp"
+                app:backgroundTint="@android:color/transparent"
+                app:rippleColor="?attr/colorPrimary"
+                app:strokeColor="?android:attr/textColor"
+                app:strokeWidth="2dp"
+                android:text="@string/report"
+                android:textSize="15sp"
+                android:textColor="?android:attr/textColor"
+                android:textAllCaps="false"/>
+            <TextView
+                android:id="@+id/fullname"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/fullname"
+                android:textSize="30sp"
+                android:textColor="?android:attr/textColor"/>
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/username_en"
+                android:textSize="15sp"
+                android:textColor="?android:attr/textColor"/>
+            <TextView
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/email"
+                android:textSize="15sp"
+                android:textColor="?android:attr/textColor"/>
+            <TextView
+                android:id="@+id/phone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/phone"
+                android:textSize="15sp"
+                android:textColor="?android:attr/textColor"/>
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:maxHeight="100dp"
+                android:gravity="center"
+                android:text="@string/description"
+                android:textSize="15sp"
+                android:textColor="?android:attr/textColor"
+                android:maxLines="3"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/see_rewards"
+                android:textSize="15sp"
+                android:textAllCaps="false"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/thumbnails_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="@string/listings"
+        android:textSize="30sp"
+        android:textColor="?android:attr/textColor"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/thumbnails_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/reviews_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_toStartOf="@id/review_btn"
+            android:layout_toLeftOf="@id/review_btn"
+            android:gravity="start"
+            android:text="@string/evaluations"
+            android:textSize="30sp"
+            android:textColor="?android:attr/textColor"/>
+
+        <Button
+            android:id="@+id/review_btn"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:text="@string/evaluation"
+            android:textAllCaps="false"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reviews_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"/>
+
+    <!--    </RelativeLayout>-->
+</LinearLayout>

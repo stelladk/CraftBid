@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CraftBid">
-        <activity android:name=".SignupCreatorActivity"></activity>
+        <activity android:name=".CreatorProfile"></activity>
+        <activity android:name=".SignupCreatorActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

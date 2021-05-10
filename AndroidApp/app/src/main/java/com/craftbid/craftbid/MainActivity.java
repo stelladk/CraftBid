@@ -1,6 +1,8 @@
 package com.craftbid.craftbid;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,6 +10,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,17 +48,17 @@ public class MainActivity extends AppCompatActivity {
 //        appBar.setExpanded(true);
 
         List<Thumbnail> thumbnails = new ArrayList<>();
-        thumbnails.add(new Thumbnail(0, "Πλεκτή τσάντα", "Ωραιότατη πλεκτή τσάντα πάρε πάρε όλα 5 ευρώ αρχική","Πλεκτά, Τσάντες", "R.drawable.bag", 5));
-        thumbnails.add(new Thumbnail(1, "Βραχιόλια", "Βραχιολι χειροποιητο αν θες το παιρνεις", "Κοσμήματα",  "R.drawable.bracelet", 5));
-        thumbnails.add(new Thumbnail(2, "Πλεκτά για όλους", "Πλεκτά ρούχα για όλες τις ηλικίε δεχόμαστε παραγγελίες", "Πλεκτά",  "R.drawable.knit", 15));
-        thumbnails.add(new Thumbnail(3, "Πασχαλινό κερί χειροποίητο", "Κεριά Πασχαλινά για την Ανάσταση. Χρόνια Πολλά!", "Κεριά", "R.drawable.candle",  20));
+        thumbnails.add(new Thumbnail(0, "Πλεκτή τσάντα", "Ωραιότατη πλεκτή τσάντα πάρε πάρε όλα 5 ευρώ αρχική","Πλεκτά, Τσάντες", "bag", 5));
+        thumbnails.add(new Thumbnail(1, "Βραχιόλια", "Βραχιολι χειροποιητο αν θες το παιρνεις", "Κοσμήματα",  "bracelet", 5));
+        thumbnails.add(new Thumbnail(2, "Πλεκτά για όλους", "Πλεκτά ρούχα για όλες τις ηλικίε δεχόμαστε παραγγελίες", "Πλεκτά",  "knit", 15));
+        thumbnails.add(new Thumbnail(3, "Πασχαλινό κερί χειροποίητο", "Κεριά Πασχαλινά για την Ανάσταση. Χρόνια Πολλά!", "Κεριά", "candle",  20));
 
         RecyclerView recycler = findViewById(R.id.feed_recyclerview);
 //        RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         GridLayoutManager manager = new GridLayoutManager(this, 2);
         manager.setOrientation(RecyclerView.VERTICAL);
         recycler.setLayoutManager(manager);
-        FeedRecyclerAdapter adapter = new FeedRecyclerAdapter(thumbnails);
+        FeedRecyclerAdapter adapter = new FeedRecyclerAdapter(thumbnails, this);
         recycler.setAdapter(adapter);
     }
 
@@ -91,9 +94,17 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    //TODO open profile based on login
     private void openProfile() {
-        Intent profile = new Intent(MainActivity.this, CustomerProfile.class);
+//        Intent profile = new Intent(MainActivity.this, CustomerProfile.class);
+        Intent profile = new Intent(MainActivity.this, CreatorProfile.class);
         startActivity(profile);
+    }
+
+    //Temporary
+    public int getDrawable(String name) {
+        return this.getResources().getIdentifier(name, "drawable", this.getPackageName());
+//        return ActivityCompat.getDrawable(this, resourceId);
     }
 
 }

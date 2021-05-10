@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.craftbid.craftbid.CreatorProfile;
+import com.craftbid.craftbid.MainActivity;
 import com.craftbid.craftbid.R;
 import com.craftbid.craftbid.model.Thumbnail;
 import com.google.android.material.snackbar.Snackbar;
@@ -22,6 +24,18 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
 
     public FeedRecyclerAdapter(List<Thumbnail> thumbnails) {
         this.thumbnails = thumbnails;
+    }
+
+    //Temporary
+    private MainActivity context = null;
+    private CreatorProfile context2 = null;
+    public FeedRecyclerAdapter(List<Thumbnail> thumbnails, MainActivity context) {
+        this.thumbnails = thumbnails;
+        this.context = context;
+    }
+    public FeedRecyclerAdapter(List<Thumbnail> thumbnails, CreatorProfile context) {
+        this.thumbnails = thumbnails;
+        this.context2 = context;
     }
 
     @NonNull
@@ -43,7 +57,13 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
             return;
         }
 //        holder.image.setBackgroundResource(thumbnails.get(position).getThumbnail());
-        holder.image.setBackgroundResource(R.drawable.bag);
+        if(context != null){
+            holder.image.setBackgroundResource(context.getDrawable(thumbnails.get(position).getThumbnail()));
+        }else if(context2!=null){
+            holder.image.setBackgroundResource(context2.getDrawable(thumbnails.get(position).getThumbnail()));
+        }else{
+            holder.image.setBackgroundResource(R.drawable.chair1);
+        }
         holder.title.setText(thumbnails.get(position).getName());
         holder.category.setText(thumbnails.get(position).getCategory());
         holder.description.setText(thumbnails.get(position).getDescription());
