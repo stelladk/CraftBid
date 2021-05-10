@@ -109,7 +109,7 @@ public class Server {
                     view_rewards(db_connect,input,output);
                     break;
                 case "ADD_REWARD":
-                    //TODO add reward for creator in database
+                    add_reward(db_connect,input,output);
                     break;
             }
             //after serving request
@@ -346,7 +346,25 @@ public class Server {
             System.err.println("Unable to process login request");
             e.printStackTrace();
         }
-    }//load main screen
+    }//view rewards
+
+
+    /** ADD REWARD
+     * Creator adds a new reward */
+    public void add_reward(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new ADD_REWARD request");
+        try {
+            Reward reward = (Reward)input.readObject(); //android client sends a Reward object with all the info for this Reward
+            //add the reward to the database
+            String query = "INSERT INTO Reward (id,name,price_in_points,photo,offered_by) "+
+                    "VALUES(\'"+reward.getId()+"\',"+reward.getName()+",\'"+reward.getPrice()+"\',\'"+reward.getPhoto()+"\',\'"+reward.getOffered_by()+"\');";
+            Statement stm = db_connect.createStatement();
+            stm.executeUpdate(query);
+        }catch(IOException | ClassNotFoundException| SQLException e) {
+            System.err.println("Unable to process login request");
+            e.printStackTrace();
+        }
+    }//add reward
 
 
     public static void main(String[] args) {
