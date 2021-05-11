@@ -82,7 +82,7 @@ public class Server {
                     request_profile(db_connect,input,output);
                     break;
                 case "CREATE_LISTING":
-                    //TODO add listing to database
+                    create_listing(db_connect,input,output);
                     break;
                 case "VIEW_LISTING":
                     //TODO request listing info
@@ -344,6 +344,26 @@ public class Server {
             e.printStackTrace();
         }
     }//request_profile
+
+
+    /** CREATE LISTING
+     * Creator publishes a new listing for a handmade product */
+    public void create_listing(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new CREATE_LISTING request");
+        try {
+            Listing listing = (Listing)input.readObject(); //android client sends a Listing object with all the info for this Listing
+            //add the listing to the database
+            String query = "INSERT INTO Offer(id,name,description,category,min_price,reward_points,quantity,is_located,published_by) "+
+                    "VALUES(\'"+listing.getId()+"\',"+listing.getName()+",\'"+listing.getDescription()+"\',\'"
+                    +listing.getCategory()+"\',\'"+listing.getMin_price()+"\',\'"+listing.getReward_points()+"\',\'"
+                    +listing.getQuantity()+"\',\'"+listing.getLocation()+"\',\'"+listing.getPublished_by()+"\');";
+            Statement stm = db_connect.createStatement();
+            stm.executeUpdate(query);
+        }catch(IOException | ClassNotFoundException| SQLException e) {
+            System.err.println("Unable to process create listing request");
+            e.printStackTrace();
+        }
+    }//create listing
 
 
     /** CREATE BID
