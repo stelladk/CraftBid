@@ -27,6 +27,14 @@
     <string name="report">Αναφορά</string>
     <string name="listings">Αγγελίες</string>
     <string name="evaluation">Αξιολόγηση</string>
+    <string name="see_more">Δείτε περισσότερα</string>
+    <string name="edit">Επεξεργασία</string>
+    <string name="show_offers">Εμφάνιση Προσφορών</string>
+    <string name="last_offer">Αρχική τιμή/ \nΤελευταία προσφορά</string>
+    <string name="colon">:</string>
+    <string name="by_creator">by: </string>
+    <string name="location">Περιοχή: </string>
+    <string name="points">Πόντοι: </string>
     <string-array name="expertise">
         <item>Ζωγράφος</item>
         <item>Ξυλουργός</item>
