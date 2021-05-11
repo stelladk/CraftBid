@@ -64,11 +64,9 @@ public class Server {
             output = new ObjectOutputStream(request.getOutputStream());
             input = new ObjectInputStream(request.getInputStream());
             switch((String)input.readObject()) { //clients send a request type
-                //LOGIN
                 case "LOGIN":
                     login(db_connect,input,output);
                     break;
-                //SIGNUP FOR CUSTOMERS AND CREATORS
                 case "SIGNUP_USER":
                     signup(db_connect,input,output);
                     break;
@@ -85,7 +83,7 @@ public class Server {
                     create_listing(db_connect,input,output);
                     break;
                 case "VIEW_LISTING":
-                    //TODO request listing info
+                    view_listing(db_connect,input,output);
                     break;
                 case "UPDATE_LISTING":
                     //TODO update listing info in database
@@ -330,7 +328,6 @@ public class Server {
                     //TODO create a list of Evaluations
                 }
                 //listings
-                //evaluations
                 query = "SELECT * FROM Listing WHERE published_by= \'" + username + "\' ;"; //TODO orderby date
                 stm = db_connect.createStatement();
                 res = stm.executeQuery(query);
@@ -359,11 +356,37 @@ public class Server {
                     +listing.getQuantity()+"\',\'"+listing.getLocation()+"\',\'"+listing.getPublished_by()+"\');";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
+            //TODO get photos and add them to table "Photo"
         }catch(IOException | ClassNotFoundException| SQLException e) {
             System.err.println("Unable to process create listing request");
             e.printStackTrace();
         }
     }//create listing
+
+
+    /** VIEW LISTING
+     * View all information of a listing based on the id */
+    public void view_listing(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new VIEW_LISTING request");
+        try {
+            int id = (Integer)input.readObject();
+            String query = "SELECT * FROM Listing WHERE id= \'" + id + "\';";
+            Statement stm = db_connect.createStatement();
+            ResultSet res = stm.executeQuery(query);
+            if (res.next()) {
+                System.out.println("Got all information for this listing.");
+                Listing listing = new Listing(id,res.getString("name"),res.getString("description"), res.getString("category"),
+                                              res.getString("published_by"), res.getString("thumbnail"),res.getString("is_located"),
+                                              res.getInt("reward_points"),res.getInt("quantity"),res.getFloat("min_price"),res.getDate("date_published"));
+                output.writeObject(listing); //send basic info
+                output.flush();
+                //TODO get all the photos from table "Photo"
+            }
+        }catch(IOException | ClassNotFoundException| SQLException e) {
+            System.err.println("Unable to process view listing request");
+            e.printStackTrace();
+        }
+    }//view listing
 
 
     /** CREATE BID
