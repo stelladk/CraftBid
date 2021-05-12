@@ -17,7 +17,7 @@ import com.craftbid.craftbid.model.Reward;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RewardsCustomerActivity extends AppCompatActivity {
+public class RewardsCreatorActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +32,11 @@ public class RewardsCustomerActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        TextView title = findViewById(R.id.rewards_title);
+        title.setText(getResources().getString(R.string.my_rewards));
+//        TextView creator_username = findViewById(R.id.creator_username);
         TextView claimed_points = findViewById(R.id.reward_points);
-        claimed_points.setText(getResources().getString(R.string.num_claimed_reward_points, 50));
+        claimed_points.setText("");
 
         List<Reward> rewards = new ArrayList<>();
         rewards.add(new Reward(0, 40, "Ξύλινη καρέκλα",  "chair3", "mitsos_creations"));
@@ -45,6 +48,7 @@ public class RewardsCustomerActivity extends AppCompatActivity {
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recycler.setLayoutManager(manager);
         RewardsRecyclerAdapter adapter = new RewardsRecyclerAdapter(rewards, this);
+        adapter.setPrivateView(true);
         recycler.setAdapter(adapter);
     }
 
@@ -59,7 +63,7 @@ public class RewardsCustomerActivity extends AppCompatActivity {
     }
 
     private void goBack() {
-        Intent back = new Intent(RewardsCustomerActivity.this, CreatorProfile.class);
+        Intent back = new Intent(RewardsCreatorActivity.this, CreatorProfile.class);
         startActivity(back);
     }
 

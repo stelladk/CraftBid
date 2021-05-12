@@ -52,6 +52,7 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
             holder.image.setBackgroundResource(0);
             holder.title.setText("Δείτε Περισσότερα");
             holder.category.setText("");
+            holder.description.setText("");
             holder.price.setText("");
             holder.plus_sign.setVisibility(View.VISIBLE);
             return;

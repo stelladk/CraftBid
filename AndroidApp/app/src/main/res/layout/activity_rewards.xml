@@ -9,7 +9,7 @@
     <include layout="@layout/app_bar"/>
 
     <TextView
-        android:id="@+id/rewards_by_title"
+        android:id="@+id/rewards_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
