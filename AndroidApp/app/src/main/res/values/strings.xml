@@ -35,6 +35,11 @@
     <string name="by_creator">by: </string>
     <string name="location">Περιοχή: </string>
     <string name="points">Πόντοι: </string>
+    <string name="rewards_by">Βραβεία του Καλλιτέχνη</string>
+    <string name="num_claimed_reward_points">Έχετε %1$d πόντους για αυτόν τον καλλιτέχνη</string>
+    <string name="num_points">%1$d Πόντοι</string>
+    <string name="select">Επιλογή</string>
+    <string name="notifications">Ειδοποιήσεις</string>
     <string-array name="expertise">
         <item>Ζωγράφος</item>
         <item>Ξυλουργός</item>

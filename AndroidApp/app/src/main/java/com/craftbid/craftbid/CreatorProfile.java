@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.craftbid.craftbid.adapters.EvaluationsRecyclerAdapter;
 import com.craftbid.craftbid.adapters.FeedRecyclerAdapter;
@@ -83,5 +84,10 @@ public class CreatorProfile extends AppCompatActivity {
     //Temporary
     public int getDrawable(String name) {
         return this.getResources().getIdentifier(name, "drawable", this.getPackageName());
+    }
+
+    public void openRewardsCustomer(View view) {
+        Intent rewardsCustomer = new Intent(CreatorProfile.this, RewardsCustomerActivity.class);
+        startActivity(rewardsCustomer);
     }
 }

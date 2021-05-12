@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RewardsCustomerActivity"
+    android:orientation="vertical">
+
+    <include layout="@layout/app_bar"/>
+
+    <TextView
+        android:id="@+id/rewards_by_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/rewards_by"
+        android:textSize="30sp"
+        android:textColor="?android:attr/textColor"/>
+
+    <TextView
+        android:id="@+id/creator_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="mitsos_creations"
+        android:textSize="30sp"
+        android:textColor="?android:attr/textColor"/>
+
+    <TextView
+        android:id="@+id/reward_points"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/num_claimed_reward_points"
+        android:textSize="20sp"
+        android:textColor="?android:attr/textColor"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rewards_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="10dp"/>
+</LinearLayout>
