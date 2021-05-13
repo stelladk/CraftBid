@@ -18,7 +18,7 @@
     <string name="pass_note">*Ο κωδικός πρέπει να περιέχει τουλάχιστον έναν ειδικό χαρακτήρα</string>
     <string name="photo_profile">Φωτογραφία προφίλ</string>
     <string name="add_photo">Προσθήκη Φωτογραφίας</string>
-    <string name="description">Περιγραφή Προφίλ Εδώ..... μπλα μπλα μπλα</string>
+    <string name="profile_description">Περιγραφή Προφίλ Εδώ..... μπλα μπλα μπλα</string>
     <string name="evaluations">Αξιολογήσεις</string>
     <string name="for_static">για</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
@@ -48,11 +48,29 @@
     <string name="both_ways">*ταχυδρομικά, χέρι-με-χέρι</string>
     <string name="courier">*ταχυδρομικά</string>
     <string name="hands">*χέρι-με-χέρι</string>
+    <string name="new_listing">Νέα Αγγελία</string>
+    <string name="title">Τίτλος</string>
+    <string name="init_price_optional">Αρχική τιμή (προαιρετικό)</string>
+    <string name="location_optional">Τοποθεσία (προαιρετικό)</string>
+    <string name="quantity">Ποσότητα</string>
+    <string name="points_optional">Πόντοι \n(προαιρετικό)</string>
+    <string name="shipment">Ταχυδρομικά</string>
+    <string name="hand_in_hand">Χέρι-με-χέρι</string>
+    <string name="help">Βοήθεια</string>
+    <string name="description">Περιγραφή</string>
+    <string name="save">Αποθήκευση</string>
+    <string name="one">1</string>
     <string-array name="expertise">
         <item>Ζωγράφος</item>
         <item>Ξυλουργός</item>
         <item>Πλέκτης</item>
         <item>Digital Designer</item>
         <item>Άλλο</item>
+    </string-array>
+    <string-array name="category">
+        <item>Ρούχα</item>
+        <item>Κεριά</item>
+        <item>Πίνακες</item>
+        <item>Καρέκλες</item>
     </string-array>
 </resources>

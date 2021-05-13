@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CreateListingActivity"
+    android:orientation="vertical">
+
+    <include layout="@layout/app_bar"/>
+
+    <TextView
+        android:id="@+id/listing_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="@string/new_listing"
+        android:textSize="35sp"
+        android:textColor="?android:attr/textColor"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/collection_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/title_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:hint="@string/title"
+        android:textSize="25sp"
+        android:textColor="?android:attr/textColor"
+        android:inputType="text"
+        android:importantForAutofill="no"/>
+
+    <EditText
+        android:id="@+id/init_price_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:hint="@string/init_price_optional"
+        android:textSize="25sp"
+        android:textColor="?android:attr/textColor"
+        android:inputType="text"
+        android:importantForAutofill="no"/>
+
+    <EditText
+        android:id="@+id/location_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:hint="@string/location_optional"
+        android:textSize="25sp"
+        android:textColor="?android:attr/textColor"
+        android:inputType="text"
+        android:importantForAutofill="no"/>
+
+    <LinearLayout
+        android:id="@+id/quantity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/quantity_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:text="@string/quantity"
+            android:textColor="?android:attr/textColor"
+            android:textSize="25sp"/>
+        <EditText
+            android:id="@+id/quantity_edit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="@string/one"
+            android:textSize="20sp"
+            android:textColor="?android:attr/textColor"
+            android:inputType="textEmailAddress"
+            android:importantForAutofill="no" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center">
+        <Spinner
+            android:id="@+id/listing_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/shipment_check"
+            android:gravity="center" />
+
+        <CheckBox
+            android:id="@+id/shipment_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/listing_category"
+            app:layout_constraintBottom_toTopOf="@id/handin_check"
+            app:layout_constraintStart_toStartOf="parent"
+            android:gravity="center"
+            android:text="@string/shipment"/>
+
+        <CheckBox
+            android:id="@+id/handin_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/shipment_check"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:gravity="center"
+            android:text="@string/hand_in_hand"/>
+
+        <TextView
+            android:id="@+id/points_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/points_help"
+            app:layout_constraintBottom_toTopOf="@id/points_edit"
+            android:gravity="center"
+            android:hint=""
+            android:text="@string/points_optional"
+            android:textColor="?android:attr/textColor"/>
+
+        <EditText
+            android:id="@+id/points_edit"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toBottomOf="@id/points_title"
+            app:layout_constraintEnd_toStartOf="@id/points_help"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:gravity="center"
+            android:inputType="number"
+            android:importantForAutofill="no" />
+        <ImageButton
+            android:id="@+id/points_help"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/points_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:contentDescription="@string/help"
+            android:src="@drawable/ic_help"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:maxHeight="80dp"
+        android:layout_marginHorizontal="30dp"
+        android:maxLines="4"
+        android:maxLength="2000"
+        android:hint="@string/description"
+        android:textSize="25sp"
+        android:textColor="?android:attr/textColor"
+        android:scrollHorizontally="false"
+        android:inputType="text"
+        android:importantForAutofill="no"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="10dp"
+        app:backgroundTint="@color/green"
+        android:text="@string/save"
+        android:textColor="@color/black"
+        android:textAllCaps="false"/>
+</LinearLayout>

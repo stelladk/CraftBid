@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.craftbid.craftbid.adapters.FeedRecyclerAdapter;
 import com.craftbid.craftbid.model.Thumbnail;
 
+import java.nio.channels.InterruptedByTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.profile:
                 openProfile();
+            case R.id.add:
+                openCreateListing();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -99,6 +102,11 @@ public class MainActivity extends AppCompatActivity {
 //        Intent profile = new Intent(MainActivity.this, CustomerProfile.class);
         Intent profile = new Intent(MainActivity.this, CreatorProfile.class);
         startActivity(profile);
+    }
+
+    private void openCreateListing(){
+        Intent createListing = new Intent(MainActivity.this, CreateListingActivity.class);
+        startActivity(createListing);
     }
 
     //Temporary

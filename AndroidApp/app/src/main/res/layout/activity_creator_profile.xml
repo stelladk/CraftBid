@@ -105,7 +105,7 @@
                 android:layout_height="match_parent"
                 android:maxHeight="100dp"
                 android:gravity="center"
-                android:text="@string/description"
+                android:text="@string/profile_description"
                 android:textSize="15sp"
                 android:textColor="?android:attr/textColor"
                 android:maxLines="3"/>
