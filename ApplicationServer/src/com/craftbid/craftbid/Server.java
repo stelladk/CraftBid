@@ -109,6 +109,14 @@ public class Server {
                 case "ADD_REWARD":
                     add_reward(db_connect,input,output);
                     break;
+                case "REQUEST_LOCATIONS":
+                    //TODO send a list of all locations
+                    break;
+                case "REQUEST_CATEGORIES":
+                    //TODO send a list of all categories
+                    break;
+                case "CREATE_PURCHASE":
+                    break;
             }
             //after serving request
             db_connect.close();
