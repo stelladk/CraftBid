@@ -67,10 +67,23 @@
                 android:textSize="15sp"
                 android:textColor="?android:attr/textColor"
                 android:textAllCaps="false"/>
+            <EditText
+                android:id="@+id/fullname_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="50dp"
+                android:gravity="center"
+                android:hint="@string/fullname"
+                android:text="@string/fullname"
+                android:textSize="30sp"
+                android:textColor="?android:attr/textColor"
+                android:inputType="text"
+                android:importantForAutofill="no"
+                android:visibility="gone"/>
             <TextView
                 android:id="@+id/fullname"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/fullname"
                 android:textSize="30sp"
@@ -78,57 +91,187 @@
             <TextView
                 android:id="@+id/username"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/username_en"
                 android:textSize="15sp"
                 android:textColor="?android:attr/textColor"/>
+            <EditText
+                android:id="@+id/email_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="50dp"
+                android:gravity="center"
+                android:hint="@string/email"
+                android:text="@string/email"
+                android:textSize="15sp"
+                android:textColor="?android:attr/textColor"
+                android:inputType="textEmailAddress"
+                android:importantForAutofill="no"
+                android:visibility="gone"/>
             <TextView
                 android:id="@+id/email"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/email"
                 android:textSize="15sp"
                 android:textColor="?android:attr/textColor"/>
+            <EditText
+                android:id="@+id/phone_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="50dp"
+                android:gravity="center"
+                android:hint="@string/phone"
+                android:text="@string/phone"
+                android:textSize="15sp"
+                android:textColor="?android:attr/textColor"
+                android:inputType="phone"
+                android:importantForAutofill="no"
+                android:visibility="gone"/>
             <TextView
                 android:id="@+id/phone"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/phone"
                 android:textSize="15sp"
                 android:textColor="?android:attr/textColor"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/expertise"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/expertise"
+                    android:textSize="15sp"
+                    android:textColor="?android:attr/textColor"/>
+                <CheckBox
+                    android:id="@+id/freelancer_choice"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/freelancer"
+                    android:textSize="15sp"
+                    android:textColor="?android:attr/textColor"
+                    android:visibility="gone"/>
+                <TextView
+                    android:id="@+id/freelancer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/freelancer_checked"
+                    android:textSize="15sp"
+                    android:textColor="?android:attr/textColor"
+                    android:visibility="visible"/>
+            </LinearLayout>
+            <EditText
+                android:id="@+id/description_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="50dp"
+                android:gravity="center"
+                android:hint="@string/description"
+                android:text="@string/profile_description"
+                android:textSize="15sp"
+                android:textColor="?android:attr/textColor"
+                android:maxLines="3"
+                android:inputType="text"
+                android:importantForAutofill="no"
+                android:visibility="gone"/>
             <TextView
                 android:id="@+id/description"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:maxHeight="100dp"
                 android:gravity="center"
                 android:text="@string/profile_description"
                 android:textSize="15sp"
                 android:textColor="?android:attr/textColor"
-                android:maxLines="3"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/see_rewards"
-                android:textSize="15sp"
-                android:textAllCaps="false"
-                android:textStyle="bold"
-                android:onClick="openRewardsCustomer"/>
+                android:maxLines="2"/>
+<!--            <Button-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:text="@string/see_rewards"-->
+<!--                android:textSize="15sp"-->
+<!--                android:textAllCaps="false"-->
+<!--                android:textStyle="bold"-->
+<!--                android:onClick="openRewardsCustomer"/>-->
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/thumbnails_title"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        android:text="@string/listings"
-        android:textSize="30sp"
-        android:textColor="?android:attr/textColor"/>
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/edit_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            android:text="@string/edit"
+            android:textSize="15sp"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:onClick="toggleEditCreator"
+            android:visibility="invisible"/>
+        <Button
+            android:id="@+id/rewards_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:text="@string/see_rewards"
+            android:textSize="15sp"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:onClick="openRewardsCustomer"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/thumbnails_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_toStartOf="@id/add_listing_btn"
+            android:layout_toLeftOf="@id/add_listing_btn"
+            android:gravity="start"
+            android:text="@string/listings"
+            android:textSize="30sp"
+            android:textColor="?android:attr/textColor"/>
+
+        <Button
+            android:id="@+id/add_listing_btn"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:text="@string/add"
+            android:textAllCaps="false"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:visibility="invisible"/>
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/thumbnails_recyclerview"
@@ -138,8 +281,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
         <TextView
             android:id="@+id/reviews_title"
             android:layout_width="wrap_content"

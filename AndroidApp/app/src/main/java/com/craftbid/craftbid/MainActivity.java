@@ -87,9 +87,12 @@ public class MainActivity extends AppCompatActivity {
                 logged_in = false;
                 break;
             case R.id.profile:
-                openProfile();
+//                openProfile();
+                openPrivateProfile(); //TODO open profile based on login
+                break;
             case R.id.add:
                 openCreateListing();
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -101,6 +104,13 @@ public class MainActivity extends AppCompatActivity {
     private void openProfile() {
 //        Intent profile = new Intent(MainActivity.this, CustomerProfile.class);
         Intent profile = new Intent(MainActivity.this, CreatorProfile.class);
+        startActivity(profile);
+    }
+
+    //TODO open profile based on login
+    private void openPrivateProfile() {
+//        Intent profile = new Intent(MainActivity.this, CustomerProfile.class);
+        Intent profile = new Intent(MainActivity.this, CreatorProfilePrivate.class);
         startActivity(profile);
     }
 

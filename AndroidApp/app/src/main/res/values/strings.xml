@@ -23,6 +23,7 @@
     <string name="for_static">για</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
     <string name="freelancer">Freelancer</string>
+    <string name="freelancer_checked">\u2713 Freelancer</string>
     <string name="see_rewards">Δείτε τα δώρα</string>
     <string name="report">Αναφορά</string>
     <string name="listings">Αγγελίες</string>
@@ -60,6 +61,8 @@
     <string name="description">Περιγραφή</string>
     <string name="save">Αποθήκευση</string>
     <string name="one">1</string>
+    <string name="add">Προσθήκη</string>
+    <string name="expertise">Επάγγελμα</string>
     <string-array name="expertise">
         <item>Ζωγράφος</item>
         <item>Ξυλουργός</item>

@@ -86,10 +86,11 @@ public class CreatorProfile extends AppCompatActivity {
         return this.getResources().getIdentifier(name, "drawable", this.getPackageName());
     }
 
-    //TODO open rewards based on profile type
     public void openRewardsCustomer(View view) {
-//        Intent rewards = new Intent(CreatorProfile.this, RewardsCustomerActivity.class);
-        Intent rewards = new Intent(CreatorProfile.this, RewardsCreatorActivity.class);
+        Intent rewards = new Intent(CreatorProfile.this, RewardsCustomerActivity.class);
         startActivity(rewards);
+    }
+
+    public void toggleEditCreator(View view) {
     }
 }
