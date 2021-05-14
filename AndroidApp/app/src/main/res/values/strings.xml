@@ -73,4 +73,9 @@
         <item>Πίνακες</item>
         <item>Καρέκλες</item>
     </string-array>
+    <string-array name="location">
+        <item>Καλλιθέα</item>
+        <item>Πατήσια</item>
+        <item>Μαρούσι</item>
+    </string-array>
 </resources>

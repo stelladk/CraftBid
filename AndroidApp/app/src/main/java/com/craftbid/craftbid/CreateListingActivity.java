@@ -36,9 +36,15 @@ public class CreateListingActivity extends AppCompatActivity {
 
         //TODO get listing categories from database
         Spinner expertise = findViewById(R.id.listing_category);
-        ArrayAdapter<CharSequence> spinner_adapter = ArrayAdapter.createFromResource(this, R.array.category, android.R.layout.simple_spinner_item);
-        spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        expertise.setAdapter(spinner_adapter);
+        ArrayAdapter<CharSequence> exp_adapter = ArrayAdapter.createFromResource(this, R.array.category, android.R.layout.simple_spinner_item);
+        exp_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        expertise.setAdapter(exp_adapter);
+
+        //TODO get location choices from database
+        Spinner location = findViewById(R.id.location_spinner);
+        ArrayAdapter<CharSequence> location_adapter = ArrayAdapter.createFromResource(this, R.array.location, android.R.layout.simple_spinner_item);
+        location_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        location.setAdapter(location_adapter);
     }
 
     //Temporary
