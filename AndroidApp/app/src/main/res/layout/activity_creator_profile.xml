@@ -10,24 +10,56 @@
 
     <include layout="@layout/app_bar"/>
 
-    <!--    <RelativeLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content">-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/fullname_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxHeight="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_toStartOf="@id/report_btn"
+            android:layout_toLeftOf="@id/report_btn"
+            android:gravity="center"
+            android:hint="@string/fullname"
+            android:text="@string/fullname"
+            android:textSize="30sp"
+            android:textColor="?android:attr/textColor"
+            android:inputType="text"
+            android:importantForAutofill="no"
+            android:visibility="gone"/>
+        <TextView
+            android:id="@+id/fullname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_toStartOf="@id/report_btn"
+            android:layout_toLeftOf="@id/report_btn"
+            android:gravity="center"
+            android:text="@string/fullname"
+            android:textSize="30sp"
+            android:textColor="?android:attr/textColor"/>
 
-<!--    <com.google.android.material.button.MaterialButton-->
-<!--        android:id="@+id/report_btn"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="end|top"-->
-<!--        android:padding="0dp"-->
-<!--        app:backgroundTint="@android:color/transparent"-->
-<!--        app:rippleColor="?attr/colorPrimary"-->
-<!--        app:strokeColor="?android:attr/textColor"-->
-<!--        app:strokeWidth="2dp"-->
-<!--        android:text="@string/report"-->
-<!--        android:textSize="15sp"-->
-<!--        android:textColor="?android:attr/textColor"-->
-<!--        android:textAllCaps="false"/>-->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/report_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="end|top"
+            android:padding="0dp"
+            app:backgroundTint="@android:color/transparent"
+            app:rippleColor="?attr/colorPrimary"
+            app:strokeColor="?android:attr/textColor"
+            app:strokeWidth="2dp"
+            android:text="@string/report"
+            android:textSize="15sp"
+            android:textColor="?android:attr/textColor"
+            android:textAllCaps="false"/>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/profile_header"
@@ -38,9 +70,9 @@
             android:id="@+id/profile_photo"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
             app:ArcType="inner"
             app:ArcRadius="75dp"
             android:background="@drawable/mitsos"
@@ -53,49 +85,49 @@
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             android:orientation="vertical">
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/report_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|top"
-                android:padding="0dp"
-                app:backgroundTint="@android:color/transparent"
-                app:rippleColor="?attr/colorPrimary"
-                app:strokeColor="?android:attr/textColor"
-                app:strokeWidth="2dp"
-                android:text="@string/report"
-                android:textSize="15sp"
-                android:textColor="?android:attr/textColor"
-                android:textAllCaps="false"/>
-            <EditText
-                android:id="@+id/fullname_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxHeight="50dp"
-                android:gravity="center"
-                android:hint="@string/fullname"
-                android:text="@string/fullname"
-                android:textSize="30sp"
-                android:textColor="?android:attr/textColor"
-                android:inputType="text"
-                android:importantForAutofill="no"
-                android:visibility="gone"/>
-            <TextView
-                android:id="@+id/fullname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/fullname"
-                android:textSize="30sp"
-                android:textColor="?android:attr/textColor"/>
-            <TextView
-                android:id="@+id/username"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/username_en"
-                android:textSize="15sp"
-                android:textColor="?android:attr/textColor"/>
+<!--            <com.google.android.material.button.MaterialButton-->
+<!--                android:id="@+id/report_btn"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="end|top"-->
+<!--                android:padding="0dp"-->
+<!--                app:backgroundTint="@android:color/transparent"-->
+<!--                app:rippleColor="?attr/colorPrimary"-->
+<!--                app:strokeColor="?android:attr/textColor"-->
+<!--                app:strokeWidth="2dp"-->
+<!--                android:text="@string/report"-->
+<!--                android:textSize="15sp"-->
+<!--                android:textColor="?android:attr/textColor"-->
+<!--                android:textAllCaps="false"/>-->
+<!--            <EditText-->
+<!--                android:id="@+id/fullname_edit"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:maxHeight="50dp"-->
+<!--                android:gravity="center"-->
+<!--                android:hint="@string/fullname"-->
+<!--                android:text="@string/fullname"-->
+<!--                android:textSize="30sp"-->
+<!--                android:textColor="?android:attr/textColor"-->
+<!--                android:inputType="text"-->
+<!--                android:importantForAutofill="no"-->
+<!--                android:visibility="gone"/>-->
+<!--            <TextView-->
+<!--                android:id="@+id/fullname"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:gravity="center"-->
+<!--                android:text="@string/fullname"-->
+<!--                android:textSize="30sp"-->
+<!--                android:textColor="?android:attr/textColor"/>-->
+<!--            <TextView-->
+<!--                android:id="@+id/username"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:gravity="center"-->
+<!--                android:text="@string/username_en"-->
+<!--                android:textSize="15sp"-->
+<!--                android:textColor="?android:attr/textColor"/>-->
             <EditText
                 android:id="@+id/email_edit"
                 android:layout_width="match_parent"
@@ -173,15 +205,16 @@
             <EditText
                 android:id="@+id/description_edit"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxHeight="50dp"
+                android:layout_height="70dp"
                 android:gravity="center"
                 android:hint="@string/description"
                 android:text="@string/profile_description"
                 android:textSize="15sp"
                 android:textColor="?android:attr/textColor"
+                android:background="@drawable/border"
                 android:maxLines="3"
                 android:inputType="text"
+                android:scrollHorizontally="false"
                 android:importantForAutofill="no"
                 android:visibility="gone"/>
             <TextView
@@ -193,7 +226,7 @@
                 android:text="@string/profile_description"
                 android:textSize="15sp"
                 android:textColor="?android:attr/textColor"
-                android:maxLines="2"/>
+                android:maxLines="3"/>
 <!--            <Button-->
 <!--                android:layout_width="wrap_content"-->
 <!--                android:layout_height="wrap_content"-->
@@ -254,7 +287,7 @@
             android:layout_toLeftOf="@id/add_listing_btn"
             android:gravity="start"
             android:text="@string/listings"
-            android:textSize="30sp"
+            android:textSize="27sp"
             android:textColor="?android:attr/textColor"/>
 
         <Button
@@ -292,7 +325,7 @@
             android:layout_toLeftOf="@id/review_btn"
             android:gravity="start"
             android:text="@string/evaluations"
-            android:textSize="30sp"
+            android:textSize="27sp"
             android:textColor="?android:attr/textColor"/>
 
         <Button

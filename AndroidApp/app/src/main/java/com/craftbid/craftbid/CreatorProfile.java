@@ -29,7 +29,7 @@ public class CreatorProfile extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Profile");
+        toolbar.setTitle("mitsos_creations");
 
         //Set Back Arrow
 //        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
