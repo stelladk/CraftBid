@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CraftBid">
-        <activity android:name=".CreatorProfilePrivate"></activity>
+        <activity android:name=".EditListingActivity"></activity>
+        <activity android:name=".CreatorProfilePrivate" />
         <activity android:name=".CreateListingActivity" />
         <activity android:name=".RewardsCreatorActivity" />
         <activity android:name=".RewardsCustomerActivity" />

@@ -45,6 +45,19 @@
         android:textColor="?android:attr/textColor"
         android:inputType="text"
         android:importantForAutofill="no"/>
+    <TextView
+        android:id="@+id/note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintTop_toBottomOf="@id/password"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        android:text="*αν έχει ήδη υποβληθεί προσφορά δεν αλλάζει"
+        android:textSize="12sp"
+        android:textColor="@color/error"
+        android:visibility="gone"/>
 
     <Spinner
         android:id="@+id/location_spinner"
