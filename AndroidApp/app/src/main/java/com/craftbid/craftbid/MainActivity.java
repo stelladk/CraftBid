@@ -90,6 +90,9 @@ public class MainActivity extends AppCompatActivity {
 //                openProfile();
                 openPrivateProfile(); //TODO open profile based on login
                 break;
+            case R.id.notif:
+                openNotifications();
+                break;
             case R.id.add:
                 openCreateListing();
                 break;
@@ -117,6 +120,11 @@ public class MainActivity extends AppCompatActivity {
     private void openCreateListing(){
         Intent createListing = new Intent(MainActivity.this, CreateListingActivity.class);
         startActivity(createListing);
+    }
+
+    private void openNotifications(){
+        Intent notif = new Intent(MainActivity.this, NotificationsActivity.class);
+        startActivity(notif);
     }
 
     //Temporary
