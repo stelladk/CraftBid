@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.craftbid.craftbid.adapters.EvaluationsRecyclerAdapter;
 import com.craftbid.craftbid.model.Evaluation;
@@ -26,7 +27,7 @@ public class CustomerProfile extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Profile");
+        toolbar.setTitle("maria_karen");
 
         //Set Back Arrow
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -61,5 +62,9 @@ public class CustomerProfile extends AppCompatActivity {
     private void goBack() {
         Intent main = new Intent(CustomerProfile.this, MainActivity.class);
         startActivity(main);
+    }
+
+    public void toggleEditCustomer(View view){
+
     }
 }

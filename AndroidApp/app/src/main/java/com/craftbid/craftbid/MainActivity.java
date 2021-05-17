@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
     //TODO open profile based on login
     private void openPrivateProfile() {
-//        Intent profile = new Intent(MainActivity.this, CustomerProfile.class);
+//        Intent profile = new Intent(MainActivity.this, CustomerProfilePrivate.class);
         Intent profile = new Intent(MainActivity.this, CreatorProfilePrivate.class);
         startActivity(profile);
     }

@@ -9,10 +9,29 @@
 
     <include layout="@layout/app_bar"/>
 
-<!--    <RelativeLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content">-->
-        <LinearLayout
+    <EditText
+        android:id="@+id/fullname_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="50dp"
+        android:gravity="center"
+        android:hint="@string/fullname"
+        android:text="@string/fullname"
+        android:textSize="30sp"
+        android:textColor="?android:attr/textColor"
+        android:inputType="text"
+        android:importantForAutofill="no"
+        android:visibility="gone"/>
+    <TextView
+        android:id="@+id/fullname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/fullname"
+        android:textSize="30sp"
+        android:textColor="?android:attr/textColor"/>
+
+    <LinearLayout
             android:id="@+id/profile_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -21,7 +40,9 @@
                 android:id="@+id/profile_photo"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:layout_margin="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
                 app:ArcType="inner"
                 app:ArcRadius="75dp"
                 android:background="@drawable/karen"
@@ -29,26 +50,33 @@
 
             <LinearLayout
                 android:id="@+id/profile_details"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
                 android:orientation="vertical">
-                <TextView
-                    android:id="@+id/fullname"
+<!--                <TextView-->
+<!--                    android:id="@+id/username"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:gravity="center"-->
+<!--                    android:text="@string/username_en"-->
+<!--                    android:textSize="20sp"-->
+<!--                    android:textColor="?android:attr/textColor"/>-->
+                <EditText
+                    android:id="@+id/email_edit"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="50dp"
                     android:gravity="center"
-                    android:text="@string/fullname"
-                    android:textSize="35sp"
-                    android:textColor="?android:attr/textColor"/>
-                <TextView
-                    android:id="@+id/username"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="@string/username_en"
-                    android:textSize="20sp"
-                    android:textColor="?android:attr/textColor"/>
+                    android:hint="@string/email"
+                    android:text="@string/email"
+                    android:textSize="25sp"
+                    android:textColor="?android:attr/textColor"
+                    android:inputType="textEmailAddress"
+                    android:importantForAutofill="no"
+                    android:visibility="gone"/>
                 <TextView
                     android:id="@+id/email"
                     android:layout_width="match_parent"
@@ -57,10 +85,25 @@
                     android:text="@string/email"
                     android:textSize="25sp"
                     android:textColor="?android:attr/textColor"/>
+                <EditText
+                    android:id="@+id/description_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:gravity="center"
+                    android:hint="@string/description"
+                    android:text="@string/profile_description"
+                    android:textSize="15sp"
+                    android:textColor="?android:attr/textColor"
+                    android:background="@drawable/border"
+                    android:maxLines="4"
+                    android:inputType="text"
+                    android:scrollHorizontally="false"
+                    android:importantForAutofill="no"
+                    android:visibility="gone"/>
                 <TextView
                     android:id="@+id/description"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="70dp"
                     android:maxHeight="100dp"
                     android:gravity="center"
                     android:text="@string/description"
@@ -69,6 +112,20 @@
                     android:maxLines="4"/>
             </LinearLayout>
         </LinearLayout>
+
+    <Button
+        android:id="@+id/edit_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:text="@string/edit"
+        android:textSize="15sp"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        android:onClick="toggleEditCustomer"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/reviews_title"
