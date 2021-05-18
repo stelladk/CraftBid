@@ -16,122 +16,145 @@
         android:layout_gravity="center"
         android:text="@string/order_form"
         android:textSize="30sp"/>
-    <RadioGroup
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <RadioButton
-            android:id="@+id/delivery_courier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/delivery_courier_text"
-            android:textSize="20sp"
-            android:textColor="?android:attr/textColor"
-            android:checked="true">
-        </RadioButton>
-        <LinearLayout
+        <RadioGroup
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="30dp"
-            android:layout_marginLeft="30dp">
-            <EditText
-                android:id="@+id/purchase_address_edit"
-                android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RadioButton
+                android:id="@+id/delivery_courier"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="30dp"
-                android:hint="@string/address"
+                android:text="@string/delivery_courier_text"
                 android:textSize="20sp"
                 android:textColor="?android:attr/textColor"
-                android:inputType="text"
-                android:importantForAutofill="no"/>
+                android:checked="true">
+            </RadioButton>
             <LinearLayout
+                android:id="@+id/purchase_layout_courier"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <EditText
-                    android:id="@+id/purchase_number_edit"
+                android:orientation="vertical"
+                android:layout_marginStart="25dp"
+                android:layout_marginLeft="25dp">
+                <TextView
+                    android:id="@+id/courier_not_offerer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="30dp"
-                    android:hint="@string/address_number"
-                    android:textSize="20sp"
-                    android:textColor="?android:attr/textColor"
-                    android:inputType="number"
-                    android:importantForAutofill="no"/>
+                    android:text="@string/not_offered"
+                    android:layout_gravity="center"
+                    android:visibility="invisible"/>
                 <EditText
-                    android:id="@+id/purchase_TK_edit"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/purchase_address_edit"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="30dp"
-                    android:hint="@string/TK"
+                    android:hint="@string/address"
                     android:textSize="20sp"
                     android:textColor="?android:attr/textColor"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:importantForAutofill="no"/>
+                <LinearLayout
+                    android:id="@+id/purchase_layout_courier_numbers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <EditText
+                        android:id="@+id/purchase_number_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="30dp"
+                        android:hint="@string/address_number"
+                        android:textSize="20sp"
+                        android:textColor="?android:attr/textColor"
+                        android:inputType="number"
+                        android:importantForAutofill="no"/>
+                    <EditText
+                        android:id="@+id/purchase_TK_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:hint="@string/TK"
+                        android:textSize="20sp"
+                        android:textColor="?android:attr/textColor"
+                        android:inputType="number"
+                        android:importantForAutofill="no"/>
+                </LinearLayout>
+                <Button
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/submit_order"
+                    android:layout_marginTop="10dp"
+                    app:backgroundTint="@color/green"
+                    android:textColor="@color/black"
+                    android:textAllCaps="false"
+                    android:layout_gravity="center"/>
             </LinearLayout>
-            <Button
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:text="@string/submit_order"
-                android:layout_marginTop="10dp"
-                app:backgroundTint="@color/green"
-                android:textColor="@color/black"
-                android:textAllCaps="false"
-                android:layout_gravity="center"/>
-        </LinearLayout>
-        <RadioButton
-            android:id="@+id/delivery_handToHand"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/delivery_handToHand_text"
-            android:textSize="20sp"
-            android:textColor="?android:attr/textColor"
-            android:layout_marginTop="15dp">
-        </RadioButton>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="30dp"
-            android:layout_marginLeft="30dp">
-            <TextView
+            <RadioButton
+                android:id="@+id/delivery_handToHand"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/offer_location"
-                android:textSize="20sp"
-                android:textColor="?android:attr/textColor"/>
-            <TextView
-                android:id="@+id/purchase_location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="'Kallithea'"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:textColor="?android:attr/textColor"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/suggested_locations"
+                android:text="@string/delivery_handToHand_text"
                 android:textSize="20sp"
                 android:textColor="?android:attr/textColor"
-                android:textStyle="bold"
-                android:layout_marginTop="10dp"/>
-            <TextView
-                android:id="@+id/suggested_locations"
-                android:layout_width="wrap_content"
+                android:layout_marginTop="15dp">
+            </RadioButton>
+            <LinearLayout
+                android:id="@+id/purchase_layout_hand"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="πάρκο 1, πάρκο 2, Jumbo"
-                android:textSize="20sp"
-                android:textColor="?android:attr/textColor"/>
-            <Button
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:text="@string/contact_creator"
-                android:layout_marginTop="10dp"
-                app:backgroundTint="@color/green"
-                android:textColor="@color/black"
-                android:textAllCaps="false"
-                android:layout_gravity="center"/>
-        </LinearLayout>
-    </RadioGroup>
+                android:orientation="vertical"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp">
+                <TextView
+                    android:id="@+id/hand_not_offered"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/not_offered"
+                    android:layout_gravity="center"
+                    android:visibility="invisible"
+                    android:layout_marginBottom="5dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/offer_location"
+                    android:textSize="20sp"
+                    android:textColor="?android:attr/textColor"/>
+                <TextView
+                    android:id="@+id/purchase_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="'Kallithea'"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="?android:attr/textColor"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/suggested_locations"
+                    android:textSize="20sp"
+                    android:textColor="?android:attr/textColor"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"/>
+                <TextView
+                    android:id="@+id/suggested_locations"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="πάρκο 1, πάρκο 2, Jumbo"
+                    android:textSize="20sp"
+                    android:textColor="?android:attr/textColor"/>
+                <Button
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/contact_creator"
+                    android:layout_marginTop="10dp"
+                    app:backgroundTint="@color/green"
+                    android:textColor="@color/black"
+                    android:textAllCaps="false"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+        </RadioGroup>
+    </ScrollView>
 </LinearLayout>
