@@ -9,6 +9,14 @@
 
     <include layout="@layout/app_bar"/>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
     <TextView
         android:id="@+id/listing_name"
         android:layout_width="wrap_content"
@@ -121,7 +129,8 @@
             app:layout_constraintBottom_toTopOf="@id/handin_check"
             app:layout_constraintStart_toStartOf="parent"
             android:gravity="center"
-            android:text="@string/shipment"/>
+            android:text="@string/shipment"
+            android:textSize="15sp"/>
 
         <CheckBox
             android:id="@+id/handin_check"
@@ -131,7 +140,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:gravity="center"
-            android:text="@string/hand_in_hand"/>
+            android:text="@string/hand_in_hand"
+            android:textSize="15sp"/>
 
         <TextView
             android:id="@+id/points_title"
@@ -143,7 +153,8 @@
             android:gravity="center"
             android:hint=""
             android:text="@string/points_optional"
-            android:textColor="?android:attr/textColor"/>
+            android:textColor="?android:attr/textColor"
+            android:textSize="15sp"/>
 
         <EditText
             android:id="@+id/points_edit"
@@ -189,4 +200,7 @@
         android:text="@string/save"
         android:textColor="@color/black"
         android:textAllCaps="false"/>
+
+    </LinearLayout>
+    </ScrollView>
 </LinearLayout>

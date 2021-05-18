@@ -43,7 +43,7 @@ public class CreatorProfilePrivate extends CreatorProfile {
 
         edit_btn.setVisibility(View.VISIBLE);
         add_listing_btn.setVisibility(View.VISIBLE);
-        report_btn.setVisibility(View.GONE);
+        report_btn.setVisibility(View.INVISIBLE);
 
 
         fullname_edit = findViewById(R.id.fullname_edit);
