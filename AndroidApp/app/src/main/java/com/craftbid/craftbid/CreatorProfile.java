@@ -15,6 +15,7 @@ import android.view.View;
 import com.craftbid.craftbid.adapters.EvaluationsRecyclerAdapter;
 import com.craftbid.craftbid.adapters.FeedRecyclerAdapter;
 import com.craftbid.craftbid.model.Evaluation;
+import com.craftbid.craftbid.model.Listing;
 import com.craftbid.craftbid.model.Thumbnail;
 import com.google.android.material.button.MaterialButton;
 
@@ -101,5 +102,17 @@ public class CreatorProfile extends AppCompatActivity {
     }
 
     public void toggleEditCreator(View view) {
+    }
+
+    /** Moves user to New Listing activity */
+    public void addListing(View view) {
+        Intent listing = new Intent(CreatorProfile.this, CreateListingActivity.class);
+        startActivity(listing);
+    }
+
+    /** Moves user to New Evaluation activity */
+    public void addEvaluation(View view) {
+        Intent eval = new Intent(CreatorProfile.this, EvaluationActivity.class);
+        startActivity(eval);
     }
 }

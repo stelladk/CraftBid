@@ -1,12 +1,15 @@
 package com.craftbid.craftbid;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -58,6 +61,20 @@ public class CreateListingActivity extends AppCompatActivity {
         location.setAdapter(location_adapter);
 
         dialog = new Dialog(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                goBack();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    private void goBack() {
+        Intent creator = new Intent(CreateListingActivity.this, CreatorProfilePrivate.class);
+        startActivity(creator);
     }
 
     //Temporary

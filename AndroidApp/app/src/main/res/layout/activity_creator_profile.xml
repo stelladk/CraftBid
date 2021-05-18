@@ -313,7 +313,8 @@
             android:textAllCaps="false"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:visibility="invisible"/>
+            android:visibility="invisible"
+            android:onClick="addListing"/>
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -350,7 +351,8 @@
             android:text="@string/evaluation"
             android:textAllCaps="false"
             android:textSize="15sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:onClick="addEvaluation"/>
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
