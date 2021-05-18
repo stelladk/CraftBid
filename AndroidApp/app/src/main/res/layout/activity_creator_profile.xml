@@ -10,6 +10,14 @@
 
     <include layout="@layout/app_bar"/>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -58,7 +66,8 @@
             android:text="@string/report"
             android:textSize="15sp"
             android:textColor="?android:attr/textColor"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"
+            android:checkable="true"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -349,5 +358,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="5dp"/>
 
+    </LinearLayout>
+    </ScrollView>
     <!--    </RelativeLayout>-->
 </LinearLayout>

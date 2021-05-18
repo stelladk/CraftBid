@@ -19,6 +19,7 @@ import com.craftbid.craftbid.adapters.EvaluationsRecyclerAdapter;
 import com.craftbid.craftbid.adapters.FeedRecyclerAdapter;
 import com.craftbid.craftbid.model.Evaluation;
 import com.craftbid.craftbid.model.Thumbnail;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,9 +39,11 @@ public class CreatorProfilePrivate extends CreatorProfile {
 
         Button edit_btn = findViewById(R.id.edit_btn);
         Button add_listing_btn = findViewById(R.id.add_listing_btn);
+        MaterialButton report_btn = findViewById(R.id.report_btn);
 
         edit_btn.setVisibility(View.VISIBLE);
         add_listing_btn.setVisibility(View.VISIBLE);
+        report_btn.setVisibility(View.GONE);
 
 
         fullname_edit = findViewById(R.id.fullname_edit);
