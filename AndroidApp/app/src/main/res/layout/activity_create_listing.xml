@@ -174,7 +174,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:contentDescription="@string/help"
-            android:src="@drawable/ic_help"/>
+            android:src="@drawable/ic_help"
+            android:onClick="showPopup"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <EditText

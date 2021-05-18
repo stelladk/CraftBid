@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".EvaluationActivity">
+
+    <include layout="@layout/app_bar"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/evaluate_creator"
+        android:textSize="30sp"/>
+
+    <LinearLayout
+        android:id="@+id/eval_profile_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <com.stelladk.arclib.ArcLayout
+            android:id="@+id/eval_profile_photo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            app:ArcType="inner"
+            app:ArcRadius="75dp"
+            android:background="@drawable/mitsos"
+            android:contentDescription="@string/photo_profile"/>
+
+        <LinearLayout
+            android:id="@+id/eval_creator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/eval_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mitsos_creations"
+                android:textSize="20sp"
+                android:textColor="?android:attr/textColor"/>
+
+            <TextView
+                android:id="@+id/eval_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="mitsos_creations@gmail.com"
+                android:textSize="15sp"
+                android:textColor="?android:attr/textColor"/>
+
+            <TextView
+                android:id="@+id/eval_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Τηλέφωνο: 0123456789"
+                android:textSize="15sp"
+                android:textColor="?android:attr/textColor"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <RatingBar
+        android:id="@+id/eval_ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="0dp"
+        android:layout_marginTop="20dp"
+        android:progressTint="@color/gold"
+        android:progressBackgroundTint="?android:attr/textColor"
+        android:background="@android:color/transparent"
+        android:backgroundTint="@android:color/transparent"
+        android:isIndicator="false"
+        android:transformPivotX="100dp"
+        android:transformPivotY="25dp"
+        android:scaleX="1.2"
+        android:scaleY="1.2"
+        android:max="5"
+        android:rating="1"
+        tools:targetApi="lollipop"/>
+
+    <TextView
+        android:id="@+id/eval_text_comments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/comments"
+        android:textSize="20sp"
+        android:textColor="?android:attr/textColor"/>
+    <EditText
+        android:id="@+id/eval_comments"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:lines="8"
+        android:background="@drawable/border"
+        android:textSize="15sp"
+        android:textColor="?android:attr/textColor"
+        android:scrollbarStyle="insideInset"
+        android:scrollbars="vertical"
+        android:inputType="textMultiLine"
+        android:singleLine="false"
+        android:scrollHorizontally="false"
+        android:importantForAutofill="no"
+        android:gravity="top|left"
+        android:layout_marginHorizontal="30dp"
+        android:padding="3dp"/>
+
+    <Button
+        android:id="@+id/submit_eval_btn"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:text="@string/submit"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        android:onClick="submitEvaluation"/>
+</LinearLayout>

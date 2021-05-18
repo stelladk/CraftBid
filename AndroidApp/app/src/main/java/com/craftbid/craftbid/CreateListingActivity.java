@@ -5,7 +5,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -17,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CreateListingActivity extends AppCompatActivity {
-
+    Dialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,10 +56,21 @@ public class CreateListingActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> location_adapter = ArrayAdapter.createFromResource(this, R.array.location, android.R.layout.simple_spinner_item);
         location_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         location.setAdapter(location_adapter);
+
+        dialog = new Dialog(this);
     }
 
     //Temporary
     public int getDrawable(String name) {
         return this.getResources().getIdentifier(name, "drawable", this.getPackageName());
+    }
+
+    public void showPopup(View view) {
+        dialog.setContentView(R.layout.popup_create_listing);
+        dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
+        dialog.show();
+    }
+    public void closePopup(View view) {
+        dialog.dismiss();
     }
 }
