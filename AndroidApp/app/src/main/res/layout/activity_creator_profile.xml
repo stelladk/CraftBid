@@ -197,8 +197,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:padding="0dp"
                     android:text="@string/freelancer"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
                     android:textColor="?android:attr/textColor"
                     android:visibility="gone"/>
                 <TextView
