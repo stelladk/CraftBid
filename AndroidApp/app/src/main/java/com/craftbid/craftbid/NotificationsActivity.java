@@ -69,4 +69,9 @@ public class NotificationsActivity extends AppCompatActivity {
     public int getDrawable(String name) {
         return this.getResources().getIdentifier(name, "drawable", this.getPackageName());
     }
+
+    public void purchase(Thumbnail notification) {
+        Intent purchase = new Intent(NotificationsActivity.this, PurchaseActivity.class);
+        startActivity(purchase);
+    }
 }

@@ -30,6 +30,7 @@
         <activity android:name=".SignupCustomerActivity" />
         <activity android:name=".CustomerProfile" />
         <activity android:name=".ReportActivity" />
+        <activity android:name=".PurchaseActivity"/>
     </application>
 
 </manifest>

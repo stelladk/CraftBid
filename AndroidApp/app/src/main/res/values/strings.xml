@@ -73,6 +73,16 @@
     <string name="submit">Υποβολή</string>
     <string name="evaluate_creator">Αξιολόγηση Δημιουργού</string>
     <string name="new_listing_help">Αγοράζοντας το παρόν προϊόν ο πελάτης συλλέγει τους πόντους που του προσφέρετε, και μόλις συγκεντρώσει ένα σύνολο πόντων μπορεί να επιλέξει ένα από τα δώρα που έχετε επιλέξει. Προϋπόθεση για να ορίσετε πόντους σε μία αγγελία είναι να έχετε ορίσει τουλάχιστον ένα δώρο. "</string>
+    <string name="order_form">Φόρμα Παραγγελίας</string>
+    <string name="delivery_courier_text">Παράδοση ταχυδρομικά</string>
+    <string name="address">Οδός</string>
+    <string name="address_number">Αριθμός</string>
+    <string name="TK">Ταχ. κώδικας</string>
+    <string name="submit_order">Υποβολή Παραγγελίας</string>
+    <string name="delivery_handToHand_text">Παράδοση χέρι-με-χέρι</string>
+    <string name="contact_creator">Επικοινωνήστε με τον δημιουργό</string>
+    <string name="offer_location">Ο δημιουργός παρέχει παράδοση χέρι-με-χέρι στην τοποθεσία</string>
+    <string name="suggested_locations">Προτεινόμενες τοποθεσίες</string>
     <string-array name="expertise">
         <item>Ζωγράφος</item>
         <item>Ξυλουργός</item>
