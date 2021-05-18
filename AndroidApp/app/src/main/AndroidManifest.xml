@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CraftBid">
-        <activity android:name=".NotificationsActivity"></activity>
+        <activity android:name=".OffersActivity"/>
+        <activity android:name=".NotificationsActivity"/>
         <activity android:name=".CustomerProfilePrivate" />
         <activity android:name=".EditListingActivity" />
         <activity android:name=".CreatorProfilePrivate" />
@@ -28,7 +29,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".SignupCustomerActivity" />
         <activity android:name=".CustomerProfile" />
-        <activity android:name=".ReportActivity"/>
+        <activity android:name=".ReportActivity" />
     </application>
 
 </manifest>
