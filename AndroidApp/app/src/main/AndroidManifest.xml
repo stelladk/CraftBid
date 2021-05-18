@@ -28,6 +28,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".SignupCustomerActivity" />
         <activity android:name=".CustomerProfile" />
+        <activity android:name=".ReportActivity"/>
     </application>
 
 </manifest>

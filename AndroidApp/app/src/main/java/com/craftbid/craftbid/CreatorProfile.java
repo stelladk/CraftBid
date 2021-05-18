@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -15,6 +16,7 @@ import com.craftbid.craftbid.adapters.EvaluationsRecyclerAdapter;
 import com.craftbid.craftbid.adapters.FeedRecyclerAdapter;
 import com.craftbid.craftbid.model.Evaluation;
 import com.craftbid.craftbid.model.Thumbnail;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -64,6 +66,13 @@ public class CreatorProfile extends AppCompatActivity {
         reviews_recycler.setLayoutManager(manager_r);
         EvaluationsRecyclerAdapter adapter_r = new EvaluationsRecyclerAdapter(evaluations);
         reviews_recycler.setAdapter(adapter_r);
+
+        MaterialButton report_btn = findViewById(R.id.report_btn);
+        report_btn.addOnCheckedChangeListener((button, isChecked) -> {
+            Intent report = new Intent(CreatorProfile.this, ReportActivity.class);
+            // TODO pass creator's info (profile photo,username,email,phone)
+            startActivity(report);
+        });
     }
 
     @Override
