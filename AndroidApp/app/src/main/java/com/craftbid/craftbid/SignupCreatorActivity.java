@@ -25,8 +25,6 @@ import com.google.android.material.snackbar.Snackbar;
 import java.io.*;
 import java.net.Socket;
 
-import com.craftbid.craftbid.model.Thumbnail;
-
 public class SignupCreatorActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private String expertise_selected;
@@ -64,7 +62,7 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
 
     public void attemptSighup(View view) {
         //Start AsyncTask for signup
-        new SignUpTask().execute(buffer);
+        new SignUpTask().execute("");
     }
 
     @Override
@@ -113,12 +111,11 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
 
 
     /** AsyncTask running when signup button is clicked, connecting to server to signup */
-    private class SignUpTask extends AsyncTask<byte[], String, Void> {
+    private class SignUpTask extends AsyncTask<String, String, Void> {
         ProgressDialog progressDialog;
         String resultmsg = null;
         @Override
-        protected Void doInBackground(byte[]... params) {
-            byte[] buffer = params[0];
+        protected Void doInBackground(String... params) {
             Socket socket = null;
             ObjectOutputStream out = null;
             ObjectInputStream in = null;
