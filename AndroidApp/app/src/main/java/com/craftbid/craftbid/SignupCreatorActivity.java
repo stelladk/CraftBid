@@ -3,19 +3,26 @@ package com.craftbid.craftbid;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.*;
+
 public class SignupCreatorActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private String expertise_selected;
+    private final int PHOTO_PICK = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,5 +69,40 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+    
+    public void onImageClick(View view) {
+        Snackbar.make(view, "Click! " , Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+        Intent photo_picker = new Intent(Intent.ACTION_PICK,
+                                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        photo_picker.setType("image/*");
+        startActivityForResult(photo_picker,PHOTO_PICK);
+    }
+
+    @Override
+    protected void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            try {
+                Uri uri = data.getData();
+                InputStream in = getContentResolver().openInputStream(uri);
+                Bitmap photo = BitmapFactory.decodeStream(in);
+                ImageView photo_profile= (ImageView) findViewById(R.id.photo_profile);
+                photo_profile.setImageBitmap(photo);
+                //convert photo to byte array to send to server
+                ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int len = 0;
+                while ((len = in.read(buffer)) != -1) {
+                    byteBuffer.write(buffer, 0, len);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }else {
+
+        }
     }
 }

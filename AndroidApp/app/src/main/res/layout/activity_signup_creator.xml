@@ -55,7 +55,8 @@
             android:layout_height="100dp"
             android:layout_margin="10dp"
             android:background="@drawable/ic_insert_photo"
-            android:contentDescription="@string/photo_profile" />
+            android:contentDescription="@string/photo_profile"
+            android:onClick="onImageClick" />
 
         <LinearLayout
             android:id="@+id/fullname"
