@@ -81,14 +81,17 @@ public class Server {
                 case "REQUEST_PROFILE":
                     request_profile(db_connect,input,output);
                     break;
+                case "EDIT_PROFILE":
+                    //TODO edit profile info in database
+                    break;
                 case "CREATE_LISTING":
                     create_listing(db_connect,input,output);
                     break;
                 case "VIEW_LISTING":
                     view_listing(db_connect,input,output);
                     break;
-                case "UPDATE_LISTING":
-                    //TODO update listing info in database
+                case "EDIT_LISTING":
+                    //TODO edit listing info in database
                     break;
                 case "CREATE_BID":
                     add_offer(db_connect,input,output);
@@ -121,7 +124,7 @@ public class Server {
                     //TODO create a new purchase
                     break;
                 case "SEND_NOTIFICATION":
-                    //TODO send a new notification to customer when creator accept an offer
+                    //TODO send a new notification to customer when creator accept an offer,also delete all other offers
                     break;
                 case "REQUEST_NOTIFICATIONS":
                     //TODO return a list of all notifications given a username
