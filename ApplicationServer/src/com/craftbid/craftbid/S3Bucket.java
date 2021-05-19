@@ -27,7 +27,6 @@ public class S3Bucket {
 	 * @return S3 client
 	 */
 	public static AmazonS3 connectToBucket() {
-		
 		// credentials to connent to S3 bucket
 		AWSCredentials credentials = new BasicAWSCredentials(Constants.ACCESS_KEY_ID, Constants.ACCESS_SEC_KEY);
 		
@@ -108,9 +107,8 @@ public class S3Bucket {
 	}
 	
 	/**
-	 * Deletes file in specific folder in S3 bucket
-	 * @param folderName folder in S3 bucket
-	 * @param fileName file's name to be deleted
+	 * Deletes file in S3 bucket
+	 * @param filepath file's path to be deleted
 	 * @param s3Connection
 	 */
 	public static void deleteFile(String filepath, AmazonS3 s3Connection) {

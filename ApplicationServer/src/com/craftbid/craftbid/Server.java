@@ -1,5 +1,7 @@
 package com.craftbid.craftbid;
 
+import com.amazonaws.services.s3.AmazonS3;
+
 import java.net.*;
 import java.io.*;
 import java.sql.*;
@@ -116,6 +118,13 @@ public class Server {
                     //TODO send a list of all categories
                     break;
                 case "CREATE_PURCHASE":
+                    //TODO create a new purchase
+                    break;
+                case "SEND_NOTIFICATION":
+                    //TODO send a new notification to customer when creator accept an offer
+                    break;
+                case "REQUEST_NOTIFICATIONS":
+                    //TODO return a list of all notifications given a username
                     break;
             }
             //after serving request
@@ -145,6 +154,16 @@ public class Server {
                 if (pass.equals(password)) {
                     System.out.println("Password correct! Login Successful");
                     output.writeObject("LOGIN SUCCESSFUL");
+                    output.flush();
+                    //getting the profile type (customer or creator)
+                    String profile = "customer";
+                    query = "SELECT * FROM Creator WHERE username= \'" + username + "\';";
+                    stm = db_connect.createStatement();
+                    res = stm.executeQuery(query);
+                    if(res.next()) {
+                        profile = "creator";
+                    }
+                    output.writeObject(profile);
                     output.flush();
                 } else {
                     System.out.println("Password incorrect!");
@@ -176,7 +195,7 @@ public class Server {
             String email = (String)input.readObject();
             String phone = (String)input.readObject(); //send "NULL" if none given
             String desc = (String)input.readObject(); //send "NULL" if none given
-            String photo = (String)input.readObject(); //send "NULL" if none given
+            byte[] photo = (byte[])input.readObject(); //send empty byte array if none given
             boolean is_creator = (boolean)input.readObject();
             System.out.println("Username= "+username+",password = "+password+
                     ",FullName= "+fullname+",email= "+email+",phone= "+phone+",description= "+desc);
@@ -200,12 +219,20 @@ public class Server {
                     output.flush();
                 }else {
                     System.out.println("Username and email don't exist. Registering user!");
+                    String bucket_path = username+"/"+username+"_pfp";
+                    //first put profile image to the bucket as "username/username_pfp.png"
+                    File f2 = new File("temp/"+username+".jpg"); //write to temp file
+                    FileOutputStream out = new FileOutputStream(f2);
+                    out.write(photo);
+                    out.close();
+                    AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket and write file inside
+                    S3Bucket.addToFolder(bucket_path,f2,connect);
                     //insert new tuple to db
                     query = "INSERT INTO UserInfo (username,password,fullname,email,phoneNumber,description,photo) "+
                             "VALUES(\'"+username+"\',\'"+password+"\',\'"+fullname+"\',\'"+email+"\'," +
                             (phone.equals("NULL")?phone : "\'"+phone+"\'")+","+
                             (desc.equals("NULL")?desc : "\'"+desc+"\'")+","+
-                            (photo.equals("NULL")?photo : "\'"+photo+"\'")+");"; //insert nulls to table only if user sent "NULL"
+                            (photo.equals("NULL")?photo : "\'"+bucket_path+"\'")+");"; //insert nulls to table only if user sent "NULL"
                     stm.executeUpdate(query);
                     output.writeObject("BASIC REGISTER SUCCESSFUL");
                     output.flush();
