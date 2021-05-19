@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".CreateRewardActivity">
+
+    <include layout="@layout/app_bar"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="@string/new_reward"
+        android:textSize="35sp"
+        android:textColor="?android:attr/textColor"
+        android:layout_marginVertical="10dp"/>
+
+    <include layout="@layout/image_item"
+        android:id="@+id/reward_photo"
+        android:layout_height="130dp"
+        android:layout_width="130dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginVertical="10dp"/>
+
+    <EditText
+        android:id="@+id/reward_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:hint="@string/reward_name"
+        android:textSize="25sp"
+        android:textColor="?android:attr/textColor"
+        android:inputType="text"
+        android:importantForAutofill="no"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginVertical="10dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:text="@string/points"
+            android:textColor="?android:attr/textColor"
+            android:textSize="25sp"/>
+        <EditText
+            android:id="@+id/set_reward_points"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="@string/one"
+            android:textSize="20sp"
+            android:textColor="?android:attr/textColor"
+            android:inputType="number"
+            android:importantForAutofill="no" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/save_reward"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:text="@string/save"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:onClick="saveReward"/>
+</LinearLayout>

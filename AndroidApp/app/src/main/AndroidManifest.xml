@@ -32,6 +32,7 @@
         <activity android:name=".ReportActivity" />
         <activity android:name=".PurchaseActivity"/>
         <activity android:name=".EvaluationActivity"/>
+        <activity android:name=".CreateRewardActivity"/>
     </application>
 
 </manifest>
