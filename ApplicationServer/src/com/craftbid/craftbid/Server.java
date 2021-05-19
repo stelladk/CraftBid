@@ -222,24 +222,28 @@ public class Server {
                     output.flush();
                 }else {
                     System.out.println("Username and email don't exist. Registering user!");
-                    String bucket_path = username+"/"+username+"_pfp";
-                    //first put profile image to the bucket as "username/username_pfp.png"
-                    File f2 = new File("temp/"+username+".jpg"); //write to temp file
-                    FileOutputStream out = new FileOutputStream(f2);
-                    out.write(photo);
-                    out.close();
-                    AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket and write file inside
-                    S3Bucket.addToFolder(bucket_path,f2,connect);
+                    String bucket_path = "NULL";
                     //insert new tuple to db
                     query = "INSERT INTO UserInfo (username,password,fullname,email,phoneNumber,description,photo) "+
                             "VALUES(\'"+username+"\',\'"+password+"\',\'"+fullname+"\',\'"+email+"\'," +
                             (phone.equals("NULL")?phone : "\'"+phone+"\'")+","+
                             (desc.equals("NULL")?desc : "\'"+desc+"\'")+","+
-                            (photo.equals("NULL")?photo : "\'"+bucket_path+"\'")+");"; //insert nulls to table only if user sent "NULL"
+                            bucket_path+");"; //insert nulls to table only if user sent "NULL"
                     stm.executeUpdate(query);
                     output.writeObject("BASIC REGISTER SUCCESSFUL");
                     output.flush();
-
+                    //add pic to bucket
+                    if(photo!=null) {
+                        bucket_path = username+"/"+username+"_pfp";
+                        //first put profile image to the bucket as "username/username_pfp.png"
+                        File f2 = new File("temp/"+username+".jpeg"); //write to temp file
+                        FileOutputStream out = new FileOutputStream(f2);
+                        out.write(photo);
+                        out.close();
+                        AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket and write file inside
+                        S3Bucket.addToFolder(bucket_path,f2,connect);
+                        System.out.println("Added image to bucket!");
+                    }
                     //if is creator
                     //creators phone is never null, also some additional info (the android clients perform validation checking)
                     if(is_creator) {
