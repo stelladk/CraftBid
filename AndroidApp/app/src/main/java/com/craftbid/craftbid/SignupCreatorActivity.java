@@ -25,6 +25,8 @@ import com.google.android.material.snackbar.Snackbar;
 import java.io.*;
 import java.net.Socket;
 
+import com.craftbid.craftbid.model.Thumbnail;
+
 public class SignupCreatorActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private String expertise_selected;
@@ -62,9 +64,7 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
 
     public void attemptSighup(View view) {
         //Start AsyncTask for signup
-        new SignUpTask().execute("");
-
-
+        new SignUpTask().execute(buffer);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
     public void onImageClick(View view) {
         Intent photo_picker = new Intent(Intent.ACTION_PICK,
                                          android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        photo_picker.setType("image/*");
+        photo_picker.setType("image/jpeg");
         startActivityForResult(photo_picker,PHOTO_PICK);
     }
 
@@ -99,28 +99,26 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
                     ImageView photo_profile= (ImageView) findViewById(R.id.photo_profile);
                     photo_profile.setImageBitmap(photo);
                     //convert photo to byte array to send to server
-                    ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
-                    buffer = new byte[1024];
-                    int len = 0;
-                    while ((len = in.read(buffer)) != -1) {
-                        byteBuffer.write(buffer, 0, len);
-                    }
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    photo.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+                    buffer = stream.toByteArray();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }else {
-
+                Log.d("error","no image given");
             }
         }
     }
 
-    //AsyncTask running when signup button is clicked, connecting to server to signup
-    private class SignUpTask extends AsyncTask<String, String, Void> {
+
+    /** AsyncTask running when signup button is clicked, connecting to server to signup */
+    private class SignUpTask extends AsyncTask<byte[], String, Void> {
         ProgressDialog progressDialog;
         String resultmsg = null;
         @Override
-        protected Void doInBackground(String... params) {
+        protected Void doInBackground(byte[]... params) {
+            byte[] buffer = params[0];
             Socket socket = null;
             ObjectOutputStream out = null;
             ObjectInputStream in = null;
@@ -142,15 +140,35 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
             }else if(!password.equals(repeat_password)) {
                 resultmsg = "Οι κωδικοί δεν ταιριάζουν";
             }else {
-                is_successful = true;
+                //connect to server to signup
+                try {
+                    socket = new Socket("192.168.2.2",6500);
+                    in = new ObjectInputStream(socket.getInputStream());
+                    out = new ObjectOutputStream(socket.getOutputStream());
+                    out.writeObject("SIGNUP_USER");
+                    out.writeObject(username);
+                    out.writeObject(password);
+                    out.writeObject(name);
+                    out.writeObject(email);
+                    out.writeObject(phone.equals("") ? "NULL" : phone);
+                    out.writeObject("NULL"); //description is empty at first
+                    out.writeObject(buffer); //profile pic
+                    out.writeObject(false); //TODO must be true (isCreator)
+
+                    response = (String)in.readObject();
+                    if(response.equals("USER ALREADY EXISTS")) {
+                        resultmsg = "Username already exists!";
+                    }else if(response.equals("EMAIL ALREADY EXISTS")) {
+                        resultmsg = "Email already exists!";
+                    }else {
+                        //TODO continue with more creator fields
+                        resultmsg = "Signup was successful!";
+                        is_successful = true;
+                    }
+                }catch(IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
-            /*
-            try {
-                socket = new Socket("192.168.2.2",6500);
-            }catch(IOException e) {
-                e.printStackTrace();
-            }
-             */
             return null;
         }
 
