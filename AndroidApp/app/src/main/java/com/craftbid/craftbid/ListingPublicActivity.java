@@ -35,7 +35,7 @@ public class ListingPublicActivity extends AppCompatActivity {
         }
     }
     private void goBack() {
-        Intent creator = new Intent(ListingPublicActivity.this, ListingPublicActivity.class);
+        Intent creator = new Intent(ListingPublicActivity.this, MainActivity.class);
         startActivity(creator);
     }
 

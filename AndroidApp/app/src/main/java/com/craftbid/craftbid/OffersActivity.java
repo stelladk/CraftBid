@@ -38,7 +38,7 @@ public class OffersActivity extends AppCompatActivity {
         offers.add(new Offer(3, 12, "maria_karen", 7.45f));
 
 
-        RecyclerView recycler = findViewById(R.id.thumbnails_recyclerview);
+        RecyclerView recycler = findViewById(R.id.offers_recyclerview);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recycler.setLayoutManager(manager);
         OffersRecyclerAdapter adapter = new OffersRecyclerAdapter(offers);
