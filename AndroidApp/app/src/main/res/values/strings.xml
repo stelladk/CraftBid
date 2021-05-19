@@ -86,6 +86,14 @@
     <string name="not_offered">(δεν προσφέρεται)</string>
     <string name="new_reward">Νέο Βραβείο</string>
     <string name="reward_name">Όνομα Βραβείου</string>
+    <string name="sort">Ταξινόμηση:</string>
+    <string name="search">Αναζήτηση</string>
+    <string name="search_here">Αναζήτησε εδώ!</string>
+    <string-array name="sort_options">
+        <item>Τιμή</item>
+        <item>Ημερομηνία</item>
+        <item>Δημιουργός</item>
+    </string-array>
     <string-array name="expertise">
         <item>Ζωγράφος</item>
         <item>Ξυλουργός</item>

@@ -18,17 +18,17 @@ import com.craftbid.craftbid.model.Thumbnail;
 import com.google.android.material.snackbar.Snackbar;
 import com.stelladk.arclib.ArcLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapter.ViewHolder> {
 
     private List<Thumbnail> thumbnails;
 
-    public FeedRecyclerAdapter(List<Thumbnail> thumbnails) {
-        this.thumbnails = thumbnails;
-    }
+//    public FeedRecyclerAdapter(List<Thumbnail> thumbnails) {
+//        this.thumbnails = thumbnails;
+//    }
 
-    //Temporary
     private MainActivity context = null;
     private CreatorProfile context2 = null;
     public FeedRecyclerAdapter(List<Thumbnail> thumbnails, MainActivity context) {
@@ -60,6 +60,7 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
             return;
         }
 //        holder.image.setBackgroundResource(thumbnails.get(position).getThumbnail());
+        holder.plus_sign.setVisibility(View.GONE);
         if(context != null){
             holder.image.setBackgroundResource(context.getDrawable(thumbnails.get(position).getThumbnail()));
         }else if(context2!=null){
@@ -76,6 +77,12 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
     @Override
     public int getItemCount() {
         return thumbnails.size() + 1;
+    }
+
+    //Filter view according to search results
+    public void filter(List<Thumbnail> filteredList){
+        thumbnails = filteredList;
+        notifyDataSetChanged();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -99,10 +106,11 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
 
         @Override
         public void onClick(View view) {
-            /*Snackbar.make(view, "Clicked on item " + getAbsoluteAdapterPosition(), Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();*/
-            MainActivity.reviewListing();
-
+            if(context != null){
+                context.reviewListing();
+            }else if(context2 != null){
+                context2.reviewListing();
+            }
         }
     }
 }
