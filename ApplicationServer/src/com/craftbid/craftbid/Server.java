@@ -81,8 +81,8 @@ public class Server {
                 case "REQUEST_PROFILE":
                     request_profile(db_connect,input,output);
                     break;
-                case "EDIT_PROFILE":
-                    //TODO edit profile info in database
+                case "UPDATE_PROFILE":
+                    update_profile(db_connect,input,output);
                     break;
                 case "CREATE_LISTING":
                     create_listing(db_connect,input,output);
@@ -90,8 +90,8 @@ public class Server {
                 case "VIEW_LISTING":
                     view_listing(db_connect,input,output);
                     break;
-                case "EDIT_LISTING":
-                    //TODO edit listing info in database
+                case "UPDATE_LISTING":
+                    update_listing(db_connect,input,output);
                     break;
                 case "CREATE_BID":
                     add_offer(db_connect,input,output);
@@ -381,6 +381,31 @@ public class Server {
     }//request_profile
 
 
+    /** UPDATE PROFILE
+     * Modify a UserInfo's field in the database */
+    public void update_profile(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new UPDATE_PROFILE request");
+        try {
+            String field = (String)input.readObject(); //the column to be changed
+            String new_val = (String)input.readObject(); //the new value
+            String query = null;
+            if(field.equals("isFreelancer")) {
+                //TODO change bit
+            }else if(field.equals("fullname") || field.equals("email") || field.equals("phoneNumber") || field.equals("description")){
+                //TODO change String
+            } else {
+                System.out.println("Field "+field+" cannot be edited in a user's info");
+            }
+            //update the value in the database
+            Statement stm = db_connect.createStatement();
+            stm.executeUpdate(query);
+        }catch(IOException | ClassNotFoundException| SQLException e) {
+            System.err.println("Unable to process update profile request");
+            e.printStackTrace();
+        }
+    }//update profile
+
+
     /** CREATE LISTING
      * Creator publishes a new listing for a handmade product */
     public void create_listing(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
@@ -392,6 +417,7 @@ public class Server {
                     "VALUES(\'"+listing.getId()+"\',"+listing.getName()+",\'"+listing.getDescription()+"\',\'"
                     +listing.getCategory()+"\',\'"+listing.getMin_price()+"\',\'"+listing.getReward_points()+"\',\'"
                     +listing.getQuantity()+"\',\'"+listing.getLocation()+"\',\'"+listing.getPublished_by()+"\');";
+                    //todo id is autoincrement
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
             //TODO get photos and add them to table "Photo"
@@ -425,6 +451,31 @@ public class Server {
             e.printStackTrace();
         }
     }//view listing
+
+
+    /** UPDATE LISTING
+     * Modify a listing's field in the database */
+    public void update_listing(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new UPDATE_LISTING request");
+        try {
+            String field = (String)input.readObject(); //the column to be changed
+            String new_val = (String)input.readObject(); //the new value
+            String query = null;
+            if(field.equals("description") || field.equals("name")) {
+                //TODO change string
+            }else if(field.equals("reward_points") || field.equals("quantity")){
+                //TODO change int
+            } else {
+                System.out.println("Field "+field+" cannot be edited in a listing");
+            }
+            //update the value in the database
+            Statement stm = db_connect.createStatement();
+            stm.executeUpdate(query);
+        }catch(IOException | ClassNotFoundException| SQLException e) {
+            System.err.println("Unable to process update listing request");
+            e.printStackTrace();
+        }
+    }//update listing
 
 
     /** CREATE BID
