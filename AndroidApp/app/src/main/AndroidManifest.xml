@@ -33,6 +33,9 @@
         <activity android:name=".PurchaseActivity"/>
         <activity android:name=".EvaluationActivity"/>
         <activity android:name=".CreateRewardActivity"/>
+        <activity android:name=".MakeOfferActivity"/>
+        <activity android:name=".ListingPublicActivity"/>
+        <activity android:name=".ListingPrivateActivity"/>
     </application>
 
 </manifest>

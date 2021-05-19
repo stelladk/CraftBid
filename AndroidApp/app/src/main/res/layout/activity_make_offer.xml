@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".MakeOfferActivity">
 
     <!--TODO remove unnecessary hardcoded android:text -->
 
@@ -84,7 +85,8 @@
                 android:background="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/listing_photo"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                android:onClick="viewPhotos"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -98,7 +100,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="150dp">
                 <TextView
-                    android:id="@+id/username"
+                    android:id="@+id/listing_description"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/lorem_ipsum"
@@ -240,6 +242,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/delivery"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/both_ways"
@@ -252,7 +255,8 @@
                 android:text="@string/submit_offer"
                 android:textAllCaps="false"
                 android:layout_marginHorizontal="50dp"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"
+                android:onClick="submitOffer"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

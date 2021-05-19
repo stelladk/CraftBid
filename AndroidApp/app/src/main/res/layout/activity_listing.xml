@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ListingPublicActivity">
 
     <!--TODO remove unnecessary hardcoded android:text -->
 
@@ -156,45 +157,73 @@
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="25dp">
-        <TextView
-            android:id="@+id/initial_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/last_offer"
-            android:textAllCaps="false"
-            android:textSize="20sp"
-            android:textColor="?android:attr/textColor"/>
-        <TextView
-            android:id="@+id/colon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/colon"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:textSize="20sp"
-            android:layout_gravity="center_vertical"/>
-        <TextView
-            android:id="@+id/price"
+        android:layout_height="wrap_content">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="gravity"
-            android:gravity="center"
-            android:layout_gravity="center_vertical"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:text="30,49"/>
-    </LinearLayout>
+            android:orientation="vertical">
 
-    <Button
-        android:id="@+id/make_offer_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/make_offer"
-        android:textAllCaps="false"
-        android:layout_marginHorizontal="50dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="25dp">
+                <TextView
+                    android:id="@+id/initial_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/last_offer"
+                    android:textAllCaps="false"
+                    android:textSize="20sp"
+                    android:textColor="?android:attr/textColor"/>
+                <TextView
+                    android:id="@+id/colon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/colon"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:textSize="20sp"
+                    android:layout_gravity="center_vertical"/>
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="gravity"
+                    android:gravity="center"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:text="30,49"/>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/make_offer_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/make_offer"
+                android:textAllCaps="false"
+                android:layout_marginHorizontal="50dp"
+                android:onClick="makeOffer"/>
+            <Button
+                android:id="@+id/edit_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/edit"
+                android:textAllCaps="false"
+                android:layout_marginHorizontal="50dp"
+                android:visibility="invisible"/>
+            <Button
+                android:id="@+id/show_offers_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/show_offers"
+                android:textAllCaps="false"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="50dp"
+                android:visibility="invisible"/>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

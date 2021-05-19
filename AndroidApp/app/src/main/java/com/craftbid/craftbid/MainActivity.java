@@ -23,7 +23,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static Context instance;
     public boolean logged_in = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
         recycler.setLayoutManager(manager);
         FeedRecyclerAdapter adapter = new FeedRecyclerAdapter(thumbnails, this);
         recycler.setAdapter(adapter);
+
+        instance = this;
     }
 
     @Override
@@ -133,4 +137,12 @@ public class MainActivity extends AppCompatActivity {
 //        return ActivityCompat.getDrawable(this, resourceId);
     }
 
+    public static void reviewListing(){
+        // TODO set PRIVATE true/false based on whether user is the creator of the listing
+        boolean PRIVATE = true;
+        Intent listing_review;
+        if(PRIVATE) listing_review = new Intent(instance, ListingPrivateActivity.class);
+        else listing_review = new Intent(instance, ListingPublicActivity.class);
+        instance.startActivity(listing_review);
+    }
 }

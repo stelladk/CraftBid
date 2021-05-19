@@ -1,5 +1,6 @@
 package com.craftbid.craftbid.adapters;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.craftbid.craftbid.CreatorProfile;
+import com.craftbid.craftbid.ListingPrivateActivity;
 import com.craftbid.craftbid.MainActivity;
 import com.craftbid.craftbid.R;
 import com.craftbid.craftbid.model.Thumbnail;
@@ -97,8 +99,10 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
 
         @Override
         public void onClick(View view) {
-            Snackbar.make(view, "Clicked on item " + getAbsoluteAdapterPosition(), Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+            /*Snackbar.make(view, "Clicked on item " + getAbsoluteAdapterPosition(), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();*/
+            MainActivity.reviewListing();
+
         }
     }
 }
