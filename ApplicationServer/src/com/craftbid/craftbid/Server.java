@@ -97,10 +97,10 @@ public class Server {
                     add_offer(db_connect,input,output);
                     break;
                 case "VIEW_OFFERS":
-                    //TODO request list of offers for a listing
+                    view_offers(db_connect,input,output);
                     break;
                 case "DECLINE_OFFER":
-                    //TODO remove offer from database
+                    decline_offer(db_connect,input,output);
                     break;
                 case "CREATE_EVALUATION":
                     //TODO add evaluation to database
@@ -499,6 +499,51 @@ public class Server {
             e.printStackTrace();
         }
     }//add offer
+
+
+    /** VIEW OFFERS
+     * Return a list of all offers for a listing */
+    public void view_offers(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new VIEW_OFFERS request");
+        try {
+            int listing_id = (int)input.readObject();
+            //get a list of all offers for given listing id
+            String query = "SELECT * FROM Offer WHERE submitted_for="+listing_id+";";
+            Statement stm = db_connect.createStatement();
+            ResultSet res = stm.executeQuery(query);
+            ArrayList<Offer> offers =new ArrayList<Offer>();
+            while(res.next()) {
+                //create a list of offers
+                int id = res.getInt("id");
+                float price =  res.getFloat("price");
+                String submitted_by = res.getString("submitted_by");
+                offers.add(new Offer(id,listing_id,submitted_by,price));
+            }
+            output.writeObject(offers); //send thumbnails
+            output.flush();
+        }catch(IOException | ClassNotFoundException| SQLException e) {
+            System.err.println("Unable to process view offers request");
+            e.printStackTrace();
+        }
+    }//view offer
+
+
+    /** DECLINE OFFER
+     * Decline an offer by removing it from the database*/
+    public void decline_offer(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new DECLINE_OFFER request");
+        try {
+            int id = (int)input.readObject();
+            //get the offer from the database
+            String query = "DELETE FROM Offer WHERE id="+id+";";
+            Statement stm = db_connect.createStatement();
+            stm.executeUpdate(query);
+
+        }catch(IOException | ClassNotFoundException| SQLException e) {
+            System.err.println("Unable to process decline offer request");
+            e.printStackTrace();
+        }
+    }//decline offer
 
 
     /** CREATE REPORT
