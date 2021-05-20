@@ -127,10 +127,10 @@ public class Server {
                     request_expertises(db_connect,input,output);
                     break;
                 case "CREATE_PURCHASE":
-                    //TODO create a new purchase
+                    create_purchase(db_connect,input,output);
                     break;
                 case "SEND_NOTIFICATION":
-                    //TODO send a new notification to customer when creator accept an offer,also delete all other offers
+                    send_notification(db_connect,input,output);
                     break;
                 case "REQUEST_NOTIFICATIONS":
                     //TODO return a list of all notifications given a username
@@ -823,6 +823,43 @@ public class Server {
         }
     }//request expertises
 
+
+    /** CREATE PURCHASE
+     * Add a new purchase to database */
+    public void create_purchase(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new CREATE_PURCHASE request");
+        try {
+            Purchase purchase = (Purchase)input.readObject(); //android client sends a Purchase object with all the info for this Purchase
+            //add the reward to the database
+            String query = "INSERT INTO Purchase (done_by,done_on,date) "+
+                    "VALUES('"+purchase.getDone_by()+"',"+purchase.getDone_on()+",'"+purchase.getDate()+"');";
+            Statement stm = db_connect.createStatement();
+            stm.executeUpdate(query);
+        }catch(IOException | ClassNotFoundException | SQLException e) {
+            System.err.println("Unable to process create purchase request");
+            e.printStackTrace();
+        }
+    }//create purchase
+
+
+    /** SEND NOTIFICATION
+     * send a new notification to customer when creator acceptS an offer (BY STORING IT TO DB)
+     * also delete all other offers */
+    public void send_notification(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new SEND_NOTIFICATION request");
+        try {
+            Notification notif = (Notification)input.readObject(); //android client sends a Notification object with all the info for this Notification
+            //add the reward to the database
+            String query = "INSERT INTO Notification (listing_id,belongs_to,price) "+
+                    "VALUES("+notif.getListing_id()+",'"+notif.getBelongs_to()+"',"+notif.getPrice()+");";
+            Statement stm = db_connect.createStatement();
+            stm.executeUpdate(query);
+            //TODO delete all other offers for this listing id
+        }catch(IOException | ClassNotFoundException | SQLException e) {
+            System.err.println("Unable to process send notification request");
+            e.printStackTrace();
+        }
+    }//send notification
 
     public static void main(String[] args) {
         new Server("192.168.2.2",6500,100);
