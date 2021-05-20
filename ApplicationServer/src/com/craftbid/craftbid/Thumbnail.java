@@ -1,6 +1,7 @@
 package com.craftbid.craftbid;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class Thumbnail implements Serializable{
     private int id;
@@ -14,7 +15,7 @@ public class Thumbnail implements Serializable{
         this.description = description;
         this.category = category;
         this.min_price = min_price;
-        this.thumbnail = thumbnail;
+        this.thumbnail = Arrays.copyOfRange(thumbnail,0,thumbnail.length-1);
     }
 
     public String getName() {
@@ -62,6 +63,6 @@ public class Thumbnail implements Serializable{
     }
 
     public void setThumbnail(byte[] thumbnail) {
-        this.thumbnail = thumbnail;
+        this.thumbnail = Arrays.copyOfRange(thumbnail,0,thumbnail.length-1);
     }
 }

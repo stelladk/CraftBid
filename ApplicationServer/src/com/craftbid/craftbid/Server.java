@@ -692,7 +692,7 @@ public class Server {
         try {
             Evaluation evaluation = (Evaluation)input.readObject(); //android client sends an Evaluation object with all the info for this Evaluation
             //add the evaluation to the database
-            String query = "INSERT INTO Report(submitted_by,refers_to,rating,date,comment) "+
+            String query = "INSERT INTO Evaluation(submitted_by,refers_to,rating,date,comment) "+
                     "VALUES('"+evaluation.getSubmitted_by()+"','"+evaluation.getRefers_to()+"',"
                     +evaluation.getRating()+",'"+evaluation.getDate()+"','"+evaluation.getComment()+"');";
             Statement stm = db_connect.createStatement();

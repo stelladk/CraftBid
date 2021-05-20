@@ -1,6 +1,7 @@
 package com.craftbid.craftbid;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class Reward implements Serializable {
     private int price,id;
@@ -11,7 +12,7 @@ public class Reward implements Serializable {
         this.id = id;
         this.price = price;
         this.name = name;
-        this.photo = photo;
+        this.photo = Arrays.copyOfRange(photo,0,photo.length-1);
         this.offered_by = offered_by;
     }
 
@@ -52,6 +53,6 @@ public class Reward implements Serializable {
     }
 
     public void setPhoto(byte[] photo) {
-        this.photo = photo;
+        this.photo = Arrays.copyOfRange(photo,0,photo.length-1);
     }
 }

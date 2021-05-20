@@ -1,6 +1,7 @@
 package com.craftbid.craftbid;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 
 public class Evaluation implements Serializable{
@@ -72,6 +73,6 @@ public class Evaluation implements Serializable{
     }
 
     public void setThumbnail(byte[] thumbnail) {
-        this.thumbnail = thumbnail;
+        this.thumbnail = Arrays.copyOfRange(thumbnail,0,thumbnail.length-1);
     }
 }
