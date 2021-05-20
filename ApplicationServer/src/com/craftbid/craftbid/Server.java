@@ -518,9 +518,18 @@ public class Server {
     public void change_profile_picture(ObjectInputStream input, ObjectOutputStream output) {
         System.out.println("Received a new CHANGE_PROFILE_PICTURE request");
         try {
+            //replace image in bucket with new image
             String username = (String)input.readObject(); //the username
             byte[] new_img = (byte[])input.readObject(); // the new image
-            //TODO replace image in bucket with new image
+            String bucket_path = username+"/"+username+"_pfp";
+            //first put profile image to the bucket as "username/username_pfp.png"
+            File f2 = new File("temp/"+username+".jpeg"); //write to temp file
+            FileOutputStream out = new FileOutputStream(f2);
+            out.write(new_img);
+            out.close();
+            AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket and write file inside
+            S3Bucket.addToFolder(bucket_path,f2,connect);
+            System.out.println("Added image to bucket!");
         }catch(IOException | ClassNotFoundException e) {
             System.err.println("Unable to process change profile picture request");
             e.printStackTrace();
@@ -555,8 +564,19 @@ public class Server {
                 S3Bucket.addToFolder(bucket_path,f2,connect);
                 System.out.println("Added image to bucket!");
             }
+            //get the rest of the photos and add them to bucket
+            byte[] picture = null;
             for(int i = 0; i < listing.getTotal_photos(); i++) {
-                //TODO get the rest of the photos and add them to bucket
+                //put picture to the bucket as "username/listing_name/i.jpeg"
+                picture= (byte[])input.readObject(); // the new image
+                String bucket_path = listing.getPublished_by()+"/"+listing.getName()+"/"+i+".jpeg";
+                File f2 = new File("temp/"+listing.getName()+i+".jpeg"); //write to temp file
+                FileOutputStream out = new FileOutputStream(f2);
+                out.write(picture);
+                out.close();
+                AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket and write file inside
+                S3Bucket.addToFolder(bucket_path,f2,connect);
+                System.out.println("Added image to bucket!");
             }
             output.writeObject("LISTING CREATION SUCCESSFUL");
             output.flush();
