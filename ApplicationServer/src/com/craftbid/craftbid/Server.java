@@ -474,22 +474,35 @@ public class Server {
     public void update_profile(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
         System.out.println("Received a new UPDATE_PROFILE request");
         try {
+            String username = (String)input.readObject(); //the username
             String field = (String)input.readObject(); //the column to be changed
             String new_val = (String)input.readObject(); //the new value
             String query = null;
+            Statement stm;
+            ResultSet res;
+            boolean mail_ok = true;
             if(field.equals("isFreelancer")) { //sent value is either 0 or 1
-                //TODO change bit
+                query = "UPDATE Creator SET isFreelancer= "+new_val+"WHERE username= '"+username+"';";
             }else if(field.equals("fullname") || field.equals("email") || field.equals("phoneNumber") || field.equals("description")){
                 if(field.equals("email")) {
-                    //TODO check if new email already exists
+                    //check if new email already exists
+                    query = "SELECT * FROM UserInfo WHERE email= '"+new_val+"';";
+                    stm = db_connect.createStatement();
+                    res = stm.executeQuery(query);
+                    if(res.next()) {
+                        System.out.println("Email already exists!");
+                        mail_ok=false;
+                    }
                 }
-                //TODO change String
+                query = "UPDATE UserInfo SET "+field+" = '"+new_val+"' WHERE username= '"+username+"';";
             } else {
                 System.out.println("Field "+field+" cannot be edited in a user's info");
             }
-            //update the value in the database
-            Statement stm = db_connect.createStatement();
-            stm.executeUpdate(query);
+            if(mail_ok) {
+                //update the value in the database
+                stm = db_connect.createStatement();
+                stm.executeUpdate(query);
+            }
         }catch(IOException | ClassNotFoundException| SQLException e) {
             System.err.println("Unable to process update profile request");
             e.printStackTrace();
