@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
     private List<Thumbnail> thumbnails;
     private RecyclerView recycler;
     private FeedRecyclerAdapter adapter;
+    public static String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         setContentView(R.layout.activity_main);
 
         Bundle bundle = getIntent().getExtras();
-        String username;
         if(bundle!=null){
             username = bundle.getString("username");
             logged_in = true;
