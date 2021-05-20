@@ -16,6 +16,12 @@ public class ListingPrivateActivity extends AppCompatActivity {
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_listing);
 
+        Bundle b = getIntent().getExtras();
+        int listing_id;
+        if(b!=null){
+            listing_id = b.getInt("listing_id");
+        }
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("");
