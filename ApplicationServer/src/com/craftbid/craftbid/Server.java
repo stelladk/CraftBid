@@ -15,7 +15,6 @@ public class Server {
     String ip; int port,concurrent_requests;
     ServerSocket requests;
 
-
     public Server(String ip,int port,int concurrent_requests) {
         System.out.println("Starting server in ip "+ip+" and port "+port);
         this.ip = ip;
@@ -133,7 +132,7 @@ public class Server {
                     send_notification(db_connect,input,output);
                     break;
                 case "REQUEST_NOTIFICATIONS":
-                    //TODO return a list of all notifications given a username
+                    request_notifications(db_connect,input,output);
                     break;
             }
             //after serving request
@@ -481,6 +480,9 @@ public class Server {
             if(field.equals("isFreelancer")) { //sent value is either 0 or 1
                 //TODO change bit
             }else if(field.equals("fullname") || field.equals("email") || field.equals("phoneNumber") || field.equals("description")){
+                if(field.equals("email")) {
+                    //TODO check if new email already exists
+                }
                 //TODO change String
             } else {
                 System.out.println("Field "+field+" cannot be edited in a user's info");
@@ -848,10 +850,10 @@ public class Server {
     public void send_notification(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
         System.out.println("Received a new SEND_NOTIFICATION request");
         try {
-            Notification notif = (Notification)input.readObject(); //android client sends a Notification object with all the info for this Notification
+            Notification notification = (Notification)input.readObject(); //android client sends a Notification object with all the info for this Notification
             //add the reward to the database
             String query = "INSERT INTO Notification (listing_id,belongs_to,price) "+
-                    "VALUES("+notif.getListing_id()+",'"+notif.getBelongs_to()+"',"+notif.getPrice()+");";
+                    "VALUES("+notification.getListing_id()+",'"+notification.getBelongs_to()+"',"+notification.getPrice()+");";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
             //TODO delete all other offers for this listing id
@@ -860,6 +862,33 @@ public class Server {
             e.printStackTrace();
         }
     }//send notification
+
+
+    /** REQUEST NOTIFICATIONS
+     * Return a list of all notifications given a username */
+    public void request_notifications(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new REQUEST_NOTIFICATIONS request");
+        try {
+            String username = (String)input.readObject();
+            //get a list of all expertises
+            String query = "SELECT * FROM Notification WHERE belongs_to='"+username+"';";
+            Statement stm = db_connect.createStatement();
+            ResultSet res = stm.executeQuery(query);
+            ArrayList<Notification> notifications =new ArrayList<Notification>();
+            while(res.next()) {
+                //create a list of notifications
+                int listing_id = res.getInt("listing_id");
+                float price = res.getFloat("price");
+                notifications.add(new Notification(listing_id,username,price));
+            }
+            output.writeObject(notifications); //send notifications
+            output.flush();
+        }catch(IOException | ClassNotFoundException | SQLException e) {
+            System.err.println("Unable to process request notifications request");
+            e.printStackTrace();
+        }
+    }//request notifications
+
 
     public static void main(String[] args) {
         new Server("192.168.2.2",6500,100);
