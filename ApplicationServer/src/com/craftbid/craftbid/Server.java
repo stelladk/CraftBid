@@ -7,6 +7,8 @@ import java.io.*;
 import java.sql.*;
 import java.util.*;
 
+//TODO add replies to all requests where the client sends a message last (server must be the last to message)
+
 public class Server {
 
     String ip; int port,concurrent_requests;
@@ -277,15 +279,23 @@ public class Server {
             Statement stm = db_connect.createStatement();
             ResultSet res = stm.executeQuery(query);
             ArrayList<Thumbnail> listing_thumbnails =new ArrayList<Thumbnail>();
-            while(res.next()) {
+            while(res.next()) { //TODO get more (maybe add index of last loaded)
                 //create a list of listing thumbnails
                 int id = res.getInt("id");
                 String name =  res.getString("name");
                 String desc = res.getString("description");
                 String category = res.getString("category");
                 float min_price = res.getFloat("min_price");
-                //TODO get the listing thumbnail to the bucket and add it to thumbnail object as byte array
+                //get the listing thumbnail from the bucket and add it to thumbnail object as byte array
                 byte[] thumbnail = null;
+                String filepath = res.getString("published_by")+"/"+name+"/thumbnail.jpeg";
+                AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket
+                S3Bucket.getFromFolder(filepath,connect,"temp/"+name+"thumbnail.jpeg");
+                //read file from temp folder and convert to byte array
+                File f2 = new File("temp/"+name+"thumbnail.jpeg");
+                FileInputStream in = new FileInputStream(f2);
+                thumbnail = new byte[(int) f2.length()];
+                int error = in.read(thumbnail);
                 listing_thumbnails.add(new Thumbnail(id,name,desc,category,min_price,thumbnail));
             }
             output.writeObject(listing_thumbnails); //send thumbnails
@@ -309,15 +319,23 @@ public class Server {
             Statement stm = db_connect.createStatement();
             ResultSet res = stm.executeQuery(query);
             ArrayList<Thumbnail> listing_thumbnails =new ArrayList<Thumbnail>();
-            while(res.next()) {
+            while(res.next()) { //TODO get more (maybe add index of last loaded)
                 //create a list of listing thumbnails
                 int id = res.getInt("id");
                 String name =  res.getString("name");
                 String desc = res.getString("description");
                 String category = res.getString("category");
                 float min_price = res.getFloat("min_price");
-                //TODO get the listing thumbnail to the bucket and add it to thumbnail object as byte array
+                //get the listing thumbnail from the bucket and add it to thumbnail object as byte array
                 byte[] thumbnail = null;
+                String filepath = res.getString("published_by")+"/"+name+"/thumbnail.jpeg";
+                AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket
+                S3Bucket.getFromFolder(filepath,connect,"temp/"+name+"thumbnail.jpeg");
+                //read file from temp folder and convert to byte array
+                File f2 = new File("temp/"+name+"thumbnail.jpeg");
+                FileInputStream in = new FileInputStream(f2);
+                thumbnail = new byte[(int) f2.length()];
+                int error = in.read(thumbnail);
                 listing_thumbnails.add(new Thumbnail(id,name,desc,category,min_price,thumbnail));
             }
             output.writeObject(listing_thumbnails); //send thumbnails
@@ -422,12 +440,27 @@ public class Server {
             //add the listing to the database
             String query = "INSERT INTO Listing(name,description,category,min_price,reward_points,quantity,is_located,published_by,date_published,delivery) "+
                     "VALUES(\'"+listing.getName()+"\',\'"+listing.getDescription()+"\',\'"
-                    +listing.getCategory()+"\',\'"+listing.getMin_price()+"\',\'"+listing.getReward_points()+"\',\'"
-                    +listing.getQuantity()+"\',\'"+listing.getLocation()+"\',\'"+listing.getPublished_by()+"\',\'"
+                    +listing.getCategory()+"\',"+listing.getMin_price()+","+listing.getReward_points()+","
+                    +listing.getQuantity()+",\'"+listing.getLocation()+"\',\'"+listing.getPublished_by()+"\',\'"
                     +listing.getDatePublished()+"\',\'"+listing.getDelivery()+"\');";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
-            //TODO get photos and add them to bucket
+            //add thumbnail to bucket (receive as byte array from client) !!!! photo is never null in a listing
+            byte[] thumbnail = (byte[])input.readObject();
+            if(thumbnail!= null) {
+                String bucket_path = listing.getPublished_by()+"/"+listing.getName()+"/thumbnail.jpeg";
+                //put thumbnail to the bucket as "username/listing_name/thumbnail.jpeg"
+                File f2 = new File("temp/"+listing.getName()+"thumbnail.jpeg"); //write to temp file
+                FileOutputStream out = new FileOutputStream(f2);
+                out.write(thumbnail);
+                out.close();
+                AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket and write file inside
+                S3Bucket.addToFolder(bucket_path,f2,connect);
+                System.out.println("Added image to bucket!");
+            }
+            //TODO get the rest of the photos and add them to bucket
+            output.writeObject("LISTING CREATION SUCCESSFUL");
+            output.flush();
         }catch(IOException | ClassNotFoundException| SQLException e) {
             System.err.println("Unable to process create listing request");
             e.printStackTrace();
@@ -449,7 +482,7 @@ public class Server {
                 Listing listing = new Listing(id,res.getString("name"),res.getString("description"), res.getString("category"),
                                               res.getString("published_by"),res.getString("is_located"),
                                               res.getInt("reward_points"),res.getInt("quantity"),res.getFloat("min_price"),
-                                              res.getDate("date_published"),res.getString("delivery"));
+                                              res.getDate("date_published").toString(),res.getString("delivery"));
                 output.writeObject(listing); //send basic info
                 output.flush();
                 //TODO get all the photos from bucket

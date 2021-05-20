@@ -5,13 +5,12 @@ import java.util.Date;
 
 public class Listing implements Serializable {
     private int id;
-    private String name, description,category,published_by,location, delivery;
+    private String name, description,category,published_by,location, delivery,date_published;
     private float min_price;
     private int reward_points, quantity;
-    private Date date_published;
 
     public Listing(int id, String name, String description, String category, String published_by,
-                   String location, int reward_points, int quantity, float min_price, Date date_published, String delivery) {
+                   String location, int reward_points, int quantity, float min_price, String date_published, String delivery) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -97,11 +96,11 @@ public class Listing implements Serializable {
         this.quantity = quantity;
     }
 
-    public Date getDatePublished() {
+    public String getDatePublished() {
         return date_published;
     }
 
-    public void setDatePublished(Date date_published) {
+    public void setDatePublished(String date_published) {
         this.date_published = date_published;
     }
 

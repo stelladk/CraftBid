@@ -91,15 +91,15 @@ public class S3Bucket {
 	 * @param filepath the file's path in S3 bucket to be retrieved and stored locally (folderName/fileName)
 	 * @param s3Connection
 	 */
-	public static void getFromFolder(String filepath, AmazonS3 s3Connection) {
+	public static void getFromFolder(String filepath, AmazonS3 s3Connection, String localpath) {
 		S3Object image = s3Connection.getObject(Constants.BUCKET_NAME, filepath);
 		S3ObjectInputStream in = image.getObjectContent();
 		
-		// where the images will be stored locally (to be changed for Android)
-		String outPath = "src/S3Output/"+filepath.substring(filepath.indexOf("/")+1);
+		//store image locally to temp folder
+		//String outPath = "temp/"+filepath.substring(filepath.indexOf("/")+1);
 		
 		try {
-			Files.copy(in, Paths.get(outPath));
+			Files.copy(in, Paths.get(localpath));
 		} catch (IOException e) {
 			// exception if file already exists
 			e.printStackTrace();
