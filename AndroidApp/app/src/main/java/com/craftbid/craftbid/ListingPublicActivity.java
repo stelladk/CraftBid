@@ -11,7 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 
 public class ListingPublicActivity extends AppCompatActivity {
     private int listing_id;
-    private String previous;
+    private static String previous;
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
@@ -20,7 +20,7 @@ public class ListingPublicActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         if(b!=null){
             listing_id = b.getInt("listing_id");
-            previous = b.getString("previous");
+            previous = b.getString("previous",previous);
         }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
