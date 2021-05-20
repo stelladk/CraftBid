@@ -4,16 +4,17 @@ import java.io.Serializable;
 
 public class Thumbnail implements Serializable{
     private int id;
-    private String name, description,category,thumbnail;
+    private String name, description,category;
     private float min_price;
+    byte[] thumbnail;
 
-    public Thumbnail(int id, String name, String description, String category,String thumbnail,float min_price) {
+    public Thumbnail(int id, String name, String description, String category,float min_price,byte[] thumbnail) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.category = category;
-        this.thumbnail = thumbnail;
         this.min_price = min_price;
+        this.thumbnail = thumbnail;
     }
 
     public String getName() {
@@ -48,19 +49,19 @@ public class Thumbnail implements Serializable{
         this.category = category;
     }
 
-    public String getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
-    }
-
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public byte[] getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(byte[] thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }

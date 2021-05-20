@@ -103,7 +103,7 @@ public class Server {
                     decline_offer(db_connect,input,output);
                     break;
                 case "CREATE_EVALUATION":
-                    //TODO add evaluation to database
+                    //create_evaluation(db_connect,input,output);
                     break;
                 case "CREATE_REPORT":
                     create_report(db_connect,input,output);
@@ -224,11 +224,10 @@ public class Server {
                     System.out.println("Username and email don't exist. Registering user!");
                     String bucket_path = "NULL";
                     //insert new tuple to db
-                    query = "INSERT INTO UserInfo (username,password,fullname,email,phoneNumber,description,photo) "+
+                    query = "INSERT INTO UserInfo (username,password,fullname,email,phoneNumber,description) "+
                             "VALUES(\'"+username+"\',\'"+password+"\',\'"+fullname+"\',\'"+email+"\'," +
                             (phone.equals("NULL")?phone : "\'"+phone+"\'")+","+
-                            (desc.equals("NULL")?desc : "\'"+desc+"\'")+","+
-                            bucket_path+");"; //insert nulls to table only if user sent "NULL"
+                            (desc.equals("NULL")?desc : "\'"+desc+"\'")+");"; //insert nulls to table only if user sent "NULL"
                     stm.executeUpdate(query);
                     output.writeObject("BASIC REGISTER SUCCESSFUL");
                     output.flush();
@@ -281,9 +280,10 @@ public class Server {
                 String name =  res.getString("name");
                 String desc = res.getString("description");
                 String category = res.getString("category");
-                String thumbnail = res.getString("thumbnail");
                 float min_price = res.getFloat("min_price");
-                listing_thumbnails.add(new Thumbnail(id,name,desc,category,thumbnail,min_price));
+                //TODO get the listing thumbnail to the bucket and add it to thumbnail object as byte array
+                byte[] thumbnail = null;
+                listing_thumbnails.add(new Thumbnail(id,name,desc,category,min_price,thumbnail));
             }
             output.writeObject(listing_thumbnails); //send thumbnails
             output.flush();
@@ -312,9 +312,10 @@ public class Server {
                 String name =  res.getString("name");
                 String desc = res.getString("description");
                 String category = res.getString("category");
-                String thumbnail = res.getString("thumbnail");
                 float min_price = res.getFloat("min_price");
-                listing_thumbnails.add(new Thumbnail(id,name,desc,category,thumbnail,min_price));
+                //TODO get the listing thumbnail to the bucket and add it to thumbnail object as byte array
+                byte[] thumbnail = null;
+                listing_thumbnails.add(new Thumbnail(id,name,desc,category,min_price,thumbnail));
             }
             output.writeObject(listing_thumbnails); //send thumbnails
             output.flush();
@@ -343,7 +344,6 @@ public class Server {
                 info.add(res.getString("email"));
                 info.add(res.getString("phoneNumber"));
                 info.add(res.getString("description"));
-                String photo = res.getString("photo");
                 output.writeObject(info); //send basic info
                 //TODO send photo too
                 output.flush();
@@ -373,9 +373,9 @@ public class Server {
                 query = "SELECT * FROM Listing WHERE published_by= \'" + username + "\' ;"; //TODO orderby date
                 stm = db_connect.createStatement();
                 res = stm.executeQuery(query);
-                ArrayList<Listing> listings =new ArrayList<Listing>();
+                ArrayList<Thumbnail> thumbnails =new ArrayList<Thumbnail>();
                 while(res.next()) {
-                    //TODO create a list of Listings
+                    //TODO create a list of Listing Thumbnails
                 }
             }
         }catch(IOException | ClassNotFoundException | SQLException e) {
@@ -417,14 +417,14 @@ public class Server {
         try {
             Listing listing = (Listing)input.readObject(); //android client sends a Listing object with all the info for this Listing
             //add the listing to the database
-            String query = "INSERT INTO Offer(id,name,description,category,min_price,reward_points,quantity,is_located,published_by) "+
-                    "VALUES(\'"+listing.getId()+"\',"+listing.getName()+",\'"+listing.getDescription()+"\',\'"
+            String query = "INSERT INTO Listing(name,description,category,min_price,reward_points,quantity,is_located,published_by,date_published,delivery) "+
+                    "VALUES(\'"+listing.getName()+"\',\'"+listing.getDescription()+"\',\'"
                     +listing.getCategory()+"\',\'"+listing.getMin_price()+"\',\'"+listing.getReward_points()+"\',\'"
-                    +listing.getQuantity()+"\',\'"+listing.getLocation()+"\',\'"+listing.getPublished_by()+"\');";
-                    //todo id is autoincrement
+                    +listing.getQuantity()+"\',\'"+listing.getLocation()+"\',\'"+listing.getPublished_by()+"\',\'"
+                    +listing.getDatePublished()+"\',\'"+listing.getDelivery()+"\');";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
-            //TODO get photos and add them to table "Photo"
+            //TODO get photos and add them to bucket
         }catch(IOException | ClassNotFoundException| SQLException e) {
             System.err.println("Unable to process create listing request");
             e.printStackTrace();
@@ -444,11 +444,12 @@ public class Server {
             if (res.next()) {
                 System.out.println("Got all information for this listing.");
                 Listing listing = new Listing(id,res.getString("name"),res.getString("description"), res.getString("category"),
-                                              res.getString("published_by"), res.getString("thumbnail"),res.getString("is_located"),
-                                              res.getInt("reward_points"),res.getInt("quantity"),res.getFloat("min_price"),res.getDate("date_published"));
+                                              res.getString("published_by"),res.getString("is_located"),
+                                              res.getInt("reward_points"),res.getInt("quantity"),res.getFloat("min_price"),
+                                              res.getDate("date_published"),res.getString("delivery"));
                 output.writeObject(listing); //send basic info
                 output.flush();
-                //TODO get all the photos from table "Photo"
+                //TODO get all the photos from bucket
             }
         }catch(IOException | ClassNotFoundException| SQLException e) {
             System.err.println("Unable to process view listing request");
@@ -489,9 +490,8 @@ public class Server {
         try {
             Offer offer = (Offer)input.readObject(); //android client sends an Offer object with all the info for this Offer
             //add the offer to the database
-            String query = "INSERT INTO Offer(id,price,submitted_by,submitted_for) "+
-                    "VALUES(\'"+offer.getId()+"\',"+offer.getPrice()+",\'"+
-                    offer.getSubmitted_by()+"\',\'"+offer.getSubmitted_for()+"\');";
+            String query = "INSERT INTO Offer(price,submitted_by,submitted_for) "+
+                    "VALUES("+offer.getPrice()+",\'"+ offer.getSubmitted_by()+"\',\'"+offer.getSubmitted_for()+"\');";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
         }catch(IOException | ClassNotFoundException| SQLException e) {
@@ -546,12 +546,12 @@ public class Server {
     }//decline offer
 
 
-    /** CREATE REPORT
-     * Customer submits a new report for a creator */
-    public void create_report(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
-        System.out.println("Received a new CREATE_REPORT request");
+    /** CREATE EVALUATION
+     * Customer submits a new evaluation for a creator
+    public void create_evaluation(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new CREATE_EVALUATION request");
         try {
-            Report report = (Report)input.readObject(); //android client sends a Report object with all the info for this Report
+            Evaluation evaluation = (Evaluation)input.readObject(); //android client sends an Evaluation object with all the info for this Evaluation
             //add the report to the database
             String query = "INSERT INTO Report(id,submitted_by,refers_to,reason,date,description) "+
                     "VALUES(\'"+report.getId()+"\',"+report.getSubmitted_by()+",\'"+report.getRefers_to()+"\',\'"
@@ -563,6 +563,26 @@ public class Server {
             e.printStackTrace();
         }
     }//create report
+    */
+
+    /** CREATE REPORT
+     * Customer submits a new report for a creator */
+    public void create_report(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new CREATE_REPORT request");
+        try {
+            Report report = (Report)input.readObject(); //android client sends a Report object with all the info for this Report
+            //add the report to the database
+            String query = "INSERT INTO Report(submitted_by,refers_to,reason,date,description) "+
+                    "VALUES(\'"+report.getSubmitted_by()+"\',\'"+report.getRefers_to()+"\',\'"
+                    +report.getReason()+"\',\'"+report.getDate()+"\',\'"+report.getDescription()+"\');";
+            Statement stm = db_connect.createStatement();
+            stm.executeUpdate(query);
+        }catch(IOException | ClassNotFoundException| SQLException e) {
+            System.err.println("Unable to process create report request");
+            e.printStackTrace();
+        }
+    }//create report
+
 
     /** VIEW REWARDS
      * A list of all rewards a creator offers */
@@ -576,12 +596,12 @@ public class Server {
             ResultSet res = stm.executeQuery(query);
             ArrayList<Reward> rewards =new ArrayList<Reward>();
             while(res.next()) {
-                //TODO create a list of rewards
                 int price_in_points = res.getInt("price_in_points");
                 int id = res.getInt("id");
                 String name = res.getString("name");
-                String photo = res.getString("photo");
-                rewards.add(new Reward(id,price_in_points,name,photo,username));
+                //TODO get the reward thumbnail from bucket
+                byte[] thumbnail = null;
+                rewards.add(new Reward(id,price_in_points,name,username,thumbnail));
             }
             output.writeObject(rewards);
             output.flush();
@@ -614,10 +634,11 @@ public class Server {
         try {
             Reward reward = (Reward)input.readObject(); //android client sends a Reward object with all the info for this Reward
             //add the reward to the database
-            String query = "INSERT INTO Reward (id,name,price_in_points,photo,offered_by) "+
-                    "VALUES(\'"+reward.getId()+"\',"+reward.getName()+",\'"+reward.getPrice()+"\',\'"+reward.getPhoto()+"\',\'"+reward.getOffered_by()+"\');";
+            String query = "INSERT INTO Reward (name,price_in_points,offered_by) "+
+                    "VALUES(\'"+reward.getName()+"\',"+reward.getPrice()+",\'"+reward.getOffered_by()+"\');";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
+            //TODO get the reward thumbnail as byte array and add to bucket
         }catch(IOException | ClassNotFoundException| SQLException e) {
             System.err.println("Unable to process add reward request");
             e.printStackTrace();

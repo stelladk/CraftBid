@@ -5,24 +5,24 @@ import java.util.Date;
 
 public class Listing implements Serializable {
     private int id;
-    private String name, description,category,published_by,thumbnail,location;
+    private String name, description,category,published_by,location, delivery;
     private float min_price;
     private int reward_points, quantity;
-    private Date date;
+    private Date date_published;
 
-    public Listing(int id, String name, String description, String category, String published_by,String thumbnail,
-                   String location, int reward_points, int quantity, float min_price, Date date) {
+    public Listing(int id, String name, String description, String category, String published_by,
+                   String location, int reward_points, int quantity, float min_price, Date date_published, String delivery) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.category = category;
         this.published_by = published_by;
-        this.thumbnail = thumbnail;
         this.location = location;
         this.reward_points = reward_points;
         this.quantity = quantity;
         this.min_price = min_price;
-        this.date = date;
+        this.date_published = date_published;
+        this.delivery = delivery;
     }
 
     public int getId() {
@@ -81,14 +81,6 @@ public class Listing implements Serializable {
         this.published_by = published_by;
     }
 
-    public String getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
-    }
-
     public String getLocation() {
         return location;
     }
@@ -105,11 +97,19 @@ public class Listing implements Serializable {
         this.quantity = quantity;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getDatePublished() {
+        return date_published;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDatePublished(Date date_published) {
+        this.date_published = date_published;
+    }
+
+    public String getDelivery() {
+        return delivery;
+    }
+
+    public void setDelivery(String delivery) {
+        this.delivery = delivery;
     }
 }
