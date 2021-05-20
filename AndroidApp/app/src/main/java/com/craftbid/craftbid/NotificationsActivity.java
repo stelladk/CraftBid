@@ -19,11 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationsActivity extends AppCompatActivity {
-
+    private String username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
+        username = MainActivity.username;
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -72,6 +73,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
     public void purchase(Thumbnail notification) {
         Intent purchase = new Intent(NotificationsActivity.this, PurchaseActivity.class);
+        purchase.putExtra("listing_id", notification.getId());
         startActivity(purchase);
     }
 }

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".EvaluationActivity">
+    tools:context=".PurchaseActivity">
 
     <include layout="@layout/app_bar"/>
 
@@ -90,7 +90,8 @@
                     app:backgroundTint="@color/green"
                     android:textColor="@color/black"
                     android:textAllCaps="false"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:onClick="openMain"/>
             </LinearLayout>
             <RadioButton
                 android:id="@+id/delivery_handToHand"
@@ -153,7 +154,8 @@
                     app:backgroundTint="@color/green"
                     android:textColor="@color/black"
                     android:textAllCaps="false"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:onClick="openMain"/>
             </LinearLayout>
         </RadioGroup>
     </ScrollView>

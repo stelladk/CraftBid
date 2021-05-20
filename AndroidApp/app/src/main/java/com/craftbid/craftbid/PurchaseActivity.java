@@ -20,6 +20,12 @@ public class PurchaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purchase);
 
+        Bundle b = getIntent().getExtras();
+        int listing_id;
+        if(b!=null){
+            listing_id = b.getInt("listing_id");
+        }
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("");
@@ -91,6 +97,11 @@ public class PurchaseActivity extends AppCompatActivity {
     }
     private void goBack() {
         Intent main = new Intent(PurchaseActivity.this, NotificationsActivity.class);
+        startActivity(main);
+    }
+
+    public void openMain(View view) {
+        Intent main = new Intent(PurchaseActivity.this, MainActivity.class);
         startActivity(main);
     }
 }
