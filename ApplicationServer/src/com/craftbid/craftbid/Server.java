@@ -86,6 +86,9 @@ public class Server {
                 case "UPDATE_PROFILE":
                     update_profile(db_connect,input,output);
                     break;
+                case "CHANGE_PROFILE_IMAGE":
+                    change_profile_picture(input,output);
+                    break;
                 case "CREATE_LISTING":
                     create_listing(db_connect,input,output);
                     break;
@@ -470,7 +473,7 @@ public class Server {
 
 
     /** UPDATE PROFILE
-     * Modify a UserInfo's field in the database */
+     * Modify a UserInfo or Creator's field in the database */
     public void update_profile(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
         System.out.println("Received a new UPDATE_PROFILE request");
         try {
@@ -495,7 +498,7 @@ public class Server {
                     }
                 }
                 query = "UPDATE UserInfo SET "+field+" = '"+new_val+"' WHERE username= '"+username+"';";
-            } else {
+            }else {
                 System.out.println("Field "+field+" cannot be edited in a user's info");
             }
             if(mail_ok) {
@@ -508,6 +511,21 @@ public class Server {
             e.printStackTrace();
         }
     }//update profile
+
+
+    /** CHANGE PROFILE IMAGE
+     * Change the profile picture of a user in the bucket */
+    public void change_profile_picture(ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new CHANGE_PROFILE_PICTURE request");
+        try {
+            String username = (String)input.readObject(); //the username
+            byte[] new_img = (byte[])input.readObject(); // the new image
+            //TODO replace image in bucket with new image
+        }catch(IOException | ClassNotFoundException e) {
+            System.err.println("Unable to process change profile picture request");
+            e.printStackTrace();
+        }
+    }//change profile picture
 
 
     /** CREATE LISTING
