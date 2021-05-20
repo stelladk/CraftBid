@@ -45,3 +45,7 @@ ALTER TABLE Listing ALTER COLUMN is_located VARCHAR(50) NOT NULL;
 ALTER TABLE Listing ADD FOREIGN KEY(is_located) REFERENCES Location(name);
 
 ALTER TABLE Listing ADD delivery VARCHAR(25) NOT NULL;
+
+-- add column to know how many pics are stored in the bucket 
+ALTER TABLE Listing 
+ADD total_photos int;
