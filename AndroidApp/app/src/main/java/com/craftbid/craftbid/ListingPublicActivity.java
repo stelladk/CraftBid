@@ -10,11 +10,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class ListingPublicActivity extends AppCompatActivity {
-
+    private int listing_id;
+    private String previous;
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_listing);
+
+        Bundle b = getIntent().getExtras();
+        if(b!=null){
+            listing_id = b.getInt("listing_id");
+            previous = b.getString("previous");
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -35,12 +42,19 @@ public class ListingPublicActivity extends AppCompatActivity {
         }
     }
     private void goBack() {
-        Intent creator = new Intent(ListingPublicActivity.this, MainActivity.class);
-        startActivity(creator);
+        Intent back;
+        if(previous.equals("@main"))
+            back = new Intent(ListingPublicActivity.this, MainActivity.class);
+        else {
+            back = new Intent(ListingPublicActivity.this, CreatorProfile.class);
+            back.putExtra("username", previous);
+        }
+        startActivity(back);
     }
 
     public void makeOffer(View view) {
         Intent offer = new Intent(ListingPublicActivity.this, MakeOfferActivity.class);
+        offer.putExtra("listing_id", listing_id);
         startActivity(offer);
     }
 }

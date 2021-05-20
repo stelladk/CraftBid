@@ -14,11 +14,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class MakeOfferActivity extends AppCompatActivity {
+    private int listing_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_offer);
+
+        Bundle b = getIntent().getExtras();
+        if(b!=null){
+            listing_id = b.getInt("listing_id");
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -47,8 +53,9 @@ public class MakeOfferActivity extends AppCompatActivity {
         }
     }
     private void goBack() {
-        Intent creator = new Intent(MakeOfferActivity.this, ListingPublicActivity.class);
-        startActivity(creator);
+        Intent listing = new Intent(MakeOfferActivity.this, ListingPublicActivity.class);
+        listing.putExtra("listing_id", listing_id);
+        startActivity(listing);
     }
 
     // TODO
@@ -58,5 +65,6 @@ public class MakeOfferActivity extends AppCompatActivity {
 
     public void submitOffer(View view) {
         Log.d("submit", "Submit offer");
+        goBack();
     }
 }

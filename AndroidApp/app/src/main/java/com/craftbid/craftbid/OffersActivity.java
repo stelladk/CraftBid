@@ -16,11 +16,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OffersActivity extends AppCompatActivity {
-
+    private int listing_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offers);
+
+        Bundle b = getIntent().getExtras();
+        if(b!=null){
+            listing_id = b.getInt("listing_id");
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

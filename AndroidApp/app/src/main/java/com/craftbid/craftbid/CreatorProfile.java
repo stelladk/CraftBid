@@ -116,13 +116,11 @@ public class CreatorProfile extends AppCompatActivity {
         startActivity(eval);
     }
 
-    public void reviewListing(int listing_id){
-        // TODO set PRIVATE true/false based on whether user is the creator of the listing
-        boolean PRIVATE = true;
+    public void reviewListing(int listing_id) {
         Intent listing_review;
-        if(PRIVATE) listing_review = new Intent(CreatorProfile.this, ListingPrivateActivity.class);
-        else listing_review = new Intent(CreatorProfile.this, ListingPublicActivity.class);
+        listing_review = new Intent(CreatorProfile.this, ListingPublicActivity.class);
         listing_review.putExtra("listing_id", listing_id);
+        listing_review.putExtra("previous", "username"); //TODO today
         startActivity(listing_review);
     }
 }

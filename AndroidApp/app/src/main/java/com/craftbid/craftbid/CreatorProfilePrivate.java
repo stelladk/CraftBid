@@ -59,6 +59,15 @@ public class CreatorProfilePrivate extends CreatorProfile {
     }
 
     @Override
+    public void reviewListing(int listing_id){
+        Intent listing_review;
+        listing_review = new Intent(CreatorProfilePrivate.this, ListingPrivateActivity.class);
+        listing_review.putExtra("listing_id", listing_id);
+        listing_review.putExtra("previous", "@profile");
+        startActivity(listing_review);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return super.onOptionsItemSelected(item);
     }

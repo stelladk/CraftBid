@@ -39,18 +39,18 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
     private RecyclerView recycler;
     private FeedRecyclerAdapter adapter;
     public static String username;
+    public static final String GUEST = "@guest";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
             username = bundle.getString("username");
-            logged_in = true;
-        }else{
-            username = "guest"; //TODO ?
+            if(!username.equals(GUEST)) logged_in = true;
         }
 
         //Change Toolbar Title
@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         getMenuInflater().inflate(R.menu.appbarmenu, menu);
         if(logged_in){
             menu.findItem(R.id.login).setVisible(false);
+            menu.findItem(R.id.notif).setVisible(false);
         }else{
             menu.findItem(R.id.logout).setVisible(false);
             menu.findItem(R.id.profile).setVisible(false);
@@ -101,15 +102,12 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.login:
-                logged_in = true;
-                break;
             case R.id.logout:
                 logged_in = false;
                 Intent login = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(login);
                 break;
             case R.id.profile:
-//                openProfile();
                 openPrivateProfile(); //TODO open profile based on login
                 break;
             case R.id.notif:
@@ -168,13 +166,6 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
     }
 
     //TODO open profile based on login
-    private void openProfile() {
-//        Intent profile = new Intent(MainActivity.this, CustomerProfile.class);
-        Intent profile = new Intent(MainActivity.this, CreatorProfile.class);
-        startActivity(profile);
-    }
-
-    //TODO open profile based on login
     private void openPrivateProfile() {
 //        Intent profile = new Intent(MainActivity.this, CustomerProfilePrivate.class);
         Intent profile = new Intent(MainActivity.this, CreatorProfilePrivate.class);
@@ -199,11 +190,12 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
 
     public void reviewListing(int listing_id){
         // TODO set PRIVATE true/false based on whether user is the creator of the listing
-        boolean PRIVATE = true;
+        boolean PRIVATE = false;
         Intent listing_review;
         if(PRIVATE) listing_review = new Intent(MainActivity.this, ListingPrivateActivity.class);
         else listing_review = new Intent(MainActivity.this, ListingPublicActivity.class);
         listing_review.putExtra("listing_id", listing_id);
+        listing_review.putExtra("previous", "@main");
         startActivity(listing_review);
     }
 }

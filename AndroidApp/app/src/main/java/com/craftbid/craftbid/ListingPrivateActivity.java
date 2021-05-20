@@ -11,15 +11,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class ListingPrivateActivity extends AppCompatActivity {
+    private int listing_id;
+    private String previous;
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_listing);
 
         Bundle b = getIntent().getExtras();
-        int listing_id;
         if(b!=null){
             listing_id = b.getInt("listing_id");
+            previous = b.getString("previous");
         }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -39,10 +41,12 @@ public class ListingPrivateActivity extends AppCompatActivity {
 
         offers_btn.setOnClickListener(v -> {
             Intent offers = new Intent(ListingPrivateActivity.this, OffersActivity.class);
+            offers.putExtra("listing_id", listing_id);
             startActivity(offers);
         });
         edit_btn.setOnClickListener(v -> {
             Intent edit_listing = new Intent(ListingPrivateActivity.this, EditListingActivity.class);
+            edit_listing.putExtra("listing_id", listing_id);
             startActivity(edit_listing);
         });
     }
@@ -57,7 +61,16 @@ public class ListingPrivateActivity extends AppCompatActivity {
         }
     }
     private void goBack() {
-        Intent creator = new Intent(ListingPrivateActivity.this, CreatorProfilePrivate.class);
-        startActivity(creator);
+        Intent back;
+        if(previous.equals("@main"))
+            back = new Intent(ListingPrivateActivity.this, MainActivity.class);
+        else
+            back = new Intent(ListingPrivateActivity.this, CreatorProfilePrivate.class);
+        startActivity(back);
+    }
+
+    private void openProfile() {
+        Intent profile = new Intent(ListingPrivateActivity.this, CreatorProfilePrivate.class);
+        startActivity(profile);
     }
 }
