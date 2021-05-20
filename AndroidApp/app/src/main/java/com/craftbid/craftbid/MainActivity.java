@@ -34,7 +34,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements TextView.OnEditorActionListener, AdapterView.OnItemSelectedListener {
 
-    public boolean logged_in = true;
+    public static boolean logged_in = false;
     private List<Thumbnail> thumbnails;
     private RecyclerView recycler;
     private FeedRecyclerAdapter adapter;
@@ -44,17 +44,16 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //set custom support action bar
-//        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-//        getSupportActionBar().setDisplayShowCustomEnabled(true);
-//        getSupportActionBar().setCustomView(R.layout.app_bar);
-//        getSupportActionBar().setElevation(0);
+        Bundle bundle = getIntent().getExtras();
+        String username;
+        if(bundle!=null){
+            username = bundle.getString("username");
+            logged_in = true;
+        }else{
+            username = "guest"; //TODO ?
+        }
 
-//        //Set Back Arrow
-//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-//        //Change Toolbar Title
+        //Change Toolbar Title
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 //        toolbar.setTitle("feed");
@@ -91,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         getMenuInflater().inflate(R.menu.appbarmenu, menu);
         if(logged_in){
             menu.findItem(R.id.login).setVisible(false);
-            menu.findItem(R.id.signup).setVisible(false);
         }else{
             menu.findItem(R.id.logout).setVisible(false);
             menu.findItem(R.id.profile).setVisible(false);
@@ -103,11 +101,12 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.login:
-            case R.id.signup:
                 logged_in = true;
                 break;
             case R.id.logout:
                 logged_in = false;
+                Intent login = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(login);
                 break;
             case R.id.profile:
 //                openProfile();
@@ -198,12 +197,13 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
 //        return ActivityCompat.getDrawable(this, resourceId);
     }
 
-    public void reviewListing(){
+    public void reviewListing(int listing_id){
         // TODO set PRIVATE true/false based on whether user is the creator of the listing
         boolean PRIVATE = true;
         Intent listing_review;
         if(PRIVATE) listing_review = new Intent(MainActivity.this, ListingPrivateActivity.class);
         else listing_review = new Intent(MainActivity.this, ListingPublicActivity.class);
+        listing_review.putExtra("listing_id", listing_id);
         startActivity(listing_review);
     }
 }

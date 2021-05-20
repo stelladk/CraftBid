@@ -33,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         //TODO
         //Do actions to confirm login
         Intent main = new Intent(LoginActivity.this, MainActivity.class);
+        main.putExtra("username", "userId");
         startActivity(main);
     }
 }

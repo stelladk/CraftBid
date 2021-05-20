@@ -14,12 +14,6 @@
         android:contentDescription="@string/login"
         app:showAsAction="always"/>
 
-    <item android:id="@+id/signup"
-        android:icon="@drawable/signup"
-        android:title="@string/signup"
-        android:contentDescription="@string/signup"
-        app:showAsAction="always"/>
-
     <item android:id="@+id/logout"
         android:icon="@drawable/logout"
         android:title="@string/logout"

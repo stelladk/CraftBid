@@ -72,6 +72,17 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
         holder.category.setText(thumbnails.get(position).getCategory());
         holder.description.setText(thumbnails.get(position).getDescription());
         holder.price.setText(thumbnails.get(position).getMin_price()+"");
+
+        holder.item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(context != null){
+                    context.reviewListing(thumbnails.get(position).getId());
+                }else if(context2 != null){
+                    context2.reviewListing(thumbnails.get(position).getId());
+                }
+            }
+        });
     }
 
     @Override
@@ -85,7 +96,7 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
         notifyDataSetChanged();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder {
         public ArcLayout item;
         public ArcLayout image;
         public TextView title, category, description, price;
@@ -100,17 +111,6 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
             description = itemView.findViewById(R.id.description_item);
             price = itemView.findViewById(R.id.price_item);
             plus_sign = itemView.findViewById(R.id.plus_sign);
-
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            if(context != null){
-                context.reviewListing();
-            }else if(context2 != null){
-                context2.reviewListing();
-            }
         }
     }
 }
