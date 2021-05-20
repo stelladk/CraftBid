@@ -502,11 +502,11 @@ public class Server {
         try {
             Listing listing = (Listing)input.readObject(); //android client sends a Listing object with all the info for this Listing
             //add the listing to the database
-            String query = "INSERT INTO Listing(name,description,category,min_price,reward_points,quantity,is_located,published_by,date_published,delivery) "+
+            String query = "INSERT INTO Listing(name,description,category,min_price,reward_points,quantity,is_located,published_by,date_published,delivery,total_photos) "+
                     "VALUES('"+listing.getName()+"','"+listing.getDescription()+"','"
                     +listing.getCategory()+"',"+listing.getMin_price()+","+listing.getReward_points()+","
                     +listing.getQuantity()+",'"+listing.getLocation()+"','"+listing.getPublished_by()+"','"
-                    +listing.getDatePublished()+"','"+listing.getDelivery()+"');";
+                    +listing.getDatePublished()+"','"+listing.getDelivery()+"',"+listing.getTotal_photos()+");";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
             //add thumbnail to bucket (receive as byte array from client) !!!! photo is never null in a listing
@@ -522,7 +522,9 @@ public class Server {
                 S3Bucket.addToFolder(bucket_path,f2,connect);
                 System.out.println("Added image to bucket!");
             }
-            //TODO get the rest of the photos and add them to bucket
+            for(int i = 0; i < listing.getTotal_photos(); i++) {
+                //TODO get the rest of the photos and add them to bucket
+            }
             output.writeObject("LISTING CREATION SUCCESSFUL");
             output.flush();
         }catch(IOException | ClassNotFoundException| SQLException e) {
@@ -546,10 +548,14 @@ public class Server {
                 Listing listing = new Listing(id,res.getString("name"),res.getString("description"), res.getString("category"),
                                               res.getString("published_by"),res.getString("is_located"),
                                               res.getInt("reward_points"),res.getInt("quantity"),res.getFloat("min_price"),
-                                              res.getDate("date_published").toString(),res.getString("delivery"));
+                                              res.getDate("date_published").toString(),res.getString("delivery"),res.getInt("total_photos"));
                 output.writeObject(listing); //send basic info
                 output.flush();
-                //TODO get all the photos from bucket
+
+                ArrayList<byte[]> photos = new ArrayList<byte[]>();
+                for(int i = 0; i < listing.getTotal_photos(); i++) {
+                    //TODO get all the photos from bucket and send them to client as byte arrays
+                }
             }
         }catch(IOException | ClassNotFoundException| SQLException e) {
             System.err.println("Unable to process view listing request");

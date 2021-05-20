@@ -7,10 +7,11 @@ public class Listing implements Serializable {
     private int id;
     private String name, description,category,published_by,location, delivery,date_published;
     private float min_price;
-    private int reward_points, quantity;
+    private int reward_points, quantity,total_photos;
 
     public Listing(int id, String name, String description, String category, String published_by,
-                   String location, int reward_points, int quantity, float min_price, String date_published, String delivery) {
+                   String location, int reward_points, int quantity, float min_price,
+                   String date_published, String delivery, int total_photos) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -22,6 +23,7 @@ public class Listing implements Serializable {
         this.min_price = min_price;
         this.date_published = date_published;
         this.delivery = delivery;
+        this.total_photos = total_photos;
     }
 
     public int getId() {
@@ -110,5 +112,13 @@ public class Listing implements Serializable {
 
     public void setDelivery(String delivery) {
         this.delivery = delivery;
+    }
+
+    public int getTotal_photos() {
+        return total_photos;
+    }
+
+    public void setTotal_photos(int total_photos) {
+        this.total_photos = total_photos;
     }
 }
