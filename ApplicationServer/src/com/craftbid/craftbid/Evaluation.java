@@ -7,9 +7,10 @@ public class Evaluation implements Serializable{
     private int id;
     private String submitted_by, refers_to, comment;
     private int rating;
-    private Date date;
+    private String date;
+    private byte[] thumbnail;
 
-    public Evaluation(int id, String submitted_by, String refers_to, int rating,Date date, String comment) {
+    public Evaluation(int id, String submitted_by, String refers_to, int rating,String date, String comment) {
         this.id = id;
         this.submitted_by = submitted_by;
         this.refers_to = refers_to;
@@ -58,11 +59,19 @@ public class Evaluation implements Serializable{
         this.refers_to = refers_to;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
+    }
+
+    public byte[] getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(byte[] thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }

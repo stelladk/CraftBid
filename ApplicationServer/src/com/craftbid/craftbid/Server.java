@@ -8,6 +8,7 @@ import java.sql.*;
 import java.util.*;
 
 //TODO add replies to all requests where the client sends a message last (server must be the last to message)
+//TODO check for quotes in numeric values in queries
 
 public class Server {
 
@@ -153,7 +154,7 @@ public class Server {
             String password = (String) input.readObject();
             System.out.println("Username= " + username + ",password = " + password);
             //check if credentials are correct
-            String query = "SELECT * FROM UserInfo WHERE username= \'" + username + "\';";
+            String query = "SELECT * FROM UserInfo WHERE username= '" + username + "';";
             Statement stm = db_connect.createStatement();
             ResultSet res = stm.executeQuery(query);
             if (res.next()) {
@@ -165,7 +166,7 @@ public class Server {
                     output.flush();
                     //getting the profile type (customer or creator)
                     String profile = "customer";
-                    query = "SELECT * FROM Creator WHERE username= \'" + username + "\';";
+                    query = "SELECT * FROM Creator WHERE username= '" + username + "';";
                     stm = db_connect.createStatement();
                     res = stm.executeQuery(query);
                     if(res.next()) {
@@ -209,7 +210,7 @@ public class Server {
                     ",FullName= "+fullname+",email= "+email+",phone= "+phone+",description= "+desc);
 
             //check if username already exists
-            String query = "SELECT * FROM UserInfo WHERE username= \'"+username+"\';";
+            String query = "SELECT * FROM UserInfo WHERE username= '"+username+"';";
             Statement stm = db_connect.createStatement();
             ResultSet res = stm.executeQuery(query);
             if(res.next()) {
@@ -218,7 +219,7 @@ public class Server {
                 output.flush();
             }else {
                 //check if email already exists
-                query = "SELECT * FROM UserInfo WHERE email= \'"+email+"\';";
+                query = "SELECT * FROM UserInfo WHERE email= '"+email+"';";
                 stm = db_connect.createStatement();
                 res = stm.executeQuery(query);
                 if(res.next()) {
@@ -230,9 +231,9 @@ public class Server {
                     String bucket_path = "NULL";
                     //insert new tuple to db
                     query = "INSERT INTO UserInfo (username,password,fullname,email,phoneNumber,description) "+
-                            "VALUES(\'"+username+"\',\'"+password+"\',\'"+fullname+"\',\'"+email+"\'," +
-                            (phone.equals("NULL")?phone : "\'"+phone+"\'")+","+
-                            (desc.equals("NULL")?desc : "\'"+desc+"\'")+");"; //insert nulls to table only if user sent "NULL"
+                            "VALUES('"+username+"','"+password+"','"+fullname+"','"+email+"'," +
+                            (phone.equals("NULL")?phone : "'"+phone+"'")+","+
+                            (desc.equals("NULL")?desc : "'"+desc+"'")+");"; //insert nulls to table only if user sent "NULL"
                     stm.executeUpdate(query);
                     output.writeObject("BASIC REGISTER SUCCESSFUL");
                     output.flush();
@@ -255,7 +256,7 @@ public class Server {
                         int bit = (Integer)input.readObject();
                         String expertise = (String)input.readObject();
                         query = "INSERT INTO Creator (username,isFreelancer,phoneNumber,hasExpertise) "+
-                                "VALUES(\'"+username+"\',"+bit+",\'"+phone+"\',\'"+expertise+"\');";
+                                "VALUES('"+username+"',"+bit+",'"+phone+"','"+expertise+"');";
                         stm.executeUpdate(query);
                         output.writeObject("CREATOR REGISTER SUCCESSFUL");
                         output.flush();
@@ -315,7 +316,7 @@ public class Server {
         try {
             String search_text = (String)input.readObject();
             //get a list of all listings, if name, category, or creator username matches
-            String query = "SELECT * FROM Listing WHERE name LIKE \'%"+search_text+"%\' OR published_by LIKE \'%"+search_text+"%\' OR category LIKE \'%"+search_text+"%\';";
+            String query = "SELECT * FROM Listing WHERE name LIKE '%"+search_text+"%' OR published_by LIKE '%"+search_text+"%' OR category LIKE '%"+search_text+"%';";
             Statement stm = db_connect.createStatement();
             ResultSet res = stm.executeQuery(query);
             ArrayList<Thumbnail> listing_thumbnails =new ArrayList<Thumbnail>();
@@ -355,7 +356,7 @@ public class Server {
             String username = (String) input.readObject();
             boolean is_creator = (boolean)input.readObject();
             //FOR ALL USERS: Full name, email,phone number, description, photo
-            String query = "SELECT * FROM UserInfo WHERE username= \'" + username + "\';";
+            String query = "SELECT * FROM UserInfo WHERE username= '" + username + "';";
             Statement stm = db_connect.createStatement();
             ResultSet res = stm.executeQuery(query);
             if (res.next()) {
@@ -366,38 +367,101 @@ public class Server {
                 info.add(res.getString("phoneNumber"));
                 info.add(res.getString("description"));
                 output.writeObject(info); //send basic info
-                //TODO send photo too
+                output.flush();
+                //get the profile pic of user from the bucket and send it to client as byte array
+                byte[] pfp = null;
+                String filepath = username+"/"+username+"_pfp";
+                AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket
+                S3Bucket.getFromFolder(filepath,connect,"temp/"+username+".jpeg");
+                //read file from temp folder and convert to byte array
+                File f2 = new File("temp/"+username+".jpeg");
+                FileInputStream in = new FileInputStream(f2);
+                pfp = new byte[(int) f2.length()];
+                int error = in.read(pfp);
+                output.writeObject(pfp);
                 output.flush();
             }
 
             //FOR CUSTOMERS: list of all evaluations they've posted
             if(!is_creator) {
-                query = "SELECT * FROM Evaluation WHERE submitted_by= \'" + username + "\' ORDER BY date;";
+                query = "SELECT * FROM Evaluation WHERE submitted_by= '" + username + "' ORDER BY date;";
                 stm = db_connect.createStatement();
                 res = stm.executeQuery(query);
                 ArrayList<Evaluation> evaluations =new ArrayList<Evaluation>();
+                //create a list of Evaluations
                 while(res.next()) {
-                    //TODO create a list of Evaluations
+                    int id = res.getInt("id");
+                    String refers_to = res.getString("refers_to");
+                    int rating = res.getInt("rating");
+                    String date = res.getString("date");
+                    String comment = res.getString("comment");
+                    //for customers, the image of the evaluation is their own image
+                    evaluations.add(new Evaluation(id,username,refers_to,rating,date,comment));
                 }
+                output.writeObject(evaluations);
+                output.flush();
             }
-            //TODO FOR CREATORS: list of all listings they've posted, list of all evaluations
+
+            //FOR CREATORS: list of all listings they've posted, list of all evaluations
             else {
                 //evaluations
-                query = "SELECT * FROM Evaluation WHERE refers_to= \'" + username + "\' ORDER BY date;";
+                query = "SELECT * FROM Evaluation WHERE refers_to= '" + username + "' ORDER BY date;";
                 stm = db_connect.createStatement();
                 res = stm.executeQuery(query);
                 ArrayList<Evaluation> evaluations =new ArrayList<Evaluation>();
+                //create a list of Evaluations
                 while(res.next()) {
-                    //TODO create a list of Evaluations
+                    int id = res.getInt("id");
+                    String submitted_by = res.getString("submitted_by");
+                    int rating = res.getInt("rating");
+                    String date = res.getString("date");
+                    String comment = res.getString("comment");
+
+                    //get customer's profile picture from the bucket
+                    byte[] pfp = null;
+                    String filepath = res.getString("submitted_by")+"/"+res.getString("submitted_by")+"_pfp";
+                    AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket
+                    S3Bucket.getFromFolder(filepath,connect,"temp/"+res.getString("submitted_by")+".jpeg");
+                    //read file from temp folder and convert to byte array
+                    File f2 = new File("temp/"+res.getString("submitted_by")+".jpeg");
+                    FileInputStream in = new FileInputStream(f2);
+                    pfp = new byte[(int) f2.length()];
+                    int error = in.read(pfp);
+
+                    //create new evaluation object
+                    Evaluation temp = new Evaluation(id,submitted_by,username,rating,date,comment);
+                    temp.setThumbnail(pfp);
+                    evaluations.add(temp);
                 }
+                output.writeObject(evaluations);
+                output.flush();
+
                 //listings
-                query = "SELECT * FROM Listing WHERE published_by= \'" + username + "\' ;"; //TODO orderby date
+                query = "SELECT * FROM Listing WHERE published_by= '" + username + "' ORDER BY date_published ;";
                 stm = db_connect.createStatement();
                 res = stm.executeQuery(query);
                 ArrayList<Thumbnail> thumbnails =new ArrayList<Thumbnail>();
+                //create a list of Listing Thumbnails
                 while(res.next()) {
-                    //TODO create a list of Listing Thumbnails
+                    int id = res.getInt("id");
+                    String name =  res.getString("name");
+                    String desc = res.getString("description");
+                    String category = res.getString("category");
+                    float min_price = res.getFloat("min_price");
+                    //get the listing thumbnail from the bucket and add it to thumbnail object as byte array
+                    byte[] thumbnail = null;
+                    String filepath = username+"/"+name+"/thumbnail.jpeg";
+                    AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket
+                    S3Bucket.getFromFolder(filepath,connect,"temp/"+name+"thumbnail.jpeg");
+                    //read file from temp folder and convert to byte array
+                    File f2 = new File("temp/"+name+"thumbnail.jpeg");
+                    FileInputStream in = new FileInputStream(f2);
+                    thumbnail = new byte[(int) f2.length()];
+                    int error = in.read(thumbnail);
+                    thumbnails.add(new Thumbnail(id,name,desc,category,min_price,thumbnail));
                 }
+                output.writeObject(thumbnails);
+                output.flush();
             }
         }catch(IOException | ClassNotFoundException | SQLException e) {
             System.err.println("Unable to process request profile request");
@@ -414,7 +478,7 @@ public class Server {
             String field = (String)input.readObject(); //the column to be changed
             String new_val = (String)input.readObject(); //the new value
             String query = null;
-            if(field.equals("isFreelancer")) {
+            if(field.equals("isFreelancer")) { //sent value is either 0 or 1
                 //TODO change bit
             }else if(field.equals("fullname") || field.equals("email") || field.equals("phoneNumber") || field.equals("description")){
                 //TODO change String
@@ -439,10 +503,10 @@ public class Server {
             Listing listing = (Listing)input.readObject(); //android client sends a Listing object with all the info for this Listing
             //add the listing to the database
             String query = "INSERT INTO Listing(name,description,category,min_price,reward_points,quantity,is_located,published_by,date_published,delivery) "+
-                    "VALUES(\'"+listing.getName()+"\',\'"+listing.getDescription()+"\',\'"
-                    +listing.getCategory()+"\',"+listing.getMin_price()+","+listing.getReward_points()+","
-                    +listing.getQuantity()+",\'"+listing.getLocation()+"\',\'"+listing.getPublished_by()+"\',\'"
-                    +listing.getDatePublished()+"\',\'"+listing.getDelivery()+"\');";
+                    "VALUES('"+listing.getName()+"','"+listing.getDescription()+"','"
+                    +listing.getCategory()+"',"+listing.getMin_price()+","+listing.getReward_points()+","
+                    +listing.getQuantity()+",'"+listing.getLocation()+"','"+listing.getPublished_by()+"','"
+                    +listing.getDatePublished()+"','"+listing.getDelivery()+"');";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
             //add thumbnail to bucket (receive as byte array from client) !!!! photo is never null in a listing
@@ -474,7 +538,7 @@ public class Server {
         System.out.println("Received a new VIEW_LISTING request");
         try {
             int id = (Integer)input.readObject();
-            String query = "SELECT * FROM Listing WHERE id= \'" + id + "\';";
+            String query = "SELECT * FROM Listing WHERE id=" + id + ";";
             Statement stm = db_connect.createStatement();
             ResultSet res = stm.executeQuery(query);
             if (res.next()) {
@@ -527,7 +591,7 @@ public class Server {
             Offer offer = (Offer)input.readObject(); //android client sends an Offer object with all the info for this Offer
             //add the offer to the database
             String query = "INSERT INTO Offer(price,submitted_by,submitted_for) "+
-                    "VALUES("+offer.getPrice()+",\'"+ offer.getSubmitted_by()+"\',\'"+offer.getSubmitted_for()+"\');";
+                    "VALUES("+offer.getPrice()+",'"+ offer.getSubmitted_by()+"',"+offer.getSubmitted_for()+");";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
         }catch(IOException | ClassNotFoundException| SQLException e) {
@@ -590,8 +654,8 @@ public class Server {
             Evaluation evaluation = (Evaluation)input.readObject(); //android client sends an Evaluation object with all the info for this Evaluation
             //add the evaluation to the database
             String query = "INSERT INTO Report(submitted_by,refers_to,rating,date,comment) "+
-                    "VALUES(\'"+evaluation.getSubmitted_by()+"\',\'"+evaluation.getRefers_to()+"\',"
-                    +evaluation.getRating()+",\'"+evaluation.getDate()+"\',\'"+evaluation.getComment()+"\');";
+                    "VALUES('"+evaluation.getSubmitted_by()+"','"+evaluation.getRefers_to()+"',"
+                    +evaluation.getRating()+",'"+evaluation.getDate()+"','"+evaluation.getComment()+"');";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
         }catch(IOException | ClassNotFoundException| SQLException e) {
@@ -609,8 +673,8 @@ public class Server {
             Report report = (Report)input.readObject(); //android client sends a Report object with all the info for this Report
             //add the report to the database
             String query = "INSERT INTO Report(submitted_by,refers_to,reason,date,description) "+
-                    "VALUES(\'"+report.getSubmitted_by()+"\',\'"+report.getRefers_to()+"\',\'"
-                    +report.getReason()+"\',\'"+report.getDate()+"\',\'"+report.getDescription()+"\');";
+                    "VALUES('"+report.getSubmitted_by()+"','"+report.getRefers_to()+"','"
+                    +report.getReason()+"','"+report.getDate()+"','"+report.getDescription()+"');";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
         }catch(IOException | ClassNotFoundException| SQLException e) {
@@ -627,7 +691,7 @@ public class Server {
         try {
             String username = (String) input.readObject();
             boolean is_creator = (boolean)input.readObject();
-            String query = "SELECT * FROM UserInfo WHERE username= \'" + username + "\';";
+            String query = "SELECT * FROM UserInfo WHERE username= '" + username + "';";
             Statement stm = db_connect.createStatement();
             ResultSet res = stm.executeQuery(query);
             ArrayList<Reward> rewards =new ArrayList<Reward>();
@@ -646,7 +710,7 @@ public class Server {
             if(!is_creator) {
                 //get the username of the customer
                 String customer = (String)input.readObject();
-                query = "SELECT * FROM RewardPoint WHERE creator= \'" + username + "\' AND client = \'" + customer + "\' ;";
+                query = "SELECT * FROM RewardPoint WHERE creator= '" + username + "' AND client = '" + customer + "' ;";
                 stm = db_connect.createStatement();
                 res = stm.executeQuery(query);
                 int points = 0;
@@ -671,7 +735,7 @@ public class Server {
             Reward reward = (Reward)input.readObject(); //android client sends a Reward object with all the info for this Reward
             //add the reward to the database
             String query = "INSERT INTO Reward (name,price_in_points,offered_by) "+
-                    "VALUES(\'"+reward.getName()+"\',"+reward.getPrice()+",\'"+reward.getOffered_by()+"\');";
+                    "VALUES('"+reward.getName()+"',"+reward.getPrice()+",'"+reward.getOffered_by()+"');";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
             //TODO get the reward thumbnail as byte array and add to bucket
