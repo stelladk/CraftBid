@@ -103,7 +103,7 @@ public class Server {
                     decline_offer(db_connect,input,output);
                     break;
                 case "CREATE_EVALUATION":
-                    //create_evaluation(db_connect,input,output);
+                    create_evaluation(db_connect,input,output);
                     break;
                 case "CREATE_REPORT":
                     create_report(db_connect,input,output);
@@ -115,10 +115,13 @@ public class Server {
                     add_reward(db_connect,input,output);
                     break;
                 case "REQUEST_LOCATIONS":
-                    //TODO send a list of all locations
+                    request_locations(db_connect,input,output);
                     break;
                 case "REQUEST_CATEGORIES":
-                    //TODO send a list of all categories
+                    request_categories(db_connect,input,output);
+                    break;
+                case "REQUEST_EXPERTISES":
+                    request_expertises(db_connect,input,output);
                     break;
                 case "CREATE_PURCHASE":
                     //TODO create a new purchase
@@ -547,23 +550,23 @@ public class Server {
 
 
     /** CREATE EVALUATION
-     * Customer submits a new evaluation for a creator
+     * Customer submits a new evaluation for a creator */
     public void create_evaluation(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
         System.out.println("Received a new CREATE_EVALUATION request");
         try {
             Evaluation evaluation = (Evaluation)input.readObject(); //android client sends an Evaluation object with all the info for this Evaluation
-            //add the report to the database
-            String query = "INSERT INTO Report(id,submitted_by,refers_to,reason,date,description) "+
-                    "VALUES(\'"+report.getId()+"\',"+report.getSubmitted_by()+",\'"+report.getRefers_to()+"\',\'"
-                    +report.getReason()+"\',\'"+report.getDate()+"\',\'"+report.getDescription()+"\');";
+            //add the evaluation to the database
+            String query = "INSERT INTO Report(submitted_by,refers_to,rating,date,comment) "+
+                    "VALUES(\'"+evaluation.getSubmitted_by()+"\',\'"+evaluation.getRefers_to()+"\',"
+                    +evaluation.getRating()+",\'"+evaluation.getDate()+"\',\'"+evaluation.getComment()+"\');";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
         }catch(IOException | ClassNotFoundException| SQLException e) {
-            System.err.println("Unable to process create report request");
+            System.err.println("Unable to process create evaluation request");
             e.printStackTrace();
         }
-    }//create report
-    */
+    }//create evaluation
+
 
     /** CREATE REPORT
      * Customer submits a new report for a creator */
@@ -644,6 +647,78 @@ public class Server {
             e.printStackTrace();
         }
     }//add reward
+
+
+    /** REQUEST LOCATIONS
+     * Return a list of all locations */
+    public void request_locations(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new REQUEST_LOCATIONS request");
+        try {
+            //get a list of all locations
+            String query = "SELECT * FROM Location;";
+            Statement stm = db_connect.createStatement();
+            ResultSet res = stm.executeQuery(query);
+            ArrayList<String> locations =new ArrayList<String>();
+            while(res.next()) {
+                //create a list of locations
+                String name = res.getString("name");
+                locations.add(name);
+            }
+            output.writeObject(locations); //send locations
+            output.flush();
+        }catch(IOException | SQLException e) {
+            System.err.println("Unable to process request locations request");
+            e.printStackTrace();
+        }
+    }//request locations
+
+
+    /** REQUEST CATEGORIES
+     * Return a list of all PRODUCT categories*/
+    public void request_categories(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new REQUEST_CATEGORIES request");
+        try {
+            //get a list of all categories
+            String query = "SELECT * FROM Category;";
+            Statement stm = db_connect.createStatement();
+            ResultSet res = stm.executeQuery(query);
+            ArrayList<String> categories =new ArrayList<String>();
+            while(res.next()) {
+                //create a list of categories
+                String name = res.getString("name");
+                categories.add(name);
+            }
+            output.writeObject(categories); //send categories
+            output.flush();
+        }catch(IOException | SQLException e) {
+            System.err.println("Unable to process request categories request");
+            e.printStackTrace();
+        }
+    }//request categories
+
+
+    /** REQUEST EXPERTISES
+     * Return a list of all CREATOR categories */
+    public void request_expertises(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new REQUEST_EXPERTISES request");
+        try {
+            //get a list of all expertises
+            String query = "SELECT * FROM Expertise;";
+            Statement stm = db_connect.createStatement();
+            ResultSet res = stm.executeQuery(query);
+            ArrayList<String> expertises =new ArrayList<String>();
+            while(res.next()) {
+                //create a list of expertises
+                String name = res.getString("name");
+                expertises.add(name);
+            }
+            output.writeObject(expertises); //send expertises
+            output.flush();
+        }catch(IOException | SQLException e) {
+            System.err.println("Unable to process request expertises request");
+            e.printStackTrace();
+        }
+    }//request expertises
 
 
     public static void main(String[] args) {

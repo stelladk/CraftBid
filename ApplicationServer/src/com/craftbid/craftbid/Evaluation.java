@@ -5,17 +5,17 @@ import java.util.Date;
 
 public class Evaluation implements Serializable{
     private int id;
-    private String submitted_by, reffers_to, comments;
+    private String submitted_by, refers_to, comment;
     private int rating;
     private Date date;
 
-    public Evaluation(int id, String submitted_by, String reffers_to, int rating,Date date, String comments) {
+    public Evaluation(int id, String submitted_by, String refers_to, int rating,Date date, String comment) {
         this.id = id;
         this.submitted_by = submitted_by;
-        this.reffers_to = reffers_to;
+        this.refers_to = refers_to;
         this.date = date;
         this.rating = rating;
-        this.comments = comments;
+        this.comment = comment;
     }
 
     public int getId() {
@@ -34,12 +34,12 @@ public class Evaluation implements Serializable{
         this.rating = rating;
     }
 
-    public String getComments() {
-        return comments;
+    public String getComment() {
+        return comment;
     }
 
-    public void setComments(String comments) {
-        this.comments = comments;
+    public void setComment(String comments) {
+        this.comment = comments;
     }
 
     public String getSubmitted_by() {
@@ -50,12 +50,12 @@ public class Evaluation implements Serializable{
         this.submitted_by = submitted_by;
     }
 
-    public String getReffers_to() {
-        return reffers_to;
+    public String getRefers_to() {
+        return refers_to;
     }
 
-    public void setReffers_to(String reffers_to) {
-        this.reffers_to = reffers_to;
+    public void setRefers_to(String refers_to) {
+        this.refers_to = refers_to;
     }
 
     public Date getDate() {
