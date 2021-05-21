@@ -609,12 +609,12 @@ public class Server {
                 ArrayList<byte[]> photos = new ArrayList<byte[]>();
                 byte[] photo = null;
                 for(int i = 0; i < listing.getTotal_photos(); i++) {
-                    //get picture from the bucket in "published_by/published_by_pfp.jpeg"
-                    String filepath = res.getString("published_by")+"/"+res.getString("published_by")+"_pfp.jpeg";
+                    //get picture from the bucket in "published_by/listing_name/i.jpeg"
+                    String filepath = res.getString("published_by")+"/"+res.getString("name")+"/"+i+".jpeg";
                     AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket
-                    S3Bucket.getFromFolder(filepath,connect,"temp/"+res.getString("published_by")+"pfp.jpeg");
+                    S3Bucket.getFromFolder(filepath,connect,"temp/"+res.getString("name")+i+"pfp.jpeg");
                     //read file from temp folder and convert to byte array
-                    File f2 = new File("temp/"+res.getString("published_by")+"pfp.jpeg");
+                    File f2 = new File("temp/"+res.getString("name")+i+"pfp.jpeg");
                     FileInputStream in = new FileInputStream(f2);
                     photo = new byte[(int) f2.length()];
                     int error = in.read(photo);
