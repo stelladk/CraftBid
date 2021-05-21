@@ -10,11 +10,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class ReportActivity extends AppCompatActivity {
+    private String username;
+    private String creatorUsername;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
+
+        username = MainActivity.username;
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null){
+            creatorUsername = bundle.getString("username");
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -37,11 +46,13 @@ public class ReportActivity extends AppCompatActivity {
         }
     }
     private void goBack() {
-        Intent main = new Intent(ReportActivity.this, CreatorProfile.class);
-        startActivity(main);
+        Intent profile = new Intent(ReportActivity.this, CreatorProfile.class);
+        profile.putExtra("username", creatorUsername);
+        startActivity(profile);
     }
 
     public void submitReport(View view){
         //TODO create report object and send it to AppServer
+        goBack();
     }
 }

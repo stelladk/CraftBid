@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.craftbid.craftbid.CreatorProfile;
+import com.craftbid.craftbid.CustomerProfile;
 import com.craftbid.craftbid.R;
 import com.craftbid.craftbid.model.Evaluation;
 import com.google.android.material.snackbar.Snackbar;
@@ -17,11 +19,18 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.List;
 
 public class EvaluationsRecyclerAdapter extends RecyclerView.Adapter<EvaluationsRecyclerAdapter.ViewHolder> {
-    List<Evaluation> evaluations;
+    private List<Evaluation> evaluations;
+    private CreatorProfile contextCreator = null;
 
     public EvaluationsRecyclerAdapter(List<Evaluation> evaluations) {
         this.evaluations = evaluations;
     }
+
+    public EvaluationsRecyclerAdapter(List<Evaluation> evaluations, CreatorProfile context) {
+        this.evaluations = evaluations;
+        this.contextCreator = context;
+    }
+
 
     @NonNull
     @Override
@@ -38,6 +47,15 @@ public class EvaluationsRecyclerAdapter extends RecyclerView.Adapter<Evaluations
         holder.refered.setText(evaluations.get(i).getReffers_to());
         holder.comments.setText(evaluations.get(i).getComments());
         holder.rating.setRating(evaluations.get(i).getRating());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(contextCreator != null){
+                    contextCreator.openProfile(evaluations.get(i).getSubmitted_by());
+                }
+            }
+        });
     }
 
     @Override
@@ -45,8 +63,8 @@ public class EvaluationsRecyclerAdapter extends RecyclerView.Adapter<Evaluations
         return evaluations.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        //        public ConstraintLayout item;
+    class ViewHolder extends RecyclerView.ViewHolder {
+        public View itemView;
         public ImageView image;
         public TextView reviewer;
         public TextView refered;
@@ -55,20 +73,13 @@ public class EvaluationsRecyclerAdapter extends RecyclerView.Adapter<Evaluations
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-//            item = itemView.findViewById(R.id.item);
+            this.itemView = itemView;
+
             image = itemView.findViewById(R.id.reviewer_profile);
             reviewer = itemView.findViewById(R.id.reviewer_username);
             refered = itemView.findViewById(R.id.refered_username);
             comments = itemView.findViewById(R.id.comments);
             rating = itemView.findViewById(R.id.ratingBar);
-
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            Snackbar.make(view, "Clicked on item " + getAbsoluteAdapterPosition(), Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
         }
     }
 }

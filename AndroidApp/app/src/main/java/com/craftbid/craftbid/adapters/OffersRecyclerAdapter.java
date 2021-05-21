@@ -46,6 +46,13 @@ public class OffersRecyclerAdapter extends RecyclerView.Adapter<OffersRecyclerAd
         holder.username.setText(offers.get(i).getSubmitted_by());
         holder.offer.setText(offers.get(i).getPrice()+"");
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.openProfile(offers.get(i).getSubmitted_by());
+            }
+        });
+
         holder.accept_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,7 +65,6 @@ public class OffersRecyclerAdapter extends RecyclerView.Adapter<OffersRecyclerAd
                 context.declineOffer(offers.get(i).getId());
             }
         });
-
     }
 
     @Override
@@ -66,25 +72,21 @@ public class OffersRecyclerAdapter extends RecyclerView.Adapter<OffersRecyclerAd
         return offers.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder {
+        public View itemView;
         public ImageView profile;
         public TextView username, offer;
         public Button accept_btn, decline_btn;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            this.itemView = itemView;
+
             profile = itemView.findViewById(R.id.user_profile);
             username = itemView.findViewById(R.id.username);
             offer = itemView.findViewById(R.id.offer);
             accept_btn = itemView.findViewById(R.id.accept_btn);
             decline_btn = itemView.findViewById(R.id.decline_btn);
-
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            context.openProfile();
         }
     }
 }

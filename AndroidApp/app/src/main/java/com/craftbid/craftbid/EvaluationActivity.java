@@ -12,10 +12,20 @@ import androidx.appcompat.widget.Toolbar;
 import com.craftbid.craftbid.model.Evaluation;
 
 public class EvaluationActivity extends AppCompatActivity {
+    private String username;
+    private String creatorUsername;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evaluation);
+
+        username = MainActivity.username;
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null){
+            creatorUsername = bundle.getString("username");
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -33,11 +43,13 @@ public class EvaluationActivity extends AppCompatActivity {
         }
     }
     private void goBack() {
-        Intent main = new Intent(EvaluationActivity.this, CreatorProfile.class);
-        startActivity(main);
+        Intent profile = new Intent(EvaluationActivity.this, CreatorProfile.class);
+        profile.putExtra("username", creatorUsername);
+        startActivity(profile);
     }
 
     public void submitEvaluation(View view) {
         // TODO create Evaluation object and send it
+        goBack();
     }
 }

@@ -78,10 +78,10 @@ public class OffersActivity extends AppCompatActivity {
         //TODO show popup
     }
 
-    public void openProfile() {
+    public void openProfile(String username) {
         //TODO check if he is a creator
         Intent profile = new Intent(OffersActivity.this, CustomerProfile.class);
-        profile.putExtra("username", "username"); //Send user's username
+        profile.putExtra("username", username); //Send user's username
         startActivity(profile);
     }
 }

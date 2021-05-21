@@ -75,7 +75,7 @@ public class CreatorProfile extends AppCompatActivity {
         RecyclerView reviews_recycler = findViewById(R.id.reviews_recyclerview);
         RecyclerView.LayoutManager manager_r = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         reviews_recycler.setLayoutManager(manager_r);
-        EvaluationsRecyclerAdapter adapter_r = new EvaluationsRecyclerAdapter(evaluations);
+        EvaluationsRecyclerAdapter adapter_r = new EvaluationsRecyclerAdapter(evaluations, this);
         reviews_recycler.setAdapter(adapter_r);
 
         MaterialButton report_btn = findViewById(R.id.report_btn);
@@ -126,6 +126,13 @@ public class CreatorProfile extends AppCompatActivity {
         startActivity(rewards);
     }
 
+    public void openProfile(String username) {
+        //TODO check if he is a creator
+        Intent profile = new Intent(CreatorProfile.this, CustomerProfile.class);
+        profile.putExtra("username", username); //Send username of evaluation
+        startActivity(profile);
+    }
+
     public void toggleEditCreator(View view) {
     }
 
@@ -138,6 +145,7 @@ public class CreatorProfile extends AppCompatActivity {
     /** Moves user to New Evaluation activity */
     public void addEvaluation(View view) {
         Intent eval = new Intent(CreatorProfile.this, EvaluationActivity.class);
+        eval.putExtra("username", username);
         startActivity(eval);
     }
 
@@ -145,11 +153,12 @@ public class CreatorProfile extends AppCompatActivity {
         Intent listing_review;
         if(username.equals(MainActivity.username)) {
             listing_review = new Intent(CreatorProfile.this, ListingPrivateActivity.class);
+            listing_review.putExtra("previous", "@profile");
         }else{
             listing_review = new Intent(CreatorProfile.this, ListingPublicActivity.class);
+            listing_review.putExtra("previous", username); //TODO send creator's username
         }
         listing_review.putExtra("listing_id", listing_id);
-        listing_review.putExtra("previous", username); //TODO today
         startActivity(listing_review);
     }
 }

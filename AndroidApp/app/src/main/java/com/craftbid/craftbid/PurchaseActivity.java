@@ -101,7 +101,6 @@ public class PurchaseActivity extends AppCompatActivity {
     }
 
     public void openMain(View view) {
-        Intent main = new Intent(PurchaseActivity.this, MainActivity.class);
-        startActivity(main);
+        goBack();
     }
 }

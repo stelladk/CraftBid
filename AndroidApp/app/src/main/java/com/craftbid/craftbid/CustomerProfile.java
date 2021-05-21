@@ -29,11 +29,6 @@ public class CustomerProfile extends AppCompatActivity {
         setContentView(R.layout.activity_customer_profile);
 
         username = MainActivity.username;
-        Bundle bundle = getIntent().getExtras();
-        if(bundle != null){
-            previous = bundle.getString("previous", previous); //evaluation or offer
-        }
-        Log.d("CustomerProfile", "onCreate: previous " + previous);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

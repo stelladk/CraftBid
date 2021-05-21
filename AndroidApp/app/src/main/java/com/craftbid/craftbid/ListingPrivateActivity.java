@@ -2,6 +2,7 @@ package com.craftbid.craftbid;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -12,7 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 
 public class ListingPrivateActivity extends AppCompatActivity {
     private int listing_id;
-    private String previous;
+    private static String previous;
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
@@ -21,8 +22,9 @@ public class ListingPrivateActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         if(b!=null){
             listing_id = b.getInt("listing_id");
-            previous = b.getString("previous");
+            previous = b.getString("previous", previous);
         }
+        Log.d("ListingPrivate", "onCreate: previous "+previous);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
