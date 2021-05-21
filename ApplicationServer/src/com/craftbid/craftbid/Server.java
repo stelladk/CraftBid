@@ -241,7 +241,7 @@ public class Server {
                     output.flush();
                     //add pic to bucket
                     if(photo!=null) {
-                        bucket_path = username+"/"+username+"_pfp";
+                        bucket_path = username+"/"+username+"_pfp.jpeg";
                         //first put profile image to the bucket as "username/username_pfp.png"
                         File f2 = new File("temp/"+username+".jpeg"); //write to temp file
                         FileOutputStream out = new FileOutputStream(f2);
@@ -372,7 +372,7 @@ public class Server {
                 output.flush();
                 //get the profile pic of user from the bucket and send it to client as byte array
                 byte[] pfp = null;
-                String filepath = username+"/"+username+"_pfp";
+                String filepath = username+"/"+username+"_pfp.jpeg";
                 AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket
                 S3Bucket.getFromFolder(filepath,connect,"temp/"+username+".jpeg");
                 //read file from temp folder and convert to byte array
@@ -421,7 +421,7 @@ public class Server {
 
                     //get customer's profile picture from the bucket
                     byte[] pfp = null;
-                    String filepath = res.getString("submitted_by")+"/"+res.getString("submitted_by")+"_pfp";
+                    String filepath = res.getString("submitted_by")+"/"+res.getString("submitted_by")+"_pfp.jpeg";
                     AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket
                     S3Bucket.getFromFolder(filepath,connect,"temp/"+res.getString("submitted_by")+".jpeg");
                     //read file from temp folder and convert to byte array
@@ -521,7 +521,7 @@ public class Server {
             //replace image in bucket with new image
             String username = (String)input.readObject(); //the username
             byte[] new_img = (byte[])input.readObject(); // the new image
-            String bucket_path = username+"/"+username+"_pfp";
+            String bucket_path = username+"/"+username+"_pfp.jpeg";
             //first put profile image to the bucket as "username/username_pfp.png"
             File f2 = new File("temp/"+username+".jpeg"); //write to temp file
             FileOutputStream out = new FileOutputStream(f2);
@@ -605,10 +605,23 @@ public class Server {
                 output.writeObject(listing); //send basic info
                 output.flush();
 
+                //get all the photos from bucket and send them to client as byte arrays
                 ArrayList<byte[]> photos = new ArrayList<byte[]>();
+                byte[] photo = null;
                 for(int i = 0; i < listing.getTotal_photos(); i++) {
-                    //TODO get all the photos from bucket and send them to client as byte arrays
+                    //get picture from the bucket in "published_by/published_by_pfp.jpeg"
+                    String filepath = res.getString("published_by")+"/"+res.getString("published_by")+"_pfp.jpeg";
+                    AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket
+                    S3Bucket.getFromFolder(filepath,connect,"temp/"+res.getString("published_by")+"pfp.jpeg");
+                    //read file from temp folder and convert to byte array
+                    File f2 = new File("temp/"+res.getString("published_by")+"pfp.jpeg");
+                    FileInputStream in = new FileInputStream(f2);
+                    photo = new byte[(int) f2.length()];
+                    int error = in.read(photo);
+                    photos.add(photo);
                 }
+                output.writeObject(photos);
+                output.flush();
             }
         }catch(IOException | ClassNotFoundException| SQLException e) {
             System.err.println("Unable to process view listing request");
@@ -624,11 +637,12 @@ public class Server {
         try {
             String field = (String)input.readObject(); //the column to be changed
             String new_val = (String)input.readObject(); //the new value
+            int id = (Integer)input.readObject(); // the id of the listing
             String query = null;
             if(field.equals("description") || field.equals("name")) {
-                //TODO change string
+                query = "UPDATE Listing SET "+field+" = '"+new_val+"' WHERE id= "+id+";";
             }else if(field.equals("reward_points") || field.equals("quantity")){
-                //TODO change int
+                query = "UPDATE Listing SET "+field+" = "+new_val+" WHERE id= "+id+";";
             } else {
                 System.out.println("Field "+field+" cannot be edited in a listing");
             }
