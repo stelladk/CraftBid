@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class EditListingActivity extends CreateListingActivity implements View.OnClickListener {
@@ -30,6 +31,10 @@ public class EditListingActivity extends CreateListingActivity implements View.O
 
         TextView note = findViewById(R.id.note);
         note.setVisibility(View.VISIBLE);
+
+        //Listing time is not editable
+        findViewById(R.id.title_edit).setVisibility(View.GONE);
+        findViewById(R.id.title_noedit).setVisibility(View.VISIBLE);
 
         findViewById(R.id.save_btn).setOnClickListener(this);
     }

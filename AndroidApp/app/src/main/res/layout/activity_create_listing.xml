@@ -42,6 +42,15 @@
         android:textColor="?android:attr/textColor"
         android:inputType="text"
         android:importantForAutofill="no"/>
+    <TextView
+        android:id="@+id/title_noedit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:text="@string/title"
+        android:textSize="25sp"
+        android:textColor="?android:attr/textColor"
+        android:visibility="gone"/>
 
     <EditText
         android:id="@+id/init_price_edit"
