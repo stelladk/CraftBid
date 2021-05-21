@@ -20,6 +20,18 @@ import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 
+/** PATH IN BUCKET FOR EACH USER
+ * username /username_pfp.jpeg
+ * 		    /listing_name1 /thumbnail.jpeg
+ * 		   				   /1.jpeg
+ * 		   				   /2.jpeg
+ * 		   				   ...
+ * 		    /listing_name2 /...
+ * 		    ...
+ * 		    /rewards /reward_name1.jpeg
+ * 		   		     /reward_name2.jpeg
+ * 		   		     ...
+ */
 public class S3Bucket {
 	
 	/**

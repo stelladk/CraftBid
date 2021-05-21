@@ -51,7 +51,7 @@ public class Server {
 
     public void serve_request(Socket request) {
         //load jdbc driver and connect to the database
-        Connection db_connect = null;
+        Connection db_connect;
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             String db_url = "jdbc:sqlserver://"+Constants.HOST+":"+Constants.PORT+";databaseName="+Constants.DATABASE;
@@ -143,7 +143,6 @@ public class Server {
         }catch(IOException | ClassNotFoundException | SQLException e) {
             System.err.println("Unable to process request");
             e.printStackTrace();
-            return;
         }
     }
 
@@ -764,7 +763,7 @@ public class Server {
         try {
             String username = (String) input.readObject();
             boolean is_creator = (boolean)input.readObject();
-            String query = "SELECT * FROM UserInfo WHERE username= '" + username + "';";
+            String query = "SELECT * FROM Reward WHERE offered_by= '" + username + "';";
             Statement stm = db_connect.createStatement();
             ResultSet res = stm.executeQuery(query);
             ArrayList<Reward> rewards =new ArrayList<Reward>();
@@ -772,8 +771,17 @@ public class Server {
                 int price_in_points = res.getInt("price_in_points");
                 int id = res.getInt("id");
                 String name = res.getString("name");
-                //TODO get the reward thumbnail from bucket
+                //get the reward thumbnail from bucket
                 byte[] thumbnail = null;
+                //get picture from the bucket in "username/rewards/name.jpeg"
+                String filepath = username+"/rewards/"+name+".jpeg";
+                AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket
+                S3Bucket.getFromFolder(filepath,connect,"temp/"+name+".jpeg");
+                //read file from temp folder and convert to byte array
+                File f2 = new File("temp/"+name+".jpeg");
+                FileInputStream in = new FileInputStream(f2);
+                thumbnail = new byte[(int) f2.length()];
+                int error = in.read(thumbnail);
                 rewards.add(new Reward(id,price_in_points,name,username,thumbnail));
             }
             output.writeObject(rewards);
@@ -811,7 +819,19 @@ public class Server {
                     "VALUES('"+reward.getName()+"',"+reward.getPrice()+",'"+reward.getOffered_by()+"');";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
-            //TODO get the reward thumbnail as byte array and add to bucket
+            //get the reward thumbnail as byte array and add to bucket
+            byte[] thumbnail = (byte[])input.readObject();
+            if(thumbnail!= null) {
+                //put thumbnail to the bucket as "username/rewards/name.jpeg"
+                String bucket_path = reward.getOffered_by()+"/rewards/"+reward.getName()+".jpeg";
+                File f2 = new File("temp/"+reward.getName()+".jpeg"); //write to temp file
+                FileOutputStream out = new FileOutputStream(f2);
+                out.write(thumbnail);
+                out.close();
+                AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket and write file inside
+                S3Bucket.addToFolder(bucket_path,f2,connect);
+                System.out.println("Added image to bucket!");
+            }
         }catch(IOException | ClassNotFoundException| SQLException e) {
             System.err.println("Unable to process add reward request");
             e.printStackTrace();
