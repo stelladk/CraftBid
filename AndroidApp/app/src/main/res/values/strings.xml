@@ -91,8 +91,8 @@
     <string name="search_here">Αναζήτησε εδώ!</string>
     <string-array name="sort_options">
         <item>Τιμή</item>
-        <item>Ημερομηνία</item>
-        <item>Δημιουργός</item>
+        <item>Όνομα</item>
+        <item>Κατηγορία</item>
     </string-array>
     <string-array name="expertise">
         <item>Ζωγράφος</item>

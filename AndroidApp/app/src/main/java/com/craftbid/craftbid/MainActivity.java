@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -30,6 +31,8 @@ import com.craftbid.craftbid.adapters.FeedRecyclerAdapter;
 import com.craftbid.craftbid.model.Thumbnail;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements TextView.OnEditorActionListener, AdapterView.OnItemSelectedListener {
@@ -38,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
     private List<Thumbnail> thumbnails;
     private RecyclerView recycler;
     private FeedRecyclerAdapter adapter;
+    private ProgressBar progressBar;
     public static String username;
     public static boolean creator;
     public static final String GUEST = "@guest";
@@ -48,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
 
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
@@ -88,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
 
         EditText searchBar = findViewById(R.id.searchBar);
         searchBar.setOnEditorActionListener(this);
+
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -126,8 +134,24 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+        progressBar.setVisibility(View.VISIBLE);
         //TODO sort items
+        Collections.sort(thumbnails, new Comparator<Thumbnail>() {
+            @Override
+            public int compare(Thumbnail t1, Thumbnail t2) {
+                if(position == 0){ //Price
+                    return Float.compare(t1.getMin_price(), t2.getMin_price());
+                }else if(position == 1) { //Name
+                    return t1.getName().compareTo(t2.getName());
+                }else if(position == 2){ //Category
+                    return t1.getCategory().compareTo(t2.getCategory());
+                }
+                return 0;
+            }
+        });
+        adapter.notifyDataSetChanged();
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
