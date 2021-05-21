@@ -24,9 +24,11 @@ import java.util.List;
 public class OffersRecyclerAdapter extends RecyclerView.Adapter<OffersRecyclerAdapter.ViewHolder> {
 
     private List<Offer> offers;
+    private OffersActivity context;
 
-    public OffersRecyclerAdapter(List<Offer> offers) {
+    public OffersRecyclerAdapter(List<Offer> offers, OffersActivity context) {
         this.offers = offers;
+        this.context = context;
     }
 
     @NonNull
@@ -43,6 +45,20 @@ public class OffersRecyclerAdapter extends RecyclerView.Adapter<OffersRecyclerAd
 
         holder.username.setText(offers.get(i).getSubmitted_by());
         holder.offer.setText(offers.get(i).getPrice()+"");
+
+        holder.accept_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.acceptOffer(offers.get(i).getId());
+            }
+        });
+        holder.decline_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.declineOffer(offers.get(i).getId());
+            }
+        });
+
     }
 
     @Override
@@ -63,22 +79,12 @@ public class OffersRecyclerAdapter extends RecyclerView.Adapter<OffersRecyclerAd
             accept_btn = itemView.findViewById(R.id.accept_btn);
             decline_btn = itemView.findViewById(R.id.decline_btn);
 
-            accept_btn.setOnClickListener(this);
-            decline_btn.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            switch (view.getId()){
-                case R.id.accept_btn:
-                    Snackbar.make(view, "Clicked on accept " + getAbsoluteAdapterPosition(), Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                    break;
-                case R.id.decline_btn:
-                    Snackbar.make(view, "Clicked on decline " + getAbsoluteAdapterPosition(), Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                    break;
-            }
+            context.openProfile();
         }
     }
 }

@@ -49,7 +49,7 @@ public class OffersActivity extends AppCompatActivity {
         RecyclerView recycler = findViewById(R.id.offers_recyclerview);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recycler.setLayoutManager(manager);
-        OffersRecyclerAdapter adapter = new OffersRecyclerAdapter(offers);
+        OffersRecyclerAdapter adapter = new OffersRecyclerAdapter(offers, this);
         recycler.setAdapter(adapter);
     }
 
@@ -70,4 +70,18 @@ public class OffersActivity extends AppCompatActivity {
         startActivity(listing);
     }
 
+    public void acceptOffer(int id) {
+        //TODO show popup
+    }
+
+    public void declineOffer(int id) {
+        //TODO show popup
+    }
+
+    public void openProfile() {
+        //TODO check if he is a creator
+        Intent profile = new Intent(OffersActivity.this, CustomerProfile.class);
+        profile.putExtra("username", "username"); //Send user's username
+        startActivity(profile);
+    }
 }
