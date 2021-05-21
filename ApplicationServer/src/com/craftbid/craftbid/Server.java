@@ -941,7 +941,10 @@ public class Server {
                     "VALUES("+notification.getListing_id()+",'"+notification.getBelongs_to()+"',"+notification.getPrice()+");";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
-            //TODO delete all other offers for this listing id
+            //delete all other offers for this listing id
+            query = "DELETE FROM Offer WHERE submitted_for = "+notification.getListing_id()+";";
+            stm = db_connect.createStatement();
+            stm.executeUpdate(query);
         }catch(IOException | ClassNotFoundException | SQLException e) {
             System.err.println("Unable to process send notification request");
             e.printStackTrace();
