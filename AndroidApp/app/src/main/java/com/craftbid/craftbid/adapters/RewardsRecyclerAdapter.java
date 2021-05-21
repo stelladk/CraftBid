@@ -24,7 +24,7 @@ import java.util.List;
 
 public class RewardsRecyclerAdapter extends RecyclerView.Adapter<RewardsRecyclerAdapter.ViewHolder>{
 
-    private static boolean PRIVATE_VIEW = false;
+    private boolean PRIVATE_VIEW = false;
     private List<Reward> rewards;
 
     public RewardsRecyclerAdapter(List<Reward> rewards) {
@@ -32,15 +32,15 @@ public class RewardsRecyclerAdapter extends RecyclerView.Adapter<RewardsRecycler
     }
 
     //Temporary
-    private RewardsCustomerActivity context = null;
-    private RewardsCreatorActivity context2 = null;
+    private RewardsCustomerActivity contextCustomer = null;
+    private RewardsCreatorActivity contextCreator = null;
     public RewardsRecyclerAdapter(List<Reward> rewards, RewardsCustomerActivity context) {
         this.rewards = rewards;
-        this.context = context;
+        this.contextCustomer = context;
     }
     public RewardsRecyclerAdapter(List<Reward> rewards, RewardsCreatorActivity context2) {
         this.rewards = rewards;
-        this.context2 = context2;
+        this.contextCreator = context2;
     }
 
     public void setPrivateView(boolean type){
@@ -69,12 +69,12 @@ public class RewardsRecyclerAdapter extends RecyclerView.Adapter<RewardsRecycler
             return;
         }
 //        holder.image.setBackgroundResource(thumbnails.get(position).getThumbnail());
-        if(context != null){
-            holder.image.setBackgroundResource(context.getDrawable(rewards.get(i).getPhoto()));
-            holder.points.setText(context.getRewardPointsString(rewards.get(i).getPrice()));
-        }else if(context2 != null){
-            holder.image.setBackgroundResource(context2.getDrawable(rewards.get(i).getPhoto()));
-            holder.points.setText(context2.getRewardPointsString(rewards.get(i).getPrice()));
+        if(contextCustomer != null){
+            holder.image.setBackgroundResource(contextCustomer.getDrawable(rewards.get(i).getPhoto()));
+            holder.points.setText(contextCustomer.getRewardPointsString(rewards.get(i).getPrice()));
+        }else if(contextCreator != null){
+            holder.image.setBackgroundResource(contextCreator.getDrawable(rewards.get(i).getPhoto()));
+            holder.points.setText(contextCreator.getRewardPointsString(rewards.get(i).getPrice()));
         }else{
             holder.image.setBackgroundResource(R.drawable.chair1);
             holder.points.setText(rewards.get(i).getPrice());
@@ -88,6 +88,17 @@ public class RewardsRecyclerAdapter extends RecyclerView.Adapter<RewardsRecycler
             holder.select_btn.setText("Αφαίρεση");
         }
 
+        holder.select_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(PRIVATE_VIEW){
+                    contextCreator.removeReward(rewards.get(i).getId());
+                }else{
+                    contextCustomer.openPurchase(rewards.get(i).getId());
+                }
+            }
+        });
+
     }
 
     @Override
@@ -95,7 +106,7 @@ public class RewardsRecyclerAdapter extends RecyclerView.Adapter<RewardsRecycler
         return PRIVATE_VIEW? rewards.size()+1 : rewards.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder {
         public ArcLayout image;
         public TextView title, category, description, price, points;
         public ImageView plus_sign;
@@ -111,14 +122,6 @@ public class RewardsRecyclerAdapter extends RecyclerView.Adapter<RewardsRecycler
             points = itemView.findViewById(R.id.points);
             plus_sign = itemView.findViewById(R.id.plus_sign);
             select_btn = itemView.findViewById(R.id.select_btn);
-
-            select_btn.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            Snackbar.make(view, "Selected " + getAbsoluteAdapterPosition(), Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
         }
     }
 }

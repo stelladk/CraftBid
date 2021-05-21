@@ -1,11 +1,14 @@
 package com.craftbid.craftbid;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.craftbid.craftbid.adapters.FeedRecyclerAdapter;
 import com.craftbid.craftbid.adapters.OffersRecyclerAdapter;
@@ -49,4 +52,22 @@ public class OffersActivity extends AppCompatActivity {
         OffersRecyclerAdapter adapter = new OffersRecyclerAdapter(offers);
         recycler.setAdapter(adapter);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                goBack();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void goBack() {
+        Intent listing = new Intent(OffersActivity.this, ListingPrivateActivity.class);
+        listing.putExtra("listing_id", listing_id);
+        startActivity(listing);
+    }
+
 }

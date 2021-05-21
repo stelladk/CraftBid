@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.craftbid.craftbid.adapters.EvaluationsRecyclerAdapter;
 import com.craftbid.craftbid.adapters.FeedRecyclerAdapter;
@@ -24,15 +25,24 @@ import java.util.Date;
 import java.util.List;
 
 public class CreatorProfile extends AppCompatActivity {
+    private String username;
+    private static String previous;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creator_profile);
 
+//        username = MainActivity.username;
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null){
+            username = bundle.getString("username");
+            previous = bundle.getString("previous", previous);
+        }
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("mitsos_creations");
+        toolbar.setTitle(username);
 
         //Set Back Arrow
 //        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
@@ -74,6 +84,14 @@ public class CreatorProfile extends AppCompatActivity {
             // TODO pass creator's info (profile photo,username,email,phone)
             startActivity(report);
         });
+
+        findViewById(R.id.rewards_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openRewardsCustomer(view);
+            }
+        });
+
     }
 
     @Override
@@ -87,8 +105,14 @@ public class CreatorProfile extends AppCompatActivity {
     }
 
     private void goBack() {
-        Intent main = new Intent(CreatorProfile.this, MainActivity.class);
-        startActivity(main);
+        Intent back;
+        if(previous.equals(MainActivity.MAIN)){
+            back = new Intent(CreatorProfile.this, MainActivity.class);
+        }else{
+            back = new Intent(CreatorProfile.this, ListingPublicActivity.class);
+            back.putExtra("listing_id", previous); //Send listing id
+        }
+        startActivity(back);
     }
 
     //Temporary
@@ -98,6 +122,7 @@ public class CreatorProfile extends AppCompatActivity {
 
     public void openRewardsCustomer(View view) {
         Intent rewards = new Intent(CreatorProfile.this, RewardsCustomerActivity.class);
+        rewards.putExtra("username", username);
         startActivity(rewards);
     }
 
@@ -118,9 +143,13 @@ public class CreatorProfile extends AppCompatActivity {
 
     public void reviewListing(int listing_id) {
         Intent listing_review;
-        listing_review = new Intent(CreatorProfile.this, ListingPublicActivity.class);
+        if(username.equals(MainActivity.username)) {
+            listing_review = new Intent(CreatorProfile.this, ListingPrivateActivity.class);
+        }else{
+            listing_review = new Intent(CreatorProfile.this, ListingPublicActivity.class);
+        }
         listing_review.putExtra("listing_id", listing_id);
-        listing_review.putExtra("previous", "username"); //TODO today
+        listing_review.putExtra("previous", username); //TODO today
         startActivity(listing_review);
     }
 }

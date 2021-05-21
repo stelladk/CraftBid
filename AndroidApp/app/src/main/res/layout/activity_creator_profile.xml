@@ -279,8 +279,7 @@
             android:text="@string/see_rewards"
             android:textSize="15sp"
             android:textAllCaps="false"
-            android:textStyle="bold"
-            android:onClick="openRewardsCustomer"/>
+            android:textStyle="bold"/>
     </RelativeLayout>
 
 

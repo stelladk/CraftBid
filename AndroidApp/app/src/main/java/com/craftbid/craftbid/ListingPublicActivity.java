@@ -2,6 +2,7 @@ package com.craftbid.craftbid;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -20,8 +21,9 @@ public class ListingPublicActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         if(b!=null){
             listing_id = b.getInt("listing_id");
-            previous = b.getString("previous",previous);
+            previous = b.getString("previous", previous);
         }
+        Log.d("ListingPublic", "onCreate: listing_id "+listing_id);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -56,5 +58,12 @@ public class ListingPublicActivity extends AppCompatActivity {
         Intent offer = new Intent(ListingPublicActivity.this, MakeOfferActivity.class);
         offer.putExtra("listing_id", listing_id);
         startActivity(offer);
+    }
+
+    public void openProfile(View view){
+        Intent profile = new Intent(ListingPublicActivity.this, CreatorProfile.class);
+        profile.putExtra("username", "username"); //send creators username
+        profile.putExtra("previous", listing_id);
+        startActivity(profile);
     }
 }

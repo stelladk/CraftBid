@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -28,6 +29,7 @@ import java.util.List;
 public class CreatorProfilePrivate extends CreatorProfile {
 
     private static boolean SAVE_MODE=false;
+    private String username;
 
     private EditText fullname_edit, email_edit, phone_edit, description_edit;
     private TextView fullname, email, phone, description, freelancer;
@@ -37,13 +39,22 @@ public class CreatorProfilePrivate extends CreatorProfile {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        username = MainActivity.username; //This is how we get our username
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle(MainActivity.username);
+        Log.d("CreatorProfilePrivate", "onCreate: title "+toolbar.getTitle());
+
         Button edit_btn = findViewById(R.id.edit_btn);
         Button add_listing_btn = findViewById(R.id.add_listing_btn);
         MaterialButton report_btn = findViewById(R.id.report_btn);
+        Button review_btn = findViewById(R.id.review_btn);
 
         edit_btn.setVisibility(View.VISIBLE);
         add_listing_btn.setVisibility(View.VISIBLE);
         report_btn.setVisibility(View.INVISIBLE);
+        review_btn.setVisibility(View.INVISIBLE);
 
 
         fullname_edit = findViewById(R.id.fullname_edit);
@@ -56,6 +67,13 @@ public class CreatorProfilePrivate extends CreatorProfile {
         description = findViewById(R.id.description);
         freelancer_choice = findViewById(R.id.freelancer_choice);
         freelancer = findViewById(R.id.freelancer);
+
+        findViewById(R.id.rewards_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openRewardsCreator(view);
+            }
+        });
     }
 
     @Override
@@ -77,10 +95,10 @@ public class CreatorProfilePrivate extends CreatorProfile {
 //        startActivity(main);
 //    }
 //
-//    public void openRewardsCreator(View view) {
-//        Intent rewards = new Intent(CreatorProfilePrivate.this, RewardsCreatorActivity.class);
-//        startActivity(rewards);
-//    }
+    public void openRewardsCreator(View view) {
+        Intent rewards = new Intent(CreatorProfilePrivate.this, RewardsCreatorActivity.class);
+        startActivity(rewards);
+    }
 
     @Override
     public void toggleEditCreator(View view){

@@ -96,7 +96,7 @@ public class PurchaseActivity extends AppCompatActivity {
         }
     }
     private void goBack() {
-        Intent main = new Intent(PurchaseActivity.this, NotificationsActivity.class);
+        Intent main = new Intent(PurchaseActivity.this, MainActivity.class);
         startActivity(main);
     }
 

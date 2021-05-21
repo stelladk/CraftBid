@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/offer_static"
         android:scaleType="centerCrop"
-        android:src="@drawable/chair3"
+        android:src="@drawable/karen"
         android:contentDescription="@string/profile"/>
 
     <TextView

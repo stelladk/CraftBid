@@ -56,6 +56,7 @@ public class ListingPrivateActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 goBack();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -69,8 +70,9 @@ public class ListingPrivateActivity extends AppCompatActivity {
         startActivity(back);
     }
 
-    private void openProfile() {
+    private void openProfile(View view) {
         Intent profile = new Intent(ListingPrivateActivity.this, CreatorProfilePrivate.class);
+        profile.putExtra("previous", listing_id); //Send listing id
         startActivity(profile);
     }
 }

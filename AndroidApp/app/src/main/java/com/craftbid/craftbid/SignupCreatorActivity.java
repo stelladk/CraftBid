@@ -68,8 +68,8 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         expertise_selected = adapterView.getItemAtPosition(i).toString();
-        Snackbar.make(view, "Selected Expertise " + expertise_selected, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+//        Snackbar.make(view, "Selected Expertise " + expertise_selected, Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show();
     }
 
     @Override
@@ -114,6 +114,7 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
     private class SignUpTask extends AsyncTask<String, String, Void> {
         ProgressDialog progressDialog;
         String resultmsg = null;
+        String username;
         @Override
         protected Void doInBackground(String... params) {
             Socket socket = null;
@@ -126,7 +127,7 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
             String phone = ((EditText)findViewById(R.id.phone_edit)).getText().toString();
             boolean freelancer = ((CheckBox)findViewById(R.id.freelancer)).isChecked();
             String category = ((Spinner)findViewById(R.id.expertise_spinner)).getSelectedItem().toString();
-            String username = ((EditText)findViewById(R.id.username_edit)).getText().toString();
+            username = ((EditText)findViewById(R.id.username_edit)).getText().toString();
             String password = ((EditText)findViewById(R.id.password_edit)).getText().toString();
             String repeat_password = ((EditText)findViewById(R.id.repeat_password_edit)).getText().toString();
 
@@ -182,7 +183,9 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
             Snackbar.make( getWindow().getDecorView().getRootView(), resultmsg , Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             if(is_successful) {
-                Intent login = new Intent(SignupCreatorActivity.this, LoginActivity.class);
+                Intent login = new Intent(SignupCreatorActivity.this, MainActivity.class);
+                login.putExtra("username", username);
+                login.putExtra("creator", true);
                 startActivity(login);
             }
         }

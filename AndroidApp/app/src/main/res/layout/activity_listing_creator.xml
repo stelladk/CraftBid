@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ListingPrivateActivity">
 
     <!--TODO remove unnecessary hardcoded android:text -->
 
@@ -59,7 +60,8 @@
                 android:background="@null"
                 android:padding="0dp"
                 android:gravity="center_vertical"
-                style="?android:attr/borderlessButtonStyle"/>
+                style="?android:attr/borderlessButtonStyle"
+                android:onClick="openProfile"/>
         </HorizontalScrollView>
     </LinearLayout>
 

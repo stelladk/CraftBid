@@ -34,6 +34,8 @@ public class SignupCustomerActivity extends AppCompatActivity {
         //TODO
         //Do actions to confirm sign up
         Intent main = new Intent(SignupCustomerActivity.this, MainActivity.class);
+        main.putExtra("username", "username");
+        main.putExtra("creator", false);
         startActivity(main);
     }
 }

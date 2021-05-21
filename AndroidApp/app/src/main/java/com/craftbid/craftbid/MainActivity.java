@@ -39,7 +39,9 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
     private RecyclerView recycler;
     private FeedRecyclerAdapter adapter;
     public static String username;
+    public static boolean creator;
     public static final String GUEST = "@guest";
+    public static final String MAIN = "@main";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +51,12 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
 
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
-            username = bundle.getString("username");
+            username = bundle.getString("username", username);
+            creator = bundle.getBoolean("creator", creator);
             if(!username.equals(GUEST)) logged_in = true;
         }
+        Log.d("MAIN", "onCreate: username "+username);
+        Log.d("MAIN", "onCreate: creator "+creator);
 
         //Change Toolbar Title
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -90,8 +95,8 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         getMenuInflater().inflate(R.menu.appbarmenu, menu);
         if(logged_in){
             menu.findItem(R.id.login).setVisible(false);
-            menu.findItem(R.id.notif).setVisible(false);
         }else{
+            menu.findItem(R.id.notif).setVisible(false);
             menu.findItem(R.id.logout).setVisible(false);
             menu.findItem(R.id.profile).setVisible(false);
         }
@@ -108,13 +113,10 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
                 startActivity(login);
                 break;
             case R.id.profile:
-                openPrivateProfile(); //TODO open profile based on login
+                openPrivateProfile();
                 break;
             case R.id.notif:
                 openNotifications();
-                break;
-            case R.id.add:
-                openCreateListing();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -165,16 +167,15 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    //TODO open profile based on login
     private void openPrivateProfile() {
-//        Intent profile = new Intent(MainActivity.this, CustomerProfilePrivate.class);
-        Intent profile = new Intent(MainActivity.this, CreatorProfilePrivate.class);
+        Intent profile;
+        if(creator){
+            profile = new Intent(MainActivity.this, CreatorProfilePrivate.class);
+        }else{
+            profile = new Intent(MainActivity.this, CustomerProfilePrivate.class);
+        }
+        profile.putExtra("previous", MAIN);
         startActivity(profile);
-    }
-
-    private void openCreateListing(){
-        Intent createListing = new Intent(MainActivity.this, CreateListingActivity.class);
-        startActivity(createListing);
     }
 
     private void openNotifications(){

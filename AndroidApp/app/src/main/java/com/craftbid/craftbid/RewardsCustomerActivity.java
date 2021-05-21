@@ -18,11 +18,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RewardsCustomerActivity extends AppCompatActivity {
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rewards);
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null){
+            username = bundle.getString("username");
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -58,8 +64,15 @@ public class RewardsCustomerActivity extends AppCompatActivity {
         }
     }
 
+    public void openPurchase(int id){
+        Intent purchase = new Intent(RewardsCustomerActivity.this, PurchaseActivity.class);
+        purchase.putExtra("listing_id", id);
+        startActivity(purchase);
+    }
+
     private void goBack() {
         Intent back = new Intent(RewardsCustomerActivity.this, CreatorProfile.class);
+        back.putExtra("username", username);
         startActivity(back);
     }
 

@@ -72,6 +72,7 @@ public class CreateListingActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
     private void goBack() {
         Intent creator = new Intent(CreateListingActivity.this, CreatorProfilePrivate.class);
         startActivity(creator);

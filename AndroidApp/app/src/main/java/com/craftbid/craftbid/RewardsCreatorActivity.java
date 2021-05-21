@@ -62,8 +62,12 @@ public class RewardsCreatorActivity extends AppCompatActivity {
         }
     }
 
+    public void removeReward(int id){
+        //TODO remove reward from database
+    }
+
     private void goBack() {
-        Intent back = new Intent(RewardsCreatorActivity.this, CreatorProfile.class);
+        Intent back = new Intent(RewardsCreatorActivity.this, CreatorProfilePrivate.class);
         startActivity(back);
     }
 
