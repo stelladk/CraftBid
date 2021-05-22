@@ -89,6 +89,10 @@
     <string name="sort">Ταξινόμηση:</string>
     <string name="search">Αναζήτηση</string>
     <string name="search_here">Αναζήτησε εδώ!</string>
+    <string name="yes">Ναι</string>
+    <string name="no">Όχι</string>
+    <string name="remove_reward_confirm">Είστε σίγουροι ότι θέλετε να διαγράψετε το συγκεκριμένο βραβείο;</string>
+    <string name="get_reward_confirm">Είστε σίγουροι ότι θέλετε να επιλέξετε το συγκεκριμένο δώρο;</string>
     <string-array name="sort_options">
         <item>Τιμή</item>
         <item>Όνομα</item>

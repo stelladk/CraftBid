@@ -6,9 +6,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.craftbid.craftbid.adapters.RewardsRecyclerAdapter;
@@ -19,6 +21,7 @@ import java.util.List;
 
 public class RewardsCustomerActivity extends AppCompatActivity {
     private String username;
+    Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,8 @@ public class RewardsCustomerActivity extends AppCompatActivity {
         recycler.setLayoutManager(manager);
         RewardsRecyclerAdapter adapter = new RewardsRecyclerAdapter(rewards, this);
         recycler.setAdapter(adapter);
+
+        dialog = new Dialog(this);
     }
 
     @Override
@@ -65,9 +70,20 @@ public class RewardsCustomerActivity extends AppCompatActivity {
     }
 
     public void openPurchase(int id){
-        Intent purchase = new Intent(RewardsCustomerActivity.this, PurchaseActivity.class);
-        purchase.putExtra("listing_id", id);
-        startActivity(purchase);
+        dialog.setContentView(R.layout.popup_confirm);
+        ((TextView)dialog.findViewById(R.id.confirm_message)).setText(R.string.get_reward_confirm);
+        dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
+        dialog.show();
+
+        dialog.findViewById(R.id.yes_btn).setOnClickListener(v -> {
+            Intent purchase = new Intent(RewardsCustomerActivity.this, PurchaseActivity.class);
+            purchase.putExtra("listing_id", id);
+            startActivity(purchase);
+        });
+    }
+
+    public void closePopup(View view) {
+        dialog.dismiss();
     }
 
     private void goBack() {

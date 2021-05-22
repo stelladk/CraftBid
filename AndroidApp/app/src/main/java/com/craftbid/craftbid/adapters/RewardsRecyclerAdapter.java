@@ -1,5 +1,6 @@
 package com.craftbid.craftbid.adapters;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.craftbid.craftbid.CreateRewardActivity;
 import com.craftbid.craftbid.CreatorProfile;
 import com.craftbid.craftbid.MainActivity;
 import com.craftbid.craftbid.R;
@@ -57,6 +59,7 @@ public class RewardsRecyclerAdapter extends RecyclerView.Adapter<RewardsRecycler
 
     @Override
     public void onBindViewHolder(@NonNull RewardsRecyclerAdapter.ViewHolder holder, int i) {
+        // add button
         if(i == rewards.size()){
             holder.image.setBackgroundResource(0);
             holder.title.setText("Προσθήκη");
@@ -66,6 +69,10 @@ public class RewardsRecyclerAdapter extends RecyclerView.Adapter<RewardsRecycler
             holder.plus_sign.setVisibility(View.VISIBLE);
             holder.points.setText("");
             holder.select_btn.setVisibility(View.INVISIBLE);
+            holder.plus_sign.setOnClickListener(v -> {
+                Intent add_reward = new Intent(contextCreator, CreateRewardActivity.class);
+                contextCreator.startActivity(add_reward);
+            });
             return;
         }
 //        holder.image.setBackgroundResource(thumbnails.get(position).getThumbnail());

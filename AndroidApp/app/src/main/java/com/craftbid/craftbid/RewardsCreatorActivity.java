@@ -6,9 +6,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.craftbid.craftbid.adapters.RewardsRecyclerAdapter;
@@ -18,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RewardsCreatorActivity extends AppCompatActivity {
+    Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,8 @@ public class RewardsCreatorActivity extends AppCompatActivity {
         RewardsRecyclerAdapter adapter = new RewardsRecyclerAdapter(rewards, this);
         adapter.setPrivateView(true);
         recycler.setAdapter(adapter);
+
+        dialog = new Dialog(this);
     }
 
     @Override
@@ -63,7 +69,17 @@ public class RewardsCreatorActivity extends AppCompatActivity {
     }
 
     public void removeReward(int id){
-        //TODO remove reward from database
+        dialog.setContentView(R.layout.popup_confirm);
+        dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
+        dialog.show();
+
+        dialog.findViewById(R.id.yes_btn).setOnClickListener(v -> {
+            // TODO proceed to removing the reward
+            Log.d("reward","reward removed");
+        });
+    }
+    public void closePopup(View view) {
+        dialog.dismiss();
     }
 
     private void goBack() {
