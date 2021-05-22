@@ -93,6 +93,7 @@
     <string name="no">Όχι</string>
     <string name="remove_reward_confirm">Είστε σίγουροι ότι θέλετε να διαγράψετε το συγκεκριμένο βραβείο;</string>
     <string name="get_reward_confirm">Είστε σίγουροι ότι θέλετε να επιλέξετε το συγκεκριμένο δώρο;</string>
+    <string name="signIn_warning">Για να κάνετε προσφορά στα προϊόντα πρέπει πρώτα να συνδεθείτε. Αν δεν έχετε λογαριασμό θα πρέπει να κάνετε εγγραφή.</string>
     <string-array name="sort_options">
         <item>Τιμή</item>
         <item>Όνομα</item>

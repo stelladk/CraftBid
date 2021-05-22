@@ -84,7 +84,7 @@ public class CreateListingActivity extends AppCompatActivity {
     }
 
     public void showPopup(View view) {
-        dialog.setContentView(R.layout.popup_create_listing);
+        dialog.setContentView(R.layout.popup_text);
         dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
         dialog.show();
     }
