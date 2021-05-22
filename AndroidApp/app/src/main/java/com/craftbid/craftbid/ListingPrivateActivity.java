@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class ListingPrivateActivity extends AppCompatActivity {
+public class ListingPrivateActivity extends ListingPublicActivity {
     private int listing_id;
     private static String previous;
     @Override
@@ -72,7 +72,7 @@ public class ListingPrivateActivity extends AppCompatActivity {
         startActivity(back);
     }
 
-    private void openProfile(View view) {
+    public void openProfile(View view) {
         Intent profile = new Intent(ListingPrivateActivity.this, CreatorProfilePrivate.class);
         profile.putExtra("previous", listing_id); //Send listing id
         startActivity(profile);
