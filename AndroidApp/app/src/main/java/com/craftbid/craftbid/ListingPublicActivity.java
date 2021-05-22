@@ -89,7 +89,4 @@ public class ListingPublicActivity extends AppCompatActivity {
 
         dialog.findViewById(R.id.close_btn).setOnClickListener(v -> dialog.dismiss());
     }
-    public void closePopup(){
-        dialog.dismiss();
-    }
 }

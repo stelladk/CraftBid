@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
     public static boolean creator;
     public static final String GUEST = "@guest";
     public static final String MAIN = "@main";
+    private static final int SHOWN_ITEMS = 2; //TODO change regarding how many ites we want to show each time seeMore is clicked
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         GridLayoutManager manager = new GridLayoutManager(this, 2);
         manager.setOrientation(RecyclerView.VERTICAL);
         recycler.setLayoutManager(manager);
+        //TODO once sort method is fixed this works adapter = new FeedRecyclerAdapter(new ArrayList<>(thumbnails.subList(0,SHOWN_ITEMS)), this);
         adapter = new FeedRecyclerAdapter(thumbnails, this);
         recycler.setAdapter(adapter);
 
@@ -224,5 +226,20 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         if(logged_in) listing_review.putExtra("previous", MAIN);
         else listing_review.putExtra("previous", GUEST);
         startActivity(listing_review);
+    }
+
+    /** Updates recycler's content so that more listings appear */
+    /* FIXME when all thumbnails appear, sort method sorts what it should plus the hidden element :(
+     *  in this way if the hidden element changes position another element gets hidden, and eventually there are blank spaces in the list */
+    public void seeMore() {
+        int more = adapter.getItemCount()-1 + SHOWN_ITEMS;
+        while(more > thumbnails.size()) more--;
+
+        adapter.setThumbnails(new ArrayList<>(thumbnails.subList(0,more)));
+        recycler.setAdapter(adapter);
+    }
+
+    public List<Thumbnail> getThumbnails() {
+        return thumbnails;
     }
 }

@@ -1,6 +1,7 @@
 package com.craftbid.craftbid.adapters;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.craftbid.craftbid.CreateRewardActivity;
 import com.craftbid.craftbid.CreatorProfile;
 import com.craftbid.craftbid.ListingPrivateActivity;
 import com.craftbid.craftbid.MainActivity;
@@ -50,14 +52,25 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        if(position == thumbnails.size()){
-            holder.image.setBackgroundResource(0);
-            holder.title.setText("Δείτε Περισσότερα");
-            holder.category.setText("");
-            holder.description.setText("");
-            holder.price.setText("");
-            holder.plus_sign.setVisibility(View.VISIBLE);
-            return;
+        if(position == thumbnails.size()) {
+            if ((context != null && context.getThumbnails().size() > thumbnails.size()) ||
+                    (context2!=null && context2.getThumbnails().size() > thumbnails.size())) {
+                holder.image.setBackgroundResource(0);
+                holder.title.setText("Δείτε Περισσότερα");
+                holder.category.setText("");
+                holder.description.setText("");
+                holder.price.setText("");
+                holder.plus_sign.setVisibility(View.VISIBLE);
+                holder.plus_sign.setOnClickListener(v -> {
+                    //TODO if (context != null) context.seeMore();
+                    if(context2!=null) context2.seeMore();
+                });
+                return;
+            }else if ((context!=null && context.getThumbnails().size() == thumbnails.size() && holder.title.getText().equals("LASTELEMENTBUTTON") ||
+                        context2!=null && context2.getThumbnails().size() == thumbnails.size())/*position==context.getThumbnails().size()*/) {
+                holder.item.setVisibility(View.GONE);
+                return;
+            }
         }
 //        holder.image.setBackgroundResource(thumbnails.get(position).getThumbnail());
         holder.plus_sign.setVisibility(View.GONE);
@@ -112,5 +125,12 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
             price = itemView.findViewById(R.id.price_item);
             plus_sign = itemView.findViewById(R.id.plus_sign);
         }
+    }
+    public void setThumbnails(List<Thumbnail> thumbnails){
+        this.thumbnails = thumbnails;
+    }
+
+    public List<Thumbnail> getThumbnails() {
+        return thumbnails;
     }
 }

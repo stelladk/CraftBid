@@ -21,12 +21,17 @@ import com.craftbid.craftbid.model.Thumbnail;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 public class CreatorProfile extends AppCompatActivity {
+    private static final int SHOWN_ITEMS = 2; //TODO change regarding how many ites we want to show each time seeMore is clicked
     private String username;
     private static String previous;
+    private List<Thumbnail> thumbnails;
+    private RecyclerView thumbnails_recycler;
+    private FeedRecyclerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,16 +55,16 @@ public class CreatorProfile extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //Thumbnails RecyclerView
-        List<Thumbnail> thumbnails = new ArrayList<>();
+        thumbnails = new ArrayList<>();
         thumbnails.add(new Thumbnail(0, "Ξύλινη Καρέκλα", "Ωραιότατη Ξύλινη Καρέκλα", "Καρέκλες", "chair1", 15));
         thumbnails.add(new Thumbnail(1, "Ξύλινη Καρέκλα", "Ξύλινη Καρέκλα Κήπου", "Καρέκλες", "chair3", 20));
         thumbnails.add(new Thumbnail(2, "Ξύλινη Καρέκλα", "Απλή Ξύλινη Καρέκλα", "Καρέκλες", "chair2", 15));
         thumbnails.add(new Thumbnail(3, "Ξύλινη Καρέκλα", "Χειροποίητη Ξύλινη Καρέκλα", "Καρέκλες", "chair4", 15));
 
-        RecyclerView thumbnails_recycler = findViewById(R.id.thumbnails_recyclerview);
+        thumbnails_recycler = findViewById(R.id.thumbnails_recyclerview);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         thumbnails_recycler.setLayoutManager(manager);
-        FeedRecyclerAdapter adapter = new FeedRecyclerAdapter(thumbnails, this);
+        adapter = new FeedRecyclerAdapter(new ArrayList<>(thumbnails.subList(0,SHOWN_ITEMS)), this);
         thumbnails_recycler.setAdapter(adapter);
 
         //Reviews RecyclerView
@@ -160,5 +165,18 @@ public class CreatorProfile extends AppCompatActivity {
         }
         listing_review.putExtra("listing_id", listing_id);
         startActivity(listing_review);
+    }
+
+    public List<Thumbnail> getThumbnails() {
+        return thumbnails;
+    }
+
+    /** More listing elements appear in listings (in private and public creator profiles)*/
+    public void seeMore() {
+        int more = adapter.getItemCount()-1 + SHOWN_ITEMS;
+        while(more > thumbnails.size()) more--;
+
+        adapter.setThumbnails(new ArrayList<>(thumbnails.subList(0,more)));
+        thumbnails_recycler.setAdapter(adapter);
     }
 }
