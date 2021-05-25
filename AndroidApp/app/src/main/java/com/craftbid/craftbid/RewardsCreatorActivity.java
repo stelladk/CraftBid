@@ -42,11 +42,12 @@ public class RewardsCreatorActivity extends AppCompatActivity {
         TextView claimed_points = findViewById(R.id.reward_points);
         claimed_points.setText("");
 
+        byte[] test = new byte[2];
         List<Reward> rewards = new ArrayList<>();
-        rewards.add(new Reward(0, 40, "Ξύλινη καρέκλα",  "chair3", "mitsos_creations"));
-        rewards.add(new Reward(1, 70, "Ξύλινη καρέκλα x2", "chair3", "mitsos_creations"));
-        rewards.add(new Reward(2, 120, "Ξύλινη καρέκλα x4", "chair3", "mitsos_creations"));
-        rewards.add(new Reward(3, 140, "Ξύλινη καρέκλα x5", "chair3",  "mitsos_creations"));
+        rewards.add(new Reward(0, 40, "Ξύλινη καρέκλα",  "chair3", test));
+        rewards.add(new Reward(1, 70, "Ξύλινη καρέκλα x2", "chair3", test));
+        rewards.add(new Reward(2, 120, "Ξύλινη καρέκλα x4", "chair3",test));
+        rewards.add(new Reward(3, 140, "Ξύλινη καρέκλα x5", "chair3",test));
 
         RecyclerView recycler = findViewById(R.id.rewards_recyclerview);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);

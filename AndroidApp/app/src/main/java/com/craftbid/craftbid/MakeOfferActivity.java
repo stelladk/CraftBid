@@ -120,7 +120,8 @@ public class MakeOfferActivity extends AppCompatActivity {
             ObjectInputStream in = null;
             //connect to server to loa listing info
             try {
-                socket = new Socket("192.168.2.2",6500);
+//                socket = new Socket("192.168.2.2",6500);
+                socket = new Socket("192.168.1.5",6500);
                 in = new ObjectInputStream(socket.getInputStream());
                 out = new ObjectOutputStream(socket.getOutputStream());
                 out.writeObject("CREATE_BID");

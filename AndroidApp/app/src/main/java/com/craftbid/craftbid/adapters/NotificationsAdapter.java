@@ -1,6 +1,9 @@
 package com.craftbid.craftbid.adapters;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +49,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     @Override
     public void onBindViewHolder(@NonNull NotificationsAdapter.ViewHolder holder, int i) {
         if(context != null){
-            holder.thumbnail.setImageResource(context.getDrawable(notifications.get(i).getThumbnail()));
+//            holder.thumbnail.setImageResource(context.getDrawable(notifications.get(i).getThumbnail()));
+            Drawable drawable = new BitmapDrawable(context.getResources(), BitmapFactory.decodeByteArray(notifications.get(i).getThumbnail(), 0, notifications.get(i).getThumbnail().length));
+            holder.thumbnail.setBackground(drawable);
         }else{
             holder.thumbnail.setImageResource(R.drawable.chair1);
         }

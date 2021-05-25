@@ -38,7 +38,8 @@ public class CustomerProfile extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        Date now = new Date();
+//        Date now = new Date();
+        String now = "random date";
         List<Evaluation> evaluations = new ArrayList<>();
         evaluations.add(new Evaluation(0, "maria_karen","takis_32", 4, now, getResources().getString(R.string.lorem_ipsum)));
         evaluations.add(new Evaluation(1, "maria_karen","mitsos_creations",  3, now, getResources().getString(R.string.lorem_ipsum)));

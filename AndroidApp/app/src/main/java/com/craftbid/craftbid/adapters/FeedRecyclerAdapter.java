@@ -1,6 +1,9 @@
 package com.craftbid.craftbid.adapters;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,13 +74,18 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
                 holder.item.setVisibility(View.GONE);
                 return;
             }
+            return;
         }
 //        holder.image.setBackgroundResource(thumbnails.get(position).getThumbnail());
         holder.plus_sign.setVisibility(View.GONE);
         if(context != null){
-            holder.image.setBackgroundResource(context.getDrawable(thumbnails.get(position).getThumbnail()));
+//            holder.image.setBackgroundResource(context.getDrawable(thumbnails.get(position).getThumbnail()));
+            Drawable drawable = new BitmapDrawable(context.getResources(), BitmapFactory.decodeByteArray(thumbnails.get(position).getThumbnail(), 0, thumbnails.get(position).getThumbnail().length));
+            holder.image.setBackground(drawable);
         }else if(context2!=null){
-            holder.image.setBackgroundResource(context2.getDrawable(thumbnails.get(position).getThumbnail()));
+//            holder.image.setBackgroundResource(context2.getDrawable(thumbnails.get(position).getThumbnail()));
+            Drawable drawable = new BitmapDrawable(context2.getResources(), BitmapFactory.decodeByteArray(thumbnails.get(position).getThumbnail(), 0, thumbnails.get(position).getThumbnail().length));
+            holder.image.setBackground(drawable);
         }else{
             holder.image.setBackgroundResource(R.drawable.chair1);
         }

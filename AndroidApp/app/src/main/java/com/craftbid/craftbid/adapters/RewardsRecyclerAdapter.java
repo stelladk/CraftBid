@@ -1,6 +1,9 @@
 package com.craftbid.craftbid.adapters;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,10 +80,14 @@ public class RewardsRecyclerAdapter extends RecyclerView.Adapter<RewardsRecycler
         }
 //        holder.image.setBackgroundResource(thumbnails.get(position).getThumbnail());
         if(contextCustomer != null){
-            holder.image.setBackgroundResource(contextCustomer.getDrawable(rewards.get(i).getPhoto()));
+//            holder.image.setBackgroundResource(contextCustomer.getDrawable(rewards.get(i).getPhoto()));
+            Drawable drawable = new BitmapDrawable(contextCustomer.getResources(), BitmapFactory.decodeByteArray(rewards.get(i).getPhoto(), 0, rewards.get(i).getPhoto().length));
+            holder.image.setBackground(drawable);
             holder.points.setText(contextCustomer.getRewardPointsString(rewards.get(i).getPrice()));
         }else if(contextCreator != null){
-            holder.image.setBackgroundResource(contextCreator.getDrawable(rewards.get(i).getPhoto()));
+//            holder.image.setBackgroundResource(contextCreator.getDrawable(rewards.get(i).getPhoto()));
+            Drawable drawable = new BitmapDrawable(contextCreator.getResources(), BitmapFactory.decodeByteArray(rewards.get(i).getPhoto(), 0, rewards.get(i).getPhoto().length));
+            holder.image.setBackground(drawable);
             holder.points.setText(contextCreator.getRewardPointsString(rewards.get(i).getPrice()));
         }else{
             holder.image.setBackgroundResource(R.drawable.chair1);

@@ -55,11 +55,12 @@ public class CreatorProfile extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //Thumbnails RecyclerView
+        byte[] test = new byte[2];
         thumbnails = new ArrayList<>();
-        thumbnails.add(new Thumbnail(0, "Ξύλινη Καρέκλα", "Ωραιότατη Ξύλινη Καρέκλα", "Καρέκλες", "chair1", 15));
-        thumbnails.add(new Thumbnail(1, "Ξύλινη Καρέκλα", "Ξύλινη Καρέκλα Κήπου", "Καρέκλες", "chair3", 20));
-        thumbnails.add(new Thumbnail(2, "Ξύλινη Καρέκλα", "Απλή Ξύλινη Καρέκλα", "Καρέκλες", "chair2", 15));
-        thumbnails.add(new Thumbnail(3, "Ξύλινη Καρέκλα", "Χειροποίητη Ξύλινη Καρέκλα", "Καρέκλες", "chair4", 15));
+        thumbnails.add(new Thumbnail(0, "Ξύλινη Καρέκλα", "Ωραιότατη Ξύλινη Καρέκλα", "Καρέκλες", 15, test));
+        thumbnails.add(new Thumbnail(1, "Ξύλινη Καρέκλα", "Ξύλινη Καρέκλα Κήπου", "Καρέκλες", 20, test));
+        thumbnails.add(new Thumbnail(2, "Ξύλινη Καρέκλα", "Απλή Ξύλινη Καρέκλα", "Καρέκλες", 15, test));
+        thumbnails.add(new Thumbnail(3, "Ξύλινη Καρέκλα", "Χειροποίητη Ξύλινη Καρέκλα", "Καρέκλες", 15, test));
 
         thumbnails_recycler = findViewById(R.id.thumbnails_recyclerview);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -68,7 +69,8 @@ public class CreatorProfile extends AppCompatActivity {
         thumbnails_recycler.setAdapter(adapter);
 
         //Reviews RecyclerView
-        Date now = new Date();
+//        Date now = new Date();
+        String now = "random date";
         List<Evaluation> evaluations = new ArrayList<>();
         evaluations.add(new Evaluation(0, "aekara_21", "mitsos_creations", 4, now, getResources().getString(R.string.lorem_ipsum)));
         evaluations.add(new Evaluation(1, "maria_karen", "mitsos_creations", 3, now, getResources().getString(R.string.lorem_ipsum)));

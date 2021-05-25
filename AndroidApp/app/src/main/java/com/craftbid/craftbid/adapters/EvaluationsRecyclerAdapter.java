@@ -44,8 +44,8 @@ public class EvaluationsRecyclerAdapter extends RecyclerView.Adapter<Evaluations
     public void onBindViewHolder(@NonNull ViewHolder holder, int i) {
         holder.image.setImageResource(R.drawable.karen);
         holder.reviewer.setText(evaluations.get(i).getSubmitted_by());
-        holder.refered.setText(evaluations.get(i).getReffers_to());
-        holder.comments.setText(evaluations.get(i).getComments());
+        holder.refered.setText(evaluations.get(i).getRefers_to());
+        holder.comments.setText(evaluations.get(i).getComment());
         holder.rating.setRating(evaluations.get(i).getRating());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
