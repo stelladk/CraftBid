@@ -5,10 +5,9 @@ import java.util.Date;
 
 public class Report implements Serializable {
     private int id;
-    private String submitted_by,refers_to,reason,description;
-    private Date date;
+    private String submitted_by,refers_to,reason,description,date;
 
-    public Report(int id, String submitted_by, String refers_to, String reason, String description, Date date) {
+    public Report(int id, String submitted_by, String refers_to, String reason, String description, String date) {
         this.id = id;
         this.submitted_by = submitted_by;
         this.refers_to = refers_to;
@@ -57,11 +56,11 @@ public class Report implements Serializable {
         this.description = description;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 }
