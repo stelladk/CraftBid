@@ -125,10 +125,13 @@ public class ListingPublicActivity extends AppCompatActivity {
                 in = new ObjectInputStream(socket.getInputStream());
                 out = new ObjectOutputStream(socket.getOutputStream());
                 out.writeObject("VIEW_LISTING");
-                out.writeObject(listing_id);
+//                out.writeObject(listing_id);
+                out.writeObject(5); //TODO change back to listing_id
 
                 listing = (Listing)in.readObject();
-                listing_photos = (ArrayList<byte[]>) in.readObject();
+                if(listing != null) {
+                    listing_photos = (ArrayList<byte[]>) in.readObject();
+                }
             }catch(IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -155,10 +158,13 @@ public class ListingPublicActivity extends AppCompatActivity {
                 TextView location = findViewById(R.id.location);
                 location.setText(listing.getLocation());
                 TextView value = findViewById(R.id.points_value);
-                value.setText(listing.getReward_points());
+                Log.d("PUBLIC LISTING", "onPostExecute: value "+value);
+                value.setText(listing.getReward_points()+"");
                 TextView price = findViewById(R.id.price);
                 price.setText(String.format("%s", listing.getMin_price()));
-                if(listing_photos!=null && listing_photos.size()>0){
+                Log.d("LISTING PUBLIC", "onPostExecute: photos "+listing.getTotal_photos());
+                Log.d("LISTING PUBLIC", "onPostExecute: listing_photos "+listing_photos.size());
+                if(listing_photos.size() > 0){
                     ImageView photo = findViewById(R.id.listing_photo);
                     Bitmap thumbnail = BitmapFactory.decodeByteArray(listing_photos.get(0),0, listing_photos.get(0).length);
                     photo.setImageBitmap(thumbnail);

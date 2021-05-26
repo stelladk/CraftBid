@@ -140,7 +140,7 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
             }else {
                 //connect to server to signup
                 try {
-                    socket = new Socket("192.168.1.5",6500);
+                    socket = new Socket("192.168.1.5",6500); //TODO add button to change IP
                     in = new ObjectInputStream(socket.getInputStream());
                     out = new ObjectOutputStream(socket.getOutputStream());
                     out.writeObject("SIGNUP_USER");
