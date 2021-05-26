@@ -188,6 +188,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <EditText
+        android:id="@+id/description_edit"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:maxHeight="80dp"
@@ -210,7 +211,8 @@
         app:backgroundTint="@color/green"
         android:text="@string/save"
         android:textColor="@color/black"
-        android:textAllCaps="false"/>
+        android:textAllCaps="false"
+        android:onClick="attemptCreateListing"/>
 
     </LinearLayout>
     </ScrollView>

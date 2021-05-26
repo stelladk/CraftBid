@@ -1,5 +1,7 @@
 package com.craftbid.craftbid.adapters;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,19 +19,20 @@ import com.craftbid.craftbid.model.Thumbnail;
 import com.google.android.material.snackbar.Snackbar;
 import com.stelladk.arclib.ArcLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CollectionRecyclerAdapter extends RecyclerView.Adapter<CollectionRecyclerAdapter.ViewHolder> {
 
-    List<String> collection;
+    ArrayList<byte[]> collection;
 
-    public CollectionRecyclerAdapter(List<String> collection){
+    public CollectionRecyclerAdapter(ArrayList<byte[]> collection){
         this.collection = collection;
     }
 
     //Temporary
     private CreateListingActivity context = null;
-    public CollectionRecyclerAdapter(List<String> collection, CreateListingActivity context) {
+    public CollectionRecyclerAdapter(ArrayList<byte[]> collection, CreateListingActivity context) {
         this.collection = collection;
         this.context = context;
     }
@@ -48,11 +51,19 @@ public class CollectionRecyclerAdapter extends RecyclerView.Adapter<CollectionRe
             holder.image.setImageResource(0);
             holder.plus_sign.setVisibility(View.VISIBLE);
             holder.textAdd.setVisibility(View.VISIBLE);
-            //TODO OnClickListener for adding pictures
+            holder.plus_sign.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    context.addImage();
+                }
+            });
             return;
         }
+        holder.plus_sign.setVisibility(View.GONE);
+        holder.textAdd.setVisibility(View.GONE);
         if(context != null){
-            holder.image.setImageResource(context.getDrawable(collection.get(i)));
+            Bitmap thumbnail = BitmapFactory.decodeByteArray(collection.get(i),0, collection.get(i).length);
+            holder.image.setImageBitmap(thumbnail);
         }else{
             holder.image.setImageResource(R.drawable.chair1);
         }
