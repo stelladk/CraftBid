@@ -1,4 +1,4 @@
-package com.craftbid.craftbid;
+package com.craftbid.craftbid.model;
 
 public class Purchase {
     private int id, done_on;

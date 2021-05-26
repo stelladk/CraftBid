@@ -1,4 +1,4 @@
-package com.craftbid.craftbid;
+package com.craftbid.craftbid.model;
 
 import java.io.Serializable;
 import java.util.Arrays;

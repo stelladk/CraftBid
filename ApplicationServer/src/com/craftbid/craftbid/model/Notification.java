@@ -1,4 +1,4 @@
-package com.craftbid.craftbid;
+package com.craftbid.craftbid.model;
 
 public class Notification {
     private int listing_id;

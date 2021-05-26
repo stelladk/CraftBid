@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -112,8 +113,10 @@ public class S3Bucket {
 		
 		try {
 			Files.copy(in, Paths.get(localpath));
-		} catch (IOException e) {
-			// exception if file already exists
+		} catch(FileAlreadyExistsException e) {
+			//if file already exists in local temp, do nothing
+			return;
+		}catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

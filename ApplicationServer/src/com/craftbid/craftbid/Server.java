@@ -7,6 +7,8 @@ import java.io.*;
 import java.sql.*;
 import java.util.*;
 
+import com.craftbid.craftbid.model.*;
+
 //TODO add replies to all requests where the client sends a message last (server must be the last to message)
 //TODO check for quotes in numeric values in queries
 
