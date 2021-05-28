@@ -43,6 +43,8 @@ public class RewardsCustomerActivity extends AppCompatActivity {
             username = bundle.getString("username");
         }
 
+        new ViewRewardsTask().execute();
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Rewards");
@@ -55,7 +57,7 @@ public class RewardsCustomerActivity extends AppCompatActivity {
         creator.setText(username);
 
         byte[] test = new byte[2];
-        List<Reward> rewards = new ArrayList<>();
+        rewards = new ArrayList<>();
         rewards.add(new Reward(0, 40, "Ξύλινη καρέκλα",  "chair3", test));
         rewards.add(new Reward(1, 70, "Ξύλινη καρέκλα x2", "chair3", test));
         rewards.add(new Reward(2, 120, "Ξύλινη καρέκλα x4", "chair3", test));
