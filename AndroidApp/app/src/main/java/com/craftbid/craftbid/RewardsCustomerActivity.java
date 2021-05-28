@@ -7,20 +7,30 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.craftbid.craftbid.adapters.RewardsRecyclerAdapter;
+import com.craftbid.craftbid.model.Listing;
 import com.craftbid.craftbid.model.Reward;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RewardsCustomerActivity extends AppCompatActivity {
     private String username;
+    private ArrayList<Reward> rewards;
+    private int reward_points;
+    private RewardsRecyclerAdapter adapter;
     Dialog dialog;
 
     @Override
@@ -41,8 +51,8 @@ public class RewardsCustomerActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        TextView claimed_points = findViewById(R.id.reward_points);
-        claimed_points.setText(getResources().getString(R.string.num_claimed_reward_points, 50));
+        TextView creator = findViewById(R.id.creator_username);
+        creator.setText(username);
 
         byte[] test = new byte[2];
         List<Reward> rewards = new ArrayList<>();
@@ -54,7 +64,7 @@ public class RewardsCustomerActivity extends AppCompatActivity {
         RecyclerView recycler = findViewById(R.id.rewards_recyclerview);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recycler.setLayoutManager(manager);
-        RewardsRecyclerAdapter adapter = new RewardsRecyclerAdapter(rewards, this);
+        adapter = new RewardsRecyclerAdapter(rewards, this);
         recycler.setAdapter(adapter);
 
         dialog = new Dialog(this);
@@ -98,7 +108,57 @@ public class RewardsCustomerActivity extends AppCompatActivity {
         return this.getResources().getIdentifier(name, "drawable", this.getPackageName());
     }
 
-    public String getRewardPointsString(int points){
+    public String getRewardPointsString(int points){ //for points in adapter
         return getResources().getString(R.string.num_points, points);
+    }
+
+    private class ViewRewardsTask extends AsyncTask<Void, Void, Void>{
+        ProgressDialog progressDialog;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Socket socket;
+            ObjectOutputStream out;
+            ObjectInputStream in;
+            try {
+//                socket = new Socket("192.168.2.2",6500);
+                socket = new Socket("192.168.1.5",6500);
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("VIEW_REWARDS");
+                out.writeObject(username); //creator's username
+                out.writeObject(false); //i am not the creator of these rewards
+                out.flush();
+
+                rewards = (ArrayList<Reward>)in.readObject();
+
+                out.writeObject(MainActivity.username);//Send your username
+                out.flush();
+
+                reward_points = (int) in.readObject(); //get available reward_points for this creator
+
+            }catch(IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(RewardsCustomerActivity.this,
+                    "Getting Rewards...",
+                    "Connecting to server...");
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            progressDialog.dismiss();
+            if(rewards!=null){
+                TextView claimed_points = findViewById(R.id.reward_points);
+                claimed_points.setText(getResources().getString(R.string.num_claimed_reward_points, reward_points));
+                //TODO FIX the points are not showing
+                adapter.notifyDataSetChanged();
+            }
+        }
     }
 }
