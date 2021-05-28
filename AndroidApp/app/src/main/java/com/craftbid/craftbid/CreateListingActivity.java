@@ -58,6 +58,13 @@ public class CreateListingActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        findViewById(R.id.save_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptCreateListing(view);
+            }
+        });
+
         //Thumbnails RecyclerView
         collection = new ArrayList<>();
 //        collection.add("chair1");

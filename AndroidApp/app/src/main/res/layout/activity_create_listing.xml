@@ -211,8 +211,7 @@
         app:backgroundTint="@color/green"
         android:text="@string/save"
         android:textColor="@color/black"
-        android:textAllCaps="false"
-        android:onClick="attemptCreateListing"/>
+        android:textAllCaps="false"/>
 
     </LinearLayout>
     </ScrollView>
