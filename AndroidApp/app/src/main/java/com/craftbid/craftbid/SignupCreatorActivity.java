@@ -63,7 +63,7 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
 
     public void attemptSighup(View view) {
         //Start AsyncTask for signup
-        new SignUpTask().execute("");
+        new SignUpCreatorTask().execute("");
     }
 
     @Override
@@ -74,9 +74,7 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
+    public void onNothingSelected(AdapterView<?> adapterView) { }
 
     //click on imageview to get an image from gallery
     public void onImageClick(View view) {
@@ -112,7 +110,7 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
 
 
     /** AsyncTask running when signup button is clicked, connecting to server to signup */
-    private class SignUpTask extends AsyncTask<String, String, Void> {
+    private class SignUpCreatorTask extends AsyncTask<String, String, Void> {
         ProgressDialog progressDialog;
         String resultmsg = null;
         String username;
@@ -152,7 +150,7 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
                     out.writeObject(phone.equals("") ? "NULL" : phone);
                     out.writeObject("NULL"); //description is empty at first
                     out.writeObject(buffer); //profile pic
-                    out.writeObject(false); //TODO must be true (isCreator)
+                    out.writeObject(true); //is creator
 
                     response = (String)in.readObject();
                     if(response.equals("USER ALREADY EXISTS")) {
@@ -161,6 +159,8 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
                         resultmsg = "Email already exists!";
                     }else {
                         //TODO continue with more creator fields
+                        //isfreelancer (bit)
+                        //experitse from list of expertises
                         resultmsg = "Signup was successful!";
                         is_successful = true;
                     }
