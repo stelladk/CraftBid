@@ -41,6 +41,7 @@ public class Server {
                     }
 
                     public void run() {
+                        System.out.println("Received a new request!");
                         serve_request(request);
                     }
                 }.init(request)).start();
@@ -980,7 +981,7 @@ public class Server {
     }//request notifications
 
 
-    public static void main(String[] args) {
-        new Server("192.168.2.2",6500,100);
+    public static void main(String[] args) throws UnknownHostException{
+        new Server(Inet4Address.getLocalHost().getHostAddress(), 6500,100);
     }
 }
