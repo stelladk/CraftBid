@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.Socket;
 
 public class SignupCreatorActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -140,7 +141,7 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
             }else {
                 //connect to server to signup
                 try {
-                    socket = new Socket("192.168.1.5",6500); //TODO add button to change IP
+                    socket = new Socket("192.168.2.5",6500);
                     in = new ObjectInputStream(socket.getInputStream());
                     out = new ObjectOutputStream(socket.getOutputStream());
                     out.writeObject("SIGNUP_USER");

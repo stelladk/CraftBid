@@ -24,6 +24,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -120,8 +121,7 @@ public class ListingPublicActivity extends AppCompatActivity {
             ObjectInputStream in = null;
             //connect to server to loa listing info
             try {
-//                socket = new Socket("192.168.2.2",6500);
-                socket = new Socket("192.168.1.5",6500);
+                socket = new Socket(InetAddress.getByName("localhost"),6500);
                 in = new ObjectInputStream(socket.getInputStream());
                 out = new ObjectOutputStream(socket.getOutputStream());
                 out.writeObject("VIEW_LISTING");

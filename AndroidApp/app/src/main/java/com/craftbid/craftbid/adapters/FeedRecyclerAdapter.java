@@ -108,7 +108,7 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
 
     @Override
     public int getItemCount() {
-        return thumbnails.size() + 1;
+        return thumbnails.size();
     }
 
     //Filter view according to search results

@@ -1,8 +1,10 @@
 package com.craftbid.craftbid;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,6 +17,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -29,7 +32,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.craftbid.craftbid.adapters.FeedRecyclerAdapter;
 import com.craftbid.craftbid.model.Thumbnail;
+import com.google.android.material.snackbar.Snackbar;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.lang.reflect.Array;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -46,16 +57,15 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
     public static boolean creator;
     public static final String GUEST = "@guest";
     public static final String MAIN = "@main";
-    private static final int SHOWN_ITEMS = 2; //TODO change regarding how many ites we want to show each time seeMore is clicked
+    private static final int SHOWN_ITEMS = 2; //TODO change regarding how many items we want to show each time seeMore is clicked
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
-
+        //get content from previous screen
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
             username = bundle.getString("username", username);
@@ -64,43 +74,36 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         }
         Log.d("MAIN", "onCreate: username "+username);
         Log.d("MAIN", "onCreate: creator "+creator);
-
-        //Change Toolbar Title
+        //change Toolbar title
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//        toolbar.setTitle("feed");
 
-//        AppBarLayout appBar = findViewById(R.id.appBar);
-//        appBar.setExpanded(true);
 
+        /*
+        USELESSSSSSSSSSSSSSSSSSSSSSSSSS
+
+        toolbar.setTitle("feed");
+        AppBarLayout appBar = findViewById(R.id.appBar);
+        appBar.setExpanded(true);
         byte[] test = new byte[2];
         thumbnails = new ArrayList<>();
         thumbnails.add(new Thumbnail(0, "Πλεκτή τσάντα", "Ωραιότατη πλεκτή τσάντα πάρε πάρε όλα 5 ευρώ αρχική","Πλεκτά, Τσάντες", 5, test));
         thumbnails.add(new Thumbnail(1, "Βραχιόλια", "Βραχιολι χειροποιητο αν θες το παιρνεις", "Κοσμήματα",  5, test));
         thumbnails.add(new Thumbnail(2, "Πλεκτά για όλους", "Πλεκτά ρούχα για όλες τις ηλικίε δεχόμαστε παραγγελίες", "Πλεκτά",  15, test));
         thumbnails.add(new Thumbnail(3, "Πασχαλινό κερί χειροποίητο", "Κεριά Πασχαλινά για την Ανάσταση. Χρόνια Πολλά!", "Κεριά", 20, test));
+    */
+
 
         recycler = findViewById(R.id.feed_recyclerview);
-//        RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        //USELESS RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         GridLayoutManager manager = new GridLayoutManager(this, 2);
         manager.setOrientation(RecyclerView.VERTICAL);
         recycler.setLayoutManager(manager);
-        //TODO once sort method is fixed this works adapter = new FeedRecyclerAdapter(new ArrayList<>(thumbnails.subList(0,SHOWN_ITEMS)), this);
-        adapter = new FeedRecyclerAdapter(thumbnails, this);
-        recycler.setAdapter(adapter);
-
-        Spinner sort = findViewById(R.id.sort_spinner);
-        ArrayAdapter<CharSequence> spinner_adapter = ArrayAdapter.createFromResource(this, R.array.sort_options, android.R.layout.simple_spinner_item);
-        spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sort.setAdapter(spinner_adapter);
-        sort.setOnItemSelectedListener(this);
-
-        EditText searchBar = findViewById(R.id.searchBar);
-        searchBar.setOnEditorActionListener(this);
-
+        new LoadMainScreenTask().execute(); //execute AsyncTask to get list of listings
         progressBar.setVisibility(View.GONE);
     }
 
+    /** Create options menu on app bar */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.appbarmenu, menu);
@@ -114,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         return true;
     }
 
+    /** App bar options listeners */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
@@ -136,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         return true;
     }
 
+    /** Sort list of thumbnails by price, name or category */
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
         progressBar.setVisibility(View.VISIBLE);
@@ -158,10 +163,9 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
+    public void onNothingSelected(AdapterView<?> adapterView) { }
 
-    }
-
+    /** ???? */
     @Override
     public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
         boolean handled = false;
@@ -174,15 +178,15 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         }
         return handled;
     }
-
     private void filterSearch(String text) {
-//        ArrayList<Thumbnail> filteredList = new ArrayList<>();
+        //ArrayList<Thumbnail> filteredList = new ArrayList<>();
         //TODO search in database and return results
         Log.d("SEARCH", "filterSearch: "+ text);
 
         adapter.filter(thumbnails);
     }
 
+    /** Hide the keyboard */
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
@@ -194,6 +198,8 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    /** Open new screens */
+    /** Open user's private profile */
     private void openPrivateProfile() {
         Intent profile;
         if(creator){
@@ -205,17 +211,20 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         startActivity(profile);
     }
 
+    /** Open the notifications panel */
     private void openNotifications(){
         Intent notif = new Intent(MainActivity.this, NotificationsActivity.class);
         startActivity(notif);
     }
 
+    /* USELESS
     //Temporary
     public int getDrawable(String name) {
         return this.getResources().getIdentifier(name, "drawable", this.getPackageName());
-//        return ActivityCompat.getDrawable(this, resourceId);
-    }
+        //return ActivityCompat.getDrawable(this, resourceId);
+    } */
 
+    /** Open the listing details */
     public void reviewListing(int listing_id){
         // TODO set PRIVATE true/false based on whether user is the creator of the listing
         boolean PRIVATE = false;
@@ -229,18 +238,79 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         startActivity(listing_review);
     }
 
-    /** Updates recycler's content so that more listings appear */
+
+    /* USELESS
+    /** Updates recycler's content so that more listings appear
     /* FIXME when all thumbnails appear, sort method sorts what it should plus the hidden element :(
-     *  in this way if the hidden element changes position another element gets hidden, and eventually there are blank spaces in the list */
+     *  in this way if the hidden element changes position another element gets hidden, and eventually there are blank spaces in the list
     public void seeMore() {
         int more = adapter.getItemCount()-1 + SHOWN_ITEMS;
         while(more > thumbnails.size()) more--;
 
         adapter.setThumbnails(new ArrayList<>(thumbnails.subList(0,more)));
         recycler.setAdapter(adapter);
-    }
+    }*/
 
+    //a getter for the list of thumbnails
     public List<Thumbnail> getThumbnails() {
         return thumbnails;
+    }
+
+
+
+    /** AsyncTask running when screen is created, connecting to server to get list of Listing Thumbnails*/
+    private class LoadMainScreenTask extends AsyncTask<String, String, Void> {
+        ProgressDialog progressDialog;
+        Socket socket = null;
+        ObjectOutputStream out = null;
+        ObjectInputStream in = null;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                socket = new Socket("192.168.2.5",6500);
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("LOAD_MAIN_SCREEN");
+                thumbnails = (ArrayList<Thumbnail>) in.readObject(); //get list of thumbnails
+
+            }catch(IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            Log.d("here","here");
+            progressDialog = ProgressDialog.show(MainActivity.this,
+                    "Getting most recent Listings...",
+                    "Connecting to server...");
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            try {
+                in.close();
+                out.close();
+                socket.close();
+            }catch(IOException e) {
+                e.printStackTrace();
+            }
+
+            progressDialog.dismiss();
+            //TODO once sort method is fixed this works adapter = new FeedRecyclerAdapter(new ArrayList<>(thumbnails.subList(0,SHOWN_ITEMS)), this);
+            adapter = new FeedRecyclerAdapter(thumbnails, MainActivity.this);
+            recycler.setAdapter(adapter);
+
+            Spinner sort = findViewById(R.id.sort_spinner);
+            ArrayAdapter<CharSequence> spinner_adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.sort_options, android.R.layout.simple_spinner_item);
+            spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sort.setAdapter(spinner_adapter);
+            sort.setOnItemSelectedListener(MainActivity.this);
+
+            EditText searchBar = findViewById(R.id.searchBar);
+            searchBar.setOnEditorActionListener(MainActivity.this);
+        }
     }
 }
