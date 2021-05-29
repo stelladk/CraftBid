@@ -268,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         @Override
         protected Void doInBackground(String... params) {
             try {
-                socket = new Socket("192.168.2.5",6500);
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
                 in = new ObjectInputStream(socket.getInputStream());
                 out = new ObjectOutputStream(socket.getOutputStream());
                 out.writeObject("LOAD_MAIN_SCREEN");

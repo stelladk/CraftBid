@@ -119,7 +119,7 @@ public class SignupCustomerActivity extends AppCompatActivity {
             }else {
                 //connect to server to signup
                 try {
-                    socket = new Socket("192.168.2.5",6500);
+                    socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
                     in = new ObjectInputStream(socket.getInputStream());
                     out = new ObjectOutputStream(socket.getOutputStream());
                     out.writeObject("SIGNUP_USER");
