@@ -187,7 +187,7 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
 
 
             //validation checks
-            if(name.equals("")|| email.equals("") || username.equals("") || password.equals("") || repeat_password.equals("")) {
+            if(name.equals("")|| email.equals("") || username.equals("") || phone.equals("") || password.equals("") || repeat_password.equals("")) {
                 resultmsg = "Συμπληρώστε τα υποχρεωτικά πεδία";
             }else if(!password.equals(repeat_password)) {
                 resultmsg = "Οι κωδικοί δεν ταιριάζουν";
@@ -215,11 +215,22 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
                     }else if(response.equals("EMAIL ALREADY EXISTS")) {
                         resultmsg = "Email already exists!";
                     }else {
-                        //TODO continue with more creator fields
-                        //isfreelancer (bit)
-                        //experitse from list of expertises
-                        resultmsg = "Signup was successful!";
-                        is_successful = true;
+                        //continue with more creator fields
+                        //get bit value from freelancer checkbox
+                        if(((CheckBox)findViewById(R.id.freelancer)).isChecked()) {
+                            out.writeObject(1);
+                        }else {
+                            out.writeObject(0);
+                        }
+                        out.writeObject(expertise_selected);
+                        out.flush();
+                        response = (String)in.readObject();
+                        if(response.equals("CREATOR REGISTER SUCCESSFUL")) {
+                            resultmsg = "Signup was successful!";
+                            is_successful = true;
+                        }else {
+                            resultmsg = "Error during signup!";
+                        }
                     }
                 }catch(IOException | ClassNotFoundException e) {
                     e.printStackTrace();
