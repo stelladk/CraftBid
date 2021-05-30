@@ -48,24 +48,25 @@ public class SignupCustomerActivity extends AppCompatActivity {
         return input;
     }
 
+    /** Go back to login screen */
     public void goBack(View view) {
         Intent login = new Intent(SignupCustomerActivity.this, LoginActivity.class);
         startActivity(login);
     }
 
+    /** When signup button is clicked */
     public void attemptSighup(View view) {
         //Start AsyncTask for signup
         new SignUpUserTask().execute("");
     }
 
-    //click on imageview to get an image from gallery
+    /** click on imageview to get an image from gallery */
     public void onImageClick(View view) {
         Intent photo_picker = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         photo_picker.setType("image/jpeg");
         startActivityForResult(photo_picker,PHOTO_PICK);
     }
-
     @Override
     protected void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);

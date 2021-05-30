@@ -20,11 +20,14 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.craftbid.craftbid.adapters.FeedRecyclerAdapter;
+import com.craftbid.craftbid.model.Thumbnail;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class SignupCreatorActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -38,12 +41,8 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup_creator);
 
-        //TODO get expertise choices from database
-        Spinner expertise = findViewById(R.id.expertise_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.expertise, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        expertise.setAdapter(adapter);
-        expertise.setOnItemSelectedListener(this);
+        //Start AsyncTask to get list of expertises from the server
+        new LoadExpertisesTask().execute();
 
         TextView password = findViewById(R.id.password_label);
         String star = getColoredSpanned("*", String.valueOf(getResources().getColor(R.color.error)));
@@ -56,34 +55,36 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
         return input;
     }
 
+    /** Go back to login screen */
     public void goBack(View view) {
         Intent login = new Intent(SignupCreatorActivity.this, LoginActivity.class);
         startActivity(login);
     }
 
+    /** When signup button is clicked */
     public void attemptSighup(View view) {
         //Start AsyncTask for signup
         new SignUpCreatorTask().execute("");
     }
 
+    /** Item selector for expertise */
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         expertise_selected = adapterView.getItemAtPosition(i).toString();
-//        Snackbar.make(view, "Selected Expertise " + expertise_selected, Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show();
+        Snackbar.make(view, "Selected Expertise " + expertise_selected, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) { }
 
-    //click on imageview to get an image from gallery
+    /** click on imageview to get an image from gallery */
     public void onImageClick(View view) {
         Intent photo_picker = new Intent(Intent.ACTION_PICK,
                                          android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         photo_picker.setType("image/jpeg");
         startActivityForResult(photo_picker,PHOTO_PICK);
     }
-
     @Override
     protected void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
@@ -107,6 +108,60 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
             }
         }
     }
+
+
+    /** AsyncTask running when screen is created, connecting to server to get list of Expertises */
+    private class LoadExpertisesTask extends AsyncTask<String, String, Void> {
+        ProgressDialog progressDialog;
+        Socket socket = null;
+        ObjectOutputStream out = null;
+        ObjectInputStream in = null;
+        ArrayList<String> expertises = null;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("REQUEST_EXPERTISES");
+                expertises = (ArrayList<String>) in.readObject(); //get list of expertises
+
+            }catch(IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            Log.d("here","here");
+            progressDialog = ProgressDialog.show(SignupCreatorActivity.this,
+                    "Getting List of Expertises...",
+                    "Connecting to server...");
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            try {
+                in.close();
+                out.close();
+                socket.close();
+            }catch(IOException e) {
+                e.printStackTrace();
+            }
+
+            progressDialog.dismiss();
+            //set currently selected expertise as the default
+            expertise_selected = expertises.get(0);
+            //set content of spinner of expertises
+            Spinner expertise = findViewById(R.id.expertise_spinner);
+            ArrayAdapter adapter = new ArrayAdapter(SignupCreatorActivity.this, android.R.layout.simple_spinner_item,expertises);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            expertise.setAdapter(adapter);
+            expertise.setOnItemSelectedListener(SignupCreatorActivity.this);
+        }
+    }//load expertises task
 
 
     /** AsyncTask running when signup button is clicked, connecting to server to signup */
@@ -152,6 +207,7 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
                     out.writeObject("NULL"); //description is empty at first
                     out.writeObject(buffer); //profile pic
                     out.writeObject(true); //is creator
+                    out.flush();
 
                     response = (String)in.readObject();
                     if(response.equals("USER ALREADY EXISTS")) {
@@ -191,5 +247,6 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
                 startActivity(login);
             }
         }
-    }
+    }//signup task
+
 }
