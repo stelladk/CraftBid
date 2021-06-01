@@ -128,21 +128,26 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
         progressBar.setVisibility(View.VISIBLE);
-        //TODO sort items
-        Collections.sort(thumbnails, new Comparator<Thumbnail>() {
-            @Override
-            public int compare(Thumbnail t1, Thumbnail t2) {
-                if(position == 1){ //Price
-                    return Float.compare(t1.getMin_price(), t2.getMin_price());
-                }else if(position == 2) { //Name
-                    return t1.getName().compareTo(t2.getName());
-                }else if(position == 3){ //Category
-                    return t1.getCategory().compareTo(t2.getCategory());
+        ArrayList<Thumbnail> sorted = new ArrayList<>(thumbnails);
+        if(position!=0) {
+            //sort items
+            Collections.sort(sorted, new Comparator<Thumbnail>() {
+                @Override
+                public int compare(Thumbnail t1, Thumbnail t2) {
+                    if(position == 1){ //Price
+                        return Float.compare(t1.getMin_price(), t2.getMin_price());
+                    }else if(position == 2) { //Name
+                        return t1.getName().compareTo(t2.getName());
+                    }else if(position == 3){ //Category
+                        return t1.getCategory().compareTo(t2.getCategory());
+                    }
+                    return 0;
                 }
-                return 0;
-            }
-        });
-        adapter.notifyDataSetChanged();
+            });
+        }
+        adapter = new FeedRecyclerAdapter(sorted, MainActivity.this);
+        recycler.setAdapter(adapter);
+        //adapter.notifyDataSetChanged();
         progressBar.setVisibility(View.GONE);
     }
 
@@ -156,7 +161,6 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         if (actionId == EditorInfo.IME_ACTION_SEARCH) {
             search_text = view.getText().toString();
             new SearchTask().execute();
-            //filterSearch(view.getText().toString());
             view.clearFocus();
             recycler.requestFocus();
             hideKeyboard(this);
@@ -164,14 +168,6 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         }
         return handled;
     }
-    /*
-    private void filterSearch(String text) {
-        //TODO search in database and return results
-        Log.d("SEARCH", "filterSearch: "+ text);
-
-        adapter.filter(thumbnails);
-    }
-     */
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
