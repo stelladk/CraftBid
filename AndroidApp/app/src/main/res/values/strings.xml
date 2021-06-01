@@ -96,6 +96,7 @@
     <string name="signIn_warning">Για να κάνετε προσφορά στα προϊόντα πρέπει πρώτα να συνδεθείτε. Αν δεν έχετε λογαριασμό θα πρέπει να κάνετε εγγραφή.</string>
     <string name="offers_empty">Δεν έχει υποβληθεί καμία προσφορά για το συγκεκριμένο προϊόν.</string>
     <string name="accept_offer">Είστε σίγουροι ότι θέλετε να αποδεχτείτε αυτή την προσφορά;</string>
+    <string name="offers_title">Προσφορές</string>
     <string-array name="sort_options">
         <item>Ημερομηνία</item>
         <item>Τιμή</item>

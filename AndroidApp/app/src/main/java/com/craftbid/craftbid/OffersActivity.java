@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
-import android.app.Notification;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -22,6 +21,8 @@ import android.widget.TextView;
 
 import com.craftbid.craftbid.adapters.FeedRecyclerAdapter;
 import com.craftbid.craftbid.adapters.OffersRecyclerAdapter;
+import com.craftbid.craftbid.model.Listing;
+import com.craftbid.craftbid.model.Notification;
 import com.craftbid.craftbid.model.Offer;
 import com.craftbid.craftbid.model.Thumbnail;
 
@@ -94,13 +95,14 @@ public class OffersActivity extends AppCompatActivity {
     }
 
     /** Opens popup for confirmation and runs AsyncTask to send request to AppServer */
-    public void acceptOffer(int id) {
+    public void acceptOffer(Offer offer) {
         dialog.setContentView(R.layout.popup_confirm);
         ((TextView)dialog.findViewById(R.id.confirm_message)).setText(R.string.accept_offer);
         dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
         dialog.show();
         dialog.findViewById(R.id.yes_btn).setOnClickListener(v -> {
             // TODO execute AsyncTask to send Notification to DB (-> goBack())
+            new AcceptOfferTask().execute(offer);
         });
         dialog.findViewById(R.id.no_btn).setOnClickListener(v -> {
             dialog.dismiss();
@@ -110,7 +112,7 @@ public class OffersActivity extends AppCompatActivity {
         dialog.dismiss();
     }
 
-    public void declineOffer(int id) {
+    public void declineOffer(Offer offer) {
         //TODO show popup and remove Notification from DB
         // after decline toggleEmptyMessage
     }
@@ -122,9 +124,8 @@ public class OffersActivity extends AppCompatActivity {
         startActivity(profile);
     }
 
-
     /** On creation of screen, connects to server to get list of Offers for particular listing*/
-    private class LoadOffersTask extends AsyncTask<String, String, Void> {
+    private class LoadOffersTask extends AsyncTask<Void, Void, Void> {
         ProgressDialog progressDialog;
         Socket socket = null;
         ObjectOutputStream out = null;
@@ -138,7 +139,7 @@ public class OffersActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Void doInBackground(String... params) {
+        protected Void doInBackground(Void... params) {
             try {
                 socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
                 in = new ObjectInputStream(socket.getInputStream());
@@ -166,6 +167,51 @@ public class OffersActivity extends AppCompatActivity {
             adapter = new OffersRecyclerAdapter(offers, OffersActivity.this);
             recycler.setAdapter(adapter);
             toggleEmptyMessage();
+        }
+    }
+
+    /** On accepting an offer, connects to server to store customer's Notification in DB*/
+    private class AcceptOfferTask extends AsyncTask<Offer, Void, Void> {
+        ProgressDialog progressDialog;
+        Socket socket = null;
+        ObjectOutputStream out = null;
+        ObjectInputStream in = null;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(OffersActivity.this,
+                    "Accepting offer...",
+                    "Connecting to server...");
+        }
+
+        @Override
+        protected Void doInBackground(Offer... params) {
+            try {
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("SEND_NOTIFICATION");
+
+                out.writeObject(new Notification(params[0].getSubmitted_for(), params[0].getSubmitted_by(), params[0].getPrice()));
+            }catch(IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            try {
+                in.close();
+                out.close();
+                socket.close();
+            }catch(IOException e) {
+                e.printStackTrace();
+            }
+            progressDialog.dismiss();
+            adapter = new OffersRecyclerAdapter(offers, OffersActivity.this);
+            recycler.setAdapter(adapter);
+            goBack();
         }
     }
 }

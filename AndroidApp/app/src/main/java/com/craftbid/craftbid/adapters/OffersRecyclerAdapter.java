@@ -56,13 +56,13 @@ public class OffersRecyclerAdapter extends RecyclerView.Adapter<OffersRecyclerAd
         holder.accept_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.acceptOffer(offers.get(i).getId());
+                context.acceptOffer(offers.get(i));
             }
         });
         holder.decline_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.declineOffer(offers.get(i).getId());
+                context.declineOffer(offers.get(i));
             }
         });
     }

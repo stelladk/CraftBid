@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_gravity="center"
-        android:text="Προσφορές"
+        android:text="@string/offers_title"
         android:textSize="35sp"
         android:textColor="?android:attr/textColor"/>
 
@@ -93,8 +93,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="19sp"
                     android:layout_marginStart="4dp"
-                    android:layout_marginLeft="4dp"
-                    android:text="15"/>
+                    android:layout_marginLeft="4dp"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
