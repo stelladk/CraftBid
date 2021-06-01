@@ -187,7 +187,6 @@ public class CreateListingActivity extends AppCompatActivity {
             }catch(IOException e) {
                 e.printStackTrace();
             }
-
             progressDialog.dismiss();
 
             //set content of spinner of category
@@ -202,19 +201,18 @@ public class CreateListingActivity extends AppCompatActivity {
             location_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             location.setAdapter(location_adapter);
         }
-    }//load expertises task
+    }
 
     private class CreateListingTask extends AsyncTask<Void, Void, Void>{
         ProgressDialog progressDialog;
+        Socket socket;
+        ObjectOutputStream out;
+        ObjectInputStream in;
         String msg;
         boolean success = false;
 
         @Override
         protected Void doInBackground(Void... voids) {
-            Socket socket;
-            ObjectOutputStream out;
-            ObjectInputStream in;
-
             //get values from input fields
             //TODO check if they are empty
             String title = ((EditText)findViewById(R.id.title_edit)).getText().toString();
@@ -257,7 +255,7 @@ public class CreateListingActivity extends AppCompatActivity {
 
             //TODO check if inputs are empty
             try {
-                socket = new Socket("192.168.1.5",6500);
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
                 in = new ObjectInputStream(socket.getInputStream());
                 out = new ObjectOutputStream(socket.getOutputStream());
                 out.writeObject("CREATE_LISTING");
@@ -293,6 +291,13 @@ public class CreateListingActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             progressDialog.dismiss();
+            try {
+                out.close();
+                in.close();
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             if(success){
                 goBack();
             }else{

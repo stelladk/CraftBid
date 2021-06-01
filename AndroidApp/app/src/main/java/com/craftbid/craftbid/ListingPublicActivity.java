@@ -113,15 +113,15 @@ public class ListingPublicActivity extends AppCompatActivity {
 
     private class LoadListingTask extends AsyncTask<Void, Void, Void>{
         ProgressDialog progressDialog;
+        Socket socket = null;
+        ObjectOutputStream out = null;
+        ObjectInputStream in = null;
 
         @Override
         protected Void doInBackground(Void... voids) {
-            Socket socket = null;
-            ObjectOutputStream out = null;
-            ObjectInputStream in = null;
-            //connect to server to loa listing info
+            //connect to server to load listing info
             try {
-                socket = new Socket(InetAddress.getByName("localhost"),6500);
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
                 in = new ObjectInputStream(socket.getInputStream());
                 out = new ObjectOutputStream(socket.getOutputStream());
                 out.writeObject("VIEW_LISTING");
@@ -169,6 +169,13 @@ public class ListingPublicActivity extends AppCompatActivity {
                     Bitmap thumbnail = BitmapFactory.decodeByteArray(listing_photos.get(0),0, listing_photos.get(0).length);
                     photo.setImageBitmap(thumbnail);
                 }
+            }
+            try {
+                out.close();
+                in.close();
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

@@ -132,16 +132,14 @@ public class EditListingActivity extends CreateListingActivity implements View.O
 
     private class EditListingTask extends AsyncTask<Void, Void, Void>{
         ProgressDialog progressDialog;
+        Socket socket;
+        ObjectOutputStream out;
+        ObjectInputStream in;
 
         @Override
         protected Void doInBackground(Void... voids) {
-            Socket socket;
-            ObjectOutputStream out;
-            ObjectInputStream in;
-
-
             try {
-                socket = new Socket("192.168.1.5",6500);
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
                 in = new ObjectInputStream(socket.getInputStream());
                 out = new ObjectOutputStream(socket.getOutputStream());
 
@@ -174,6 +172,13 @@ public class EditListingActivity extends CreateListingActivity implements View.O
         @Override
         protected void onPostExecute(Void aVoid) {
             progressDialog.dismiss();
+            try {
+                out.close();
+                in.close();
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             goBack();
         }
 

@@ -117,16 +117,15 @@ public class MakeOfferActivity extends AppCompatActivity {
 
     private class SubmitTask extends AsyncTask<Void, Void, Void>{
         ProgressDialog progressDialog;
+        Socket socket = null;
+        ObjectOutputStream out = null;
+        ObjectInputStream in = null;
 
         @Override
         protected Void doInBackground(Void... voids) {
-            Socket socket = null;
-            ObjectOutputStream out = null;
-            ObjectInputStream in = null;
             //connect to server to loa listing info
             try {
-//                socket = new Socket("192.168.2.2",6500);
-                socket = new Socket("192.168.1.5",6500);
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
                 in = new ObjectInputStream(socket.getInputStream());
                 out = new ObjectOutputStream(socket.getOutputStream());
                 out.writeObject("CREATE_BID");
@@ -150,6 +149,13 @@ public class MakeOfferActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             progressDialog.dismiss();
+            try{
+                out.close();
+                in.close();
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             goBack();
         }
     }

@@ -116,15 +116,14 @@ public class RewardsCustomerActivity extends AppCompatActivity {
 
     private class ViewRewardsTask extends AsyncTask<Void, Void, Void>{
         ProgressDialog progressDialog;
+        Socket socket;
+        ObjectOutputStream out;
+        ObjectInputStream in;
 
         @Override
         protected Void doInBackground(Void... voids) {
-            Socket socket;
-            ObjectOutputStream out;
-            ObjectInputStream in;
             try {
-//                socket = new Socket("192.168.2.2",6500);
-                socket = new Socket("192.168.1.5",6500);
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
                 in = new ObjectInputStream(socket.getInputStream());
                 out = new ObjectOutputStream(socket.getOutputStream());
                 out.writeObject("VIEW_REWARDS");
@@ -155,6 +154,13 @@ public class RewardsCustomerActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             progressDialog.dismiss();
+            try{
+                out.close();
+                in.close();
+                socket.close();
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
             if(rewards!=null){
                 TextView claimed_points = findViewById(R.id.reward_points);
                 claimed_points.setText(getResources().getString(R.string.num_claimed_reward_points, reward_points));
