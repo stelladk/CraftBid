@@ -609,19 +609,32 @@ public class Server {
                 output.writeObject(listing); //send basic info
                 output.flush();
 
-                //get all the photos from bucket and send them to client as byte arrays (thumbnail is passed as intent from android)
+                //get all the photos from bucket and send them to client as byte arrays
+                //first the thumbnail
+                byte[] thumbnail = null;
+                String filepath = res.getString("published_by")+"/"+res.getString("name")+"/thumbnail.jpeg";
+                AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket
+                S3Bucket.getFromFolder(filepath,connect,"temp/"+res.getString("name")+"thumbnail.jpeg");
+                //read file from temp folder and convert to byte array
+                File f2 = new File("temp/"+res.getString("name")+"thumbnail.jpeg");
+                FileInputStream in = new FileInputStream(f2);
+                thumbnail = new byte[(int) f2.length()];
+                int error = in.read(thumbnail);
+                output.writeObject(thumbnail);
+                output.flush();
+                //then the rest of the pics
                 ArrayList<byte[]> photos = new ArrayList<byte[]>();
                 byte[] photo = null;
                 for(int i = 1; i < listing.getTotal_photos(); i++) {
                     //get picture from the bucket in "published_by/listing_name/i.jpeg"
-                    String filepath = res.getString("published_by")+"/"+res.getString("name")+"/"+i+".jpeg";
-                    AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket
+                    filepath = res.getString("published_by")+"/"+res.getString("name")+"/"+i+".jpeg";
+                    //AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket
                     S3Bucket.getFromFolder(filepath,connect,"temp/"+res.getString("name")+i+"pfp.jpeg");
                     //read file from temp folder and convert to byte array
-                    File f2 = new File("temp/"+res.getString("name")+i+"pfp.jpeg");
-                    FileInputStream in = new FileInputStream(f2);
+                    f2 = new File("temp/"+res.getString("name")+i+"pfp.jpeg");
+                    in = new FileInputStream(f2);
                     photo = new byte[(int) f2.length()];
-                    int error = in.read(photo);
+                    error = in.read(photo);
                     photos.add(photo);
                 }
                 output.writeObject(photos);

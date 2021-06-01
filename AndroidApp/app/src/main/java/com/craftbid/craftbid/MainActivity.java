@@ -213,7 +213,6 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         if(PRIVATE) listing_review = new Intent(MainActivity.this, ListingPrivateActivity.class);
         else listing_review = new Intent(MainActivity.this, ListingPublicActivity.class);
         listing_review.putExtra("listing_id", listing_id);
-        listing_review.putExtra("thumbnail", thumbnail);
 
         if(logged_in) listing_review.putExtra("previous", MAIN);
         else listing_review.putExtra("previous", GUEST);

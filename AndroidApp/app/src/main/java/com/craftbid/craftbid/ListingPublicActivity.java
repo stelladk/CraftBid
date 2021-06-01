@@ -46,8 +46,6 @@ public class ListingPublicActivity extends AppCompatActivity {
         if(b!=null){
             listing_id = b.getInt("listing_id");
             Log.d("LISTING", "onCreate: listing_id");
-            thumbnail = b.getByteArray("thumbnail");
-            Log.d("LISTING", "onCreate: thumbnail");
             previous = b.getString("previous", previous);
         }
         Log.d("ListingPublic", "onCreate: listing_id "+listing_id);
@@ -121,6 +119,7 @@ public class ListingPublicActivity extends AppCompatActivity {
         ObjectOutputStream out = null;
         ObjectInputStream in = null;
 
+
         @Override
         protected Void doInBackground(Void... voids) {
             //connect to server to load listing info
@@ -134,8 +133,8 @@ public class ListingPublicActivity extends AppCompatActivity {
                 listing = (Listing)in.readObject();
 
                 if(listing != null) {
+                    thumbnail = (byte[])in.readObject();
                     listing_photos = (ArrayList<byte[]>) in.readObject();
-                    listing_photos.add(0, thumbnail);
                 }
 
             }catch(IOException | ClassNotFoundException e) {
@@ -170,10 +169,13 @@ public class ListingPublicActivity extends AppCompatActivity {
                 price.setText(String.format("%s", listing.getMin_price()));
                 Log.d("LISTING PUBLIC", "onPostExecute: photos "+listing.getTotal_photos());
                 Log.d("LISTING PUBLIC", "onPostExecute: listing_photos "+listing_photos.size());
+                //set the thumbnail
+                ImageView photo = findViewById(R.id.listing_photo);
+                Bitmap thumbnail_view = BitmapFactory.decodeByteArray(thumbnail,0, thumbnail.length);
+                photo.setImageBitmap(thumbnail_view);
+                //set the rest of the pics
                 if(listing_photos.size() > 0){
-                    ImageView photo = findViewById(R.id.listing_photo);
-                    Bitmap thumbnail = BitmapFactory.decodeByteArray(listing_photos.get(0),0, listing_photos.get(0).length);
-                    photo.setImageBitmap(thumbnail);
+                    //TODO add the rest of the pics
                 }
             }
             try {
