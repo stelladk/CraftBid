@@ -87,7 +87,8 @@
         android:scaleY="1.2"
         android:max="5"
         android:rating="1"
-        tools:targetApi="lollipop"/>
+        tools:targetApi="lollipop"
+        android:stepSize="1.0"/>
 
     <TextView
         android:id="@+id/eval_text_comments"
