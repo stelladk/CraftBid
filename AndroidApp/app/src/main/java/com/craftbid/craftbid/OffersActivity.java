@@ -94,15 +94,27 @@ public class OffersActivity extends AppCompatActivity {
         }
     }
 
-    /** Opens popup for confirmation and runs AsyncTask to send request to AppServer */
+    /** Opens popup for confirmation and runs AsyncTask to send accept offer request to AppServer */
     public void acceptOffer(Offer offer) {
         dialog.setContentView(R.layout.popup_confirm);
         ((TextView)dialog.findViewById(R.id.confirm_message)).setText(R.string.accept_offer);
         dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
         dialog.show();
         dialog.findViewById(R.id.yes_btn).setOnClickListener(v -> {
-            // TODO execute AsyncTask to send Notification to DB (-> goBack())
             new AcceptOfferTask().execute(offer);
+        });
+        dialog.findViewById(R.id.no_btn).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+    }
+    /** Opens popup for confirmation and runs AsyncTask to send decline offer request to AppServer*/
+    public void declineOffer(Offer offer) {
+        dialog.setContentView(R.layout.popup_confirm);
+        ((TextView)dialog.findViewById(R.id.confirm_message)).setText(R.string.decline_offer);
+        dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
+        dialog.show();
+        dialog.findViewById(R.id.yes_btn).setOnClickListener(v -> {
+            // TODO run AsyncTask to remove Offer from DB (-> toggleEmptyMessage())
         });
         dialog.findViewById(R.id.no_btn).setOnClickListener(v -> {
             dialog.dismiss();
@@ -110,11 +122,6 @@ public class OffersActivity extends AppCompatActivity {
     }
     public void closePopup(View view) {
         dialog.dismiss();
-    }
-
-    public void declineOffer(Offer offer) {
-        //TODO show popup and remove Notification from DB
-        // after decline toggleEmptyMessage
     }
 
     public void openProfile(String username) {
