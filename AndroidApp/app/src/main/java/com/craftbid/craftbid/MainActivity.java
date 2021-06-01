@@ -132,11 +132,11 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         Collections.sort(thumbnails, new Comparator<Thumbnail>() {
             @Override
             public int compare(Thumbnail t1, Thumbnail t2) {
-                if(position == 0){ //Price
+                if(position == 1){ //Price
                     return Float.compare(t1.getMin_price(), t2.getMin_price());
-                }else if(position == 1) { //Name
+                }else if(position == 2) { //Name
                     return t1.getName().compareTo(t2.getName());
-                }else if(position == 2){ //Category
+                }else if(position == 3){ //Category
                     return t1.getCategory().compareTo(t2.getCategory());
                 }
                 return 0;

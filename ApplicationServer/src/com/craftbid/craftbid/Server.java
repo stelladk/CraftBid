@@ -280,7 +280,7 @@ public class Server {
         System.out.println("Received a new LOAD_MAIN_SCREEN request");
         try {
             //get a list of all listings, ordered by date added
-            String query = "SELECT * FROM Listing ORDER BY date_published;";
+            String query = "SELECT * FROM Listing ORDER BY date_published DESC;";
             Statement stm = db_connect.createStatement();
             ResultSet res = stm.executeQuery(query);
             ArrayList<Thumbnail> listing_thumbnails =new ArrayList<Thumbnail>();
@@ -321,7 +321,7 @@ public class Server {
         try {
             String search_text = (String)input.readObject();
             //get a list of all listings, if name, category, or creator username matches
-            String query = "SELECT * FROM Listing WHERE (name LIKE '%"+search_text+"%' OR published_by LIKE '%"+search_text+"%' OR category LIKE '%"+search_text+"%') ORDER BY date_published;";
+            String query = "SELECT * FROM Listing WHERE (name LIKE '%"+search_text+"%' OR published_by LIKE '%"+search_text+"%' OR category LIKE '%"+search_text+"%') ORDER BY date_published DESC;";
             Statement stm = db_connect.createStatement();
             ResultSet res = stm.executeQuery(query);
             ArrayList<Thumbnail> listing_thumbnails =new ArrayList<Thumbnail>();
@@ -609,7 +609,7 @@ public class Server {
                 output.writeObject(listing); //send basic info
                 output.flush();
 
-                //get all the photos from bucket and send them to client as byte arrays
+                //get all the photos from bucket and send them to client as byte arrays (thumbnail is passed as intent from android)
                 ArrayList<byte[]> photos = new ArrayList<byte[]>();
                 byte[] photo = null;
                 for(int i = 1; i < listing.getTotal_photos(); i++) {
