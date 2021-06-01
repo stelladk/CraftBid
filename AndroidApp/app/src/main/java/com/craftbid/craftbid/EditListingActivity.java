@@ -81,12 +81,12 @@ public class EditListingActivity extends CreateListingActivity implements View.O
 
         //Set Location
         Spinner location = findViewById(R.id.location_spinner);
-        int pos = ((ArrayAdapter)(location).getAdapter()).getPosition(listing.getLocation());
+        int pos = ((ArrayAdapter<String>)(location).getAdapter()).getPosition(listing.getLocation());
         location.setSelection(pos);
 
         //Set Category
         Spinner category = findViewById(R.id.listing_category);
-        pos = ((ArrayAdapter)(category).getAdapter()).getPosition(listing.getCategory());
+        pos = ((ArrayAdapter<String>)(category).getAdapter()).getPosition(listing.getCategory());
         category.setSelection(pos);
 
         //Set Quantity

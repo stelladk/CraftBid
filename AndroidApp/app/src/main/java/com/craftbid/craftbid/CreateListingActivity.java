@@ -65,6 +65,8 @@ public class CreateListingActivity extends AppCompatActivity {
             }
         });
 
+        new LoadSpinnersTask().execute();
+
         //Thumbnails RecyclerView
         collection = new ArrayList<>();
 //        collection.add("chair1");
@@ -76,18 +78,6 @@ public class CreateListingActivity extends AppCompatActivity {
         recycler.setLayoutManager(manager);
         collectionAdapter = new CollectionRecyclerAdapter(collection, this); //TODO show pictures correctly
         recycler.setAdapter(collectionAdapter);
-
-        //TODO get listing categories from database
-        Spinner expertise = findViewById(R.id.listing_category);
-        ArrayAdapter<CharSequence> exp_adapter = ArrayAdapter.createFromResource(this, R.array.category, android.R.layout.simple_spinner_item);
-        exp_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        expertise.setAdapter(exp_adapter);
-
-        //TODO get location choices from database
-        Spinner location = findViewById(R.id.location_spinner);
-        ArrayAdapter<CharSequence> location_adapter = ArrayAdapter.createFromResource(this, R.array.location, android.R.layout.simple_spinner_item);
-        location_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        location.setAdapter(location_adapter);
 
         dialog = new Dialog(this);
     }
@@ -153,6 +143,66 @@ public class CreateListingActivity extends AppCompatActivity {
     public void attemptCreateListing(View view) {
         new CreateListingTask().execute();
     }
+
+
+    /** AsyncTask running when screen is created, connecting to server to get list of Expertises */
+    private class LoadSpinnersTask extends AsyncTask<String, String, Void> {
+        ProgressDialog progressDialog;
+        Socket socket = null;
+        ObjectOutputStream out = null;
+        ObjectInputStream in = null;
+        ArrayList<String> categories = null;
+        ArrayList<String> locations = null;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("REQUEST_CATEGORIES");
+                categories = (ArrayList<String>) in.readObject();
+                out.writeObject("REQUEST_LOCATIONS");
+                locations = (ArrayList<String>) in.readObject();
+
+            }catch(IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(CreateListingActivity.this,
+                    "Getting Lists...",
+                    "Connecting to server...");
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            try {
+                in.close();
+                out.close();
+                socket.close();
+            }catch(IOException e) {
+                e.printStackTrace();
+            }
+
+            progressDialog.dismiss();
+
+            //set content of spinner of category
+            Spinner category = findViewById(R.id.listing_category);
+            ArrayAdapter<String> category_adapter = new ArrayAdapter<>(CreateListingActivity.this, android.R.layout.simple_spinner_item, categories);
+            category_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            category.setAdapter(category_adapter);
+
+            //set content of spinner of location
+            Spinner location = findViewById(R.id.location_spinner);
+            ArrayAdapter<String> location_adapter = new ArrayAdapter<>(CreateListingActivity.this, android.R.layout.simple_spinner_item, locations);
+            location_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            location.setAdapter(location_adapter);
+        }
+    }//load expertises task
 
     private class CreateListingTask extends AsyncTask<Void, Void, Void>{
         ProgressDialog progressDialog;
