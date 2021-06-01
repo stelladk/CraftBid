@@ -17,6 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.craftbid.craftbid.model.Offer;
 import com.craftbid.craftbid.model.Report;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -78,6 +79,8 @@ public class ReportActivity extends AppCompatActivity {
         Socket socket = null;
         ObjectOutputStream out = null;
         ObjectInputStream in = null;
+        String response, resultmsg;
+        boolean is_successful;
 
         @Override
         protected Void doInBackground(Void... voids) {
@@ -91,7 +94,6 @@ public class ReportActivity extends AppCompatActivity {
             else if(reason_id==R.id.report_no_showUp) reason = "report_no_showUp";
             else reason = "report_deceive";
 
-            Log.d("MOUA", creatorUsername+" "+MainActivity.username);
             //connect to server to send the report
             try {
                 socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
@@ -102,7 +104,15 @@ public class ReportActivity extends AppCompatActivity {
                 //Create Report object and send it
                 Report report = new Report(-1, MainActivity.username, creatorUsername, reason, description, date);
                 out.writeObject(report);
-            }catch(IOException e) {
+                out.flush();
+                response = (String)in.readObject();
+                if(response.equals("CREATE REPORT SUCCESSFUL")) {
+                    resultmsg = "Η δημιουργία της αναφοράς ήταν επιτυχής!";
+                    is_successful = true;
+                }else {
+                    resultmsg = "Προέκυψε σφάλμα";
+                }
+            }catch(IOException | ClassNotFoundException e) {
                e.printStackTrace();
             }
             return null;
@@ -117,6 +127,9 @@ public class ReportActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
+            progressDialog.dismiss();
+            Snackbar.make( getWindow().getDecorView().getRootView(), resultmsg , Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
             try {
                 socket.close();
                 out.close();
@@ -124,8 +137,7 @@ public class ReportActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            progressDialog.dismiss();
-            goBack();
+            if(is_successful) goBack();
         }
     }
 }
