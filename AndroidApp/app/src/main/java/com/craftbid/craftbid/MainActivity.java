@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
     /** Open the listing details */
     public void reviewListing(int listing_id){
         // TODO set PRIVATE true/false based on whether user is the creator of the listing
-        boolean PRIVATE = false;
+        boolean PRIVATE = true;
         Intent listing_review;
         if(PRIVATE) listing_review = new Intent(MainActivity.this, ListingPrivateActivity.class);
         else listing_review = new Intent(MainActivity.this, ListingPublicActivity.class);

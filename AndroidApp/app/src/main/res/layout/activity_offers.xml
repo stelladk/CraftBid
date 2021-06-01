@@ -8,14 +8,6 @@
 
     <include layout="@layout/app_bar"/>
 
-<!--    <ScrollView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent">-->
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="vertical">-->
-
     <TextView
         android:id="@+id/offers_title"
         android:layout_width="wrap_content"
@@ -107,6 +99,19 @@
         </LinearLayout>
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/empty_msg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        android:text="@string/offers_empty"
+        android:textSize="20sp"
+        android:visibility="gone"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/offers_recyclerview"
         android:layout_width="match_parent"
@@ -114,6 +119,4 @@
         android:layout_marginHorizontal="10dp"
         android:layout_gravity="center_horizontal"/>
 
-<!--    </LinearLayout>-->
-<!--    </ScrollView>-->
 </LinearLayout>
