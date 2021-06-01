@@ -1,6 +1,8 @@
 package com.craftbid.craftbid.model;
 
-public class Notification {
+import java.io.Serializable;
+
+public class Notification implements Serializable {
     private int listing_id;
     private String belongs_to;
     private float price;
