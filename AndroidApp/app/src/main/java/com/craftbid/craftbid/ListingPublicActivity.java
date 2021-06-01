@@ -125,8 +125,7 @@ public class ListingPublicActivity extends AppCompatActivity {
                 in = new ObjectInputStream(socket.getInputStream());
                 out = new ObjectOutputStream(socket.getOutputStream());
                 out.writeObject("VIEW_LISTING");
-//                out.writeObject(listing_id);
-                out.writeObject(5); //TODO change back to listing_id
+                out.writeObject(listing_id);
 
                 listing = (Listing)in.readObject();
                 if(listing != null) {

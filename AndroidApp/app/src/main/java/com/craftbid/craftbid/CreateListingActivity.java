@@ -162,6 +162,12 @@ public class CreateListingActivity extends AppCompatActivity {
                 out = new ObjectOutputStream(socket.getOutputStream());
                 out.writeObject("REQUEST_CATEGORIES");
                 categories = (ArrayList<String>) in.readObject();
+                out.close();
+                in.close();
+                socket.close();
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
                 out.writeObject("REQUEST_LOCATIONS");
                 locations = (ArrayList<String>) in.readObject();
 
@@ -292,9 +298,11 @@ public class CreateListingActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             progressDialog.dismiss();
             try {
-                out.close();
-                in.close();
-                socket.close();
+                if(socket!=null){
+                    out.close();
+                    in.close();
+                    socket.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
