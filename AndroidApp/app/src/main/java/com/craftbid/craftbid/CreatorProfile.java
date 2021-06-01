@@ -29,16 +29,18 @@ public class CreatorProfile extends AppCompatActivity {
     private static final int SHOWN_ITEMS = 2; //TODO change regarding how many ites we want to show each time seeMore is clicked
     private String username;
     private static String previous;
-    private List<Thumbnail> thumbnails;
-    private RecyclerView thumbnails_recycler;
-    private FeedRecyclerAdapter adapter;
+    protected ArrayList<Thumbnail> thumbnails;
+    protected ArrayList<Evaluation> evaluations;
+    protected RecyclerView thumbnails_recycler;
+    protected RecyclerView evaluations_recycler;
+    protected FeedRecyclerAdapter adapter;
+    protected EvaluationsRecyclerAdapter adapter2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creator_profile);
 
-//        username = MainActivity.username;
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
             username = bundle.getString("username");
@@ -50,10 +52,10 @@ public class CreatorProfile extends AppCompatActivity {
         toolbar.setTitle(username);
 
         //Set Back Arrow
-//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        /*
         //Thumbnails RecyclerView
         byte[] test = new byte[2];
         thumbnails = new ArrayList<>();
@@ -61,15 +63,17 @@ public class CreatorProfile extends AppCompatActivity {
         thumbnails.add(new Thumbnail(1, "Ξύλινη Καρέκλα", "Ξύλινη Καρέκλα Κήπου", "Καρέκλες", 20, test));
         thumbnails.add(new Thumbnail(2, "Ξύλινη Καρέκλα", "Απλή Ξύλινη Καρέκλα", "Καρέκλες", 15, test));
         thumbnails.add(new Thumbnail(3, "Ξύλινη Καρέκλα", "Χειροποίητη Ξύλινη Καρέκλα", "Καρέκλες", 15, test));
+        */
 
         thumbnails_recycler = findViewById(R.id.thumbnails_recyclerview);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         thumbnails_recycler.setLayoutManager(manager);
-        adapter = new FeedRecyclerAdapter(new ArrayList<>(thumbnails.subList(0,SHOWN_ITEMS)), this);
-        thumbnails_recycler.setAdapter(adapter);
 
+        //adapter = new FeedRecyclerAdapter(new ArrayList<>(thumbnails.subList(0,SHOWN_ITEMS)), this);
+        //thumbnails_recycler.setAdapter(adapter);
+
+        /*
         //Reviews RecyclerView
-//        Date now = new Date();
         String now = "random date";
         List<Evaluation> evaluations = new ArrayList<>();
         evaluations.add(new Evaluation(0, "aekara_21", "mitsos_creations", 4, now, getResources().getString(R.string.lorem_ipsum)));
@@ -78,12 +82,14 @@ public class CreatorProfile extends AppCompatActivity {
         evaluations.add(new Evaluation(3, "someone", "mitsos_creations", 5, now, getResources().getString(R.string.lorem_ipsum)));
         evaluations.add(new Evaluation(4, "someone2", "mitsos_creations", 4, now, getResources().getString(R.string.lorem_ipsum)));
         evaluations.add(new Evaluation(5, "someone3", "mitsos_creations", 5, now, getResources().getString(R.string.lorem_ipsum)));
+        */
 
-        RecyclerView reviews_recycler = findViewById(R.id.reviews_recyclerview);
+        evaluations_recycler = findViewById(R.id.reviews_recyclerview);
         RecyclerView.LayoutManager manager_r = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        reviews_recycler.setLayoutManager(manager_r);
-        EvaluationsRecyclerAdapter adapter_r = new EvaluationsRecyclerAdapter(evaluations, this);
-        reviews_recycler.setAdapter(adapter_r);
+        evaluations_recycler.setLayoutManager(manager_r);
+
+        //adapter2 = new EvaluationsRecyclerAdapter(evaluations, this);
+        //evaluations_recycler.setAdapter(adapter2);
 
         MaterialButton report_btn = findViewById(R.id.report_btn);
         report_btn.addOnCheckedChangeListener((button, isChecked) -> {
@@ -102,6 +108,7 @@ public class CreatorProfile extends AppCompatActivity {
 
     }
 
+    /** Go back to previous screen */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -111,7 +118,6 @@ public class CreatorProfile extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
     private void goBack() {
         Intent back;
         if(previous.equals(MainActivity.MAIN)){
@@ -123,40 +129,36 @@ public class CreatorProfile extends AppCompatActivity {
         startActivity(back);
     }
 
-    //Temporary
-    public int getDrawable(String name) {
-        return this.getResources().getIdentifier(name, "drawable", this.getPackageName());
-    }
-
+    /** Open page with rewards as viewed by the customers */
     public void openRewardsCustomer(View view) {
         Intent rewards = new Intent(CreatorProfile.this, RewardsCustomerActivity.class);
         rewards.putExtra("username", username);
         startActivity(rewards);
     }
 
+    /** Open the profile of a user from their evaluation */
     public void openProfile(String username) {
         //TODO check if he is a creator
         Intent profile = new Intent(CreatorProfile.this, CustomerProfile.class);
         profile.putExtra("username", username); //Send username of evaluation
         startActivity(profile);
     }
+    public void toggleEditCreator(View view) { }
 
-    public void toggleEditCreator(View view) {
-    }
-
-    /** Moves user to New Listing activity */
+    /** Moves user to create Listing activity */
     public void addListing(View view) {
         Intent listing = new Intent(CreatorProfile.this, CreateListingActivity.class);
         startActivity(listing);
     }
 
-    /** Moves user to New Evaluation activity */
+    /** Moves user to create Evaluation activity */
     public void addEvaluation(View view) {
         Intent eval = new Intent(CreatorProfile.this, EvaluationActivity.class);
         eval.putExtra("username", username);
         startActivity(eval);
     }
 
+    /** View a listing's details */
     public void reviewListing(int listing_id) {
         Intent listing_review;
         if(username.equals(MainActivity.username)) {
@@ -174,12 +176,4 @@ public class CreatorProfile extends AppCompatActivity {
         return thumbnails;
     }
 
-    /** More listing elements appear in listings (in private and public creator profiles)*/
-    public void seeMore() {
-        int more = adapter.getItemCount()-1 + SHOWN_ITEMS;
-        while(more > thumbnails.size()) more--;
-
-        adapter.setThumbnails(new ArrayList<>(thumbnails.subList(0,more)));
-        thumbnails_recycler.setAdapter(adapter);
-    }
 }

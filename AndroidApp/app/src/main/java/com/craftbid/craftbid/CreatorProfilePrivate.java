@@ -6,14 +6,23 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.craftbid.craftbid.adapters.EvaluationsRecyclerAdapter;
@@ -21,7 +30,14 @@ import com.craftbid.craftbid.adapters.FeedRecyclerAdapter;
 import com.craftbid.craftbid.model.Evaluation;
 import com.craftbid.craftbid.model.Thumbnail;
 import com.google.android.material.button.MaterialButton;
+import com.stelladk.arclib.ArcLayout;
 
+import org.w3c.dom.Text;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,7 +48,7 @@ public class CreatorProfilePrivate extends CreatorProfile {
     private String username;
 
     private EditText fullname_edit, email_edit, phone_edit, description_edit;
-    private TextView fullname, email, phone, description, freelancer;
+    private TextView fullname, email, phone, description, freelancer,expertise;
     private CheckBox freelancer_choice;
 
     @Override
@@ -56,7 +72,6 @@ public class CreatorProfilePrivate extends CreatorProfile {
         report_btn.setVisibility(View.INVISIBLE);
         review_btn.setVisibility(View.INVISIBLE);
 
-
         fullname_edit = findViewById(R.id.fullname_edit);
         fullname = findViewById(R.id.fullname);
         email_edit = findViewById(R.id.email_edit);
@@ -67,6 +82,10 @@ public class CreatorProfilePrivate extends CreatorProfile {
         description = findViewById(R.id.description);
         freelancer_choice = findViewById(R.id.freelancer_choice);
         freelancer = findViewById(R.id.freelancer);
+        expertise = findViewById(R.id.expertise);
+
+        //Add async task to get profile info from server
+        new GetInfoTask().execute();
 
         findViewById(R.id.rewards_btn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +96,13 @@ public class CreatorProfilePrivate extends CreatorProfile {
     }
 
     @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+    /** Open new screens */
+    /** View details of a listing */
+    @Override
     public void reviewListing(int listing_id){
         Intent listing_review;
         listing_review = new Intent(CreatorProfilePrivate.this, ListingPrivateActivity.class);
@@ -85,21 +111,13 @@ public class CreatorProfilePrivate extends CreatorProfile {
         startActivity(listing_review);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-
-//    private void goBack() {
-//        Intent main = new Intent(CreatorProfilePrivate.this, MainActivity.class);
-//        startActivity(main);
-//    }
-//
+    /** Open the rewards page as viewed by creator */
     public void openRewardsCreator(View view) {
         Intent rewards = new Intent(CreatorProfilePrivate.this, RewardsCreatorActivity.class);
         startActivity(rewards);
     }
 
+    /** Toggle profile info: editable - non editable */
     @Override
     public void toggleEditCreator(View view){
         if(SAVE_MODE){
@@ -113,6 +131,9 @@ public class CreatorProfilePrivate extends CreatorProfile {
     public void editCreator(View view) {
         Button edit_btn = (Button)view;
         edit_btn.setText(getResources().getString(R.string.save));
+
+        //TODO get old values of fields that can be edited
+        //TODO add asynctask to edit profile info
 
         fullname_edit.setVisibility(View.VISIBLE);
         email_edit.setVisibility(View.VISIBLE);
@@ -143,4 +164,90 @@ public class CreatorProfilePrivate extends CreatorProfile {
         description.setVisibility(View.VISIBLE);
         freelancer.setVisibility(View.VISIBLE);
     }
+
+
+
+    /** AsyncTask running when screen is created, connecting to server to get user info */
+    private class GetInfoTask extends AsyncTask<String, String, Void> {
+        ProgressDialog progressDialog;
+        Socket socket = null;
+        ObjectOutputStream out = null;
+        ObjectInputStream in = null;
+        String fullname_txt,email_txt,phone_txt,descr_txt,hasExpertise_txt;
+        int isFreelancer;
+        byte[] pfp;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("REQUEST_PROFILE");
+                out.writeObject(username);
+                out.writeObject(true);
+                out.flush();
+                //get basic info
+                ArrayList<String> info = (ArrayList<String>)in.readObject();
+                fullname_txt = info.get(0);
+                email_txt = info.get(1);
+                phone_txt = info.get(2);
+                descr_txt = info.get(3);
+                //get profile pic
+                pfp = (byte[])in.readObject();
+                //get additional creator info
+                hasExpertise_txt = (String)in.readObject();
+                isFreelancer = (int)in.readObject();
+                //get list of evaluations
+                evaluations = (ArrayList<Evaluation>)in.readObject();
+                //get list of listing thumbnails
+                thumbnails = (ArrayList<Thumbnail>)in.readObject();
+            }catch(IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            Log.d("here","here");
+            progressDialog = ProgressDialog.show(CreatorProfilePrivate.this,
+                    "Getting profile info...",
+                    "Connecting to server...");
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            try {
+                in.close();
+                out.close();
+                socket.close();
+            }catch(IOException e) {
+                e.printStackTrace();
+            }
+
+            fullname.setText(fullname_txt);
+            email.setText(email_txt);
+            phone.setText(phone_txt);
+            description.setText(descr_txt);
+            freelancer.setText(isFreelancer==1 ? "Freelancer" : "");
+            expertise.setText(hasExpertise_txt);
+            //view profile picture
+            if(pfp!=null) {
+                ArcLayout photo = findViewById(R.id.profile_photo);
+                Bitmap pfp_view = BitmapFactory.decodeByteArray(pfp,0, pfp.length);
+                Drawable d = new BitmapDrawable(getResources(), pfp_view);
+                photo.setBackground(d);
+            }
+            //change listings and evaluations
+            //listings
+            adapter = new FeedRecyclerAdapter(thumbnails, CreatorProfilePrivate.this);
+            thumbnails_recycler.setAdapter(adapter);
+            //evaluations
+            adapter2 = new EvaluationsRecyclerAdapter(evaluations, CreatorProfilePrivate.this);
+            evaluations_recycler.setAdapter(adapter2);
+
+            progressDialog.dismiss();
+        }
+    }//load main task
 }

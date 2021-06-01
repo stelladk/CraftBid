@@ -14,11 +14,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.amazonaws.services.s3.model.*;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 
 /** PATH IN BUCKET FOR EACH USER
@@ -104,21 +100,24 @@ public class S3Bucket {
 	 * @param filepath the file's path in S3 bucket to be retrieved and stored locally (folderName/fileName)
 	 * @param s3Connection
 	 */
-	public static void getFromFolder(String filepath, AmazonS3 s3Connection, String localpath) {
+	public static int getFromFolder(String filepath, AmazonS3 s3Connection, String localpath) {
+		//if pic doesn't exist
+		if(!s3Connection.doesObjectExist(Constants.BUCKET_NAME, filepath)) {
+			System.out.println("Picture doesn't exist");
+			return 0;
+		}
 		S3Object image = s3Connection.getObject(Constants.BUCKET_NAME, filepath);
 		S3ObjectInputStream in = image.getObjectContent();
-		
-		//store image locally to temp folder
-		//String outPath = "temp/"+filepath.substring(filepath.indexOf("/")+1);
 		
 		try {
 			Files.copy(in, Paths.get(localpath));
 		} catch(FileAlreadyExistsException e) {
 			//if file already exists in local temp, do nothing
-			return;
+			return -1;
 		}catch (IOException e) {
 			e.printStackTrace();
 		}
+		return 1;
 	}
 	
 	/**

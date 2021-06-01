@@ -55,6 +55,7 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
         if(position == thumbnails.size()) {
             if ((context != null && context.getThumbnails().size() > thumbnails.size()) ||
                     (context2!=null && context2.getThumbnails().size() > thumbnails.size())) {
@@ -66,7 +67,7 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
                 holder.plus_sign.setVisibility(View.VISIBLE);
                 holder.plus_sign.setOnClickListener(v -> {
                     //TODO if (context != null) context.seeMore();
-                    if(context2!=null) context2.seeMore();
+                    //if(context2!=null) context2.seeMore();
                 });
                 return;
             }else if ((context!=null && context.getThumbnails().size() == thumbnails.size() && holder.title.getText().equals("LASTELEMENTBUTTON") ||

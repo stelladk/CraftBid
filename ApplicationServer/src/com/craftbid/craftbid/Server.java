@@ -401,12 +401,14 @@ public class Server {
                 byte[] pfp = null;
                 String filepath = username+"/"+username+"_pfp.jpeg";
                 AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket
-                S3Bucket.getFromFolder(filepath,connect,"temp/"+username+".jpeg");
-                //read file from temp folder and convert to byte array
-                File f2 = new File("temp/"+username+".jpeg");
-                FileInputStream in = new FileInputStream(f2);
-                pfp = new byte[(int) f2.length()];
-                int error = in.read(pfp);
+                int e = S3Bucket.getFromFolder(filepath,connect,"temp/"+username+".jpeg");
+                if(e != 0) { //pic remains null if user has no pfp in bucket
+                    //read file from temp folder and convert to byte array
+                    File f2 = new File("temp/"+username+".jpeg");
+                    FileInputStream in = new FileInputStream(f2);
+                    pfp = new byte[(int) f2.length()];
+                    int error = in.read(pfp);
+                }
                 output.writeObject(pfp);
                 output.flush();
             }
@@ -433,7 +435,19 @@ public class Server {
 
             //FOR CREATORS: list of all listings they've posted, list of all evaluations
             else {
+                //first, additional creator profile info (expertise and isfreelancer)
+                query = "SELECT * FROM Creator WHERE username= '" + username + "';";
+                stm = db_connect.createStatement();
+                res = stm.executeQuery(query);
+                if (res.next()) {
+                    System.out.println("Got all information for this creator.");
+                    output.writeObject(res.getString("hasExpertise"));
+                    output.writeObject(res.getInt("isFreelancer"));
+                    output.flush();
+                }
+
                 //evaluations
+                System.out.println("Getting evaluations");
                 query = "SELECT * FROM Evaluation WHERE refers_to= '" + username + "' ORDER BY date;";
                 stm = db_connect.createStatement();
                 res = stm.executeQuery(query);
@@ -447,6 +461,7 @@ public class Server {
                     String comment = res.getString("comment");
 
                     //get customer's profile picture from the bucket
+                    //TODO add case where user pfp doesn't exist in bucket
                     byte[] pfp = null;
                     String filepath = res.getString("submitted_by")+"/"+res.getString("submitted_by")+"_pfp.jpeg";
                     AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket
@@ -466,6 +481,7 @@ public class Server {
                 output.flush();
 
                 //listings
+                System.out.println("Getting Listings");
                 query = "SELECT * FROM Listing WHERE published_by= '" + username + "' ORDER BY date_published ;";
                 stm = db_connect.createStatement();
                 res = stm.executeQuery(query);
@@ -1020,6 +1036,6 @@ public class Server {
 
 
     public static void main(String[] args) throws UnknownHostException{
-        new Server(Inet4Address.getLocalHost().getHostAddress(), 6500,100);
+        new Server(Inet4Address.getLocalHost().getHostAddress(), 6501,100);
     }
 }
