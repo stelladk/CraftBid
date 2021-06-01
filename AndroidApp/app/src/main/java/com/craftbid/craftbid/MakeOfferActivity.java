@@ -97,7 +97,19 @@ public class MakeOfferActivity extends AppCompatActivity {
         TextView price = findViewById(R.id.price);
         price.setText(String.format("%s", listing.getMin_price()));
         TextView delivery = findViewById(R.id.delivery);
-        delivery.setText(listing.getDelivery());
+        //Set delivery methods
+        String deliveryText = "";
+        if(listing.getDelivery().toLowerCase().contains("shipping")){
+            deliveryText = "ταχυδρομικά";
+            if(listing.getDelivery().toLowerCase().contains("hand-in-hand")){
+                findViewById(R.id.handin_check).setSelected(true);
+                deliveryText += ", χέρι-με-χέρι";
+            }
+        }else if(listing.getDelivery().toLowerCase().contains("hand-in-hand")){
+            findViewById(R.id.handin_check).setSelected(true);
+            deliveryText += "χέρι-με-χέρι";
+        }
+        delivery.setText(deliveryText);
         if(listing_photos!=null && listing_photos.size()>0){
             ImageView photo = findViewById(R.id.listing_photo);
             Bitmap thumbnail = BitmapFactory.decodeByteArray(listing_photos.get(0),0, listing_photos.get(0).length);

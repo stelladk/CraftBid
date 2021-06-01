@@ -93,10 +93,10 @@ public class EditListingActivity extends CreateListingActivity implements View.O
         ((EditText)findViewById(R.id.quantity_edit)).setText(listing.getQuantity()+"");
 
         //Set delivery methods
-        if(listing.getDelivery().toLowerCase().contains("ταχυδρομικά")){
+        if(listing.getDelivery().toLowerCase().contains("shipping")){
             findViewById(R.id.shipment_check).setSelected(true);
         }
-        if(listing.getDelivery().toLowerCase().contains("χέρι-με-χέρι")){
+        if(listing.getDelivery().toLowerCase().contains("hand-in-hand")){
             findViewById(R.id.handin_check).setSelected(true);
         }
 

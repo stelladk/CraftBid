@@ -241,7 +241,7 @@ public class CreateListingActivity extends AppCompatActivity {
             }
             boolean shipment = ((CheckBox)findViewById(R.id.shipment_check)).isChecked();
             boolean handin = ((CheckBox)findViewById(R.id.handin_check)).isChecked();
-            String delivery = (shipment? "Ταχυδρομικά":"") + ", " + (handin? "Χέρι-με-χέρι":"");
+            String delivery = (shipment? "shipping":"") + ", " + (handin? "hand-in-hand":"");
 
             if(title.equals("") || description.equals("")){
                 msg = "Συμπληρώστε τίτλο και περιγραφή!";

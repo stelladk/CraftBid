@@ -7,8 +7,6 @@
     android:orientation="vertical"
     tools:context=".ListingPrivateActivity">
 
-    <!--TODO remove unnecessary hardcoded android:text -->
-
     <include layout="@layout/app_bar"/>
 
     <ScrollView
