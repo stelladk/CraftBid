@@ -98,9 +98,9 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
             @Override
             public void onClick(View v) {
                 if(context != null){
-                    context.reviewListing(thumbnails.get(position).getId(), thumbnails.get(position).getThumbnail());
+                    context.reviewListing(thumbnails.get(position).getId());
                 }else if(context2 != null){
-                    context2.reviewListing(thumbnails.get(position).getId(), thumbnails.get(position).getThumbnail());
+                    context2.reviewListing(thumbnails.get(position).getId());
                 }
             }
         });
