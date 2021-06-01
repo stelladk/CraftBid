@@ -135,6 +135,7 @@ public class ListingPublicActivity extends AppCompatActivity {
                 if(listing != null) {
                     thumbnail = (byte[])in.readObject();
                     listing_photos = (ArrayList<byte[]>) in.readObject();
+                    listing_photos.add(0, thumbnail);
                 }
 
             }catch(IOException | ClassNotFoundException e) {

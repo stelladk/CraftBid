@@ -22,7 +22,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="mitsos_creations"
         android:textSize="30sp"
         android:textColor="?android:attr/textColor"/>
 
@@ -31,7 +30,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/num_claimed_reward_points"
         android:textSize="20sp"
         android:textColor="?android:attr/textColor"/>
 

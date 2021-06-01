@@ -58,10 +58,10 @@ public class RewardsCustomerActivity extends AppCompatActivity {
 
         byte[] test = new byte[2];
         rewards = new ArrayList<>();
-        rewards.add(new Reward(0, 40, "Ξύλινη καρέκλα",  "chair3", test));
-        rewards.add(new Reward(1, 70, "Ξύλινη καρέκλα x2", "chair3", test));
-        rewards.add(new Reward(2, 120, "Ξύλινη καρέκλα x4", "chair3", test));
-        rewards.add(new Reward(3, 140, "Ξύλινη καρέκλα x5", "chair3",  test));
+//        rewards.add(new Reward(0, 40, "Ξύλινη καρέκλα",  "chair3", test));
+//        rewards.add(new Reward(1, 70, "Ξύλινη καρέκλα x2", "chair3", test));
+//        rewards.add(new Reward(2, 120, "Ξύλινη καρέκλα x4", "chair3", test));
+//        rewards.add(new Reward(3, 140, "Ξύλινη καρέκλα x5", "chair3",  test));
 
         RecyclerView recycler = findViewById(R.id.rewards_recyclerview);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);

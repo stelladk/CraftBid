@@ -25,7 +25,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_gravity="center"
-        android:text="Ξύλινη Καρέκλα"
         android:textSize="35sp"
         android:textColor="?android:attr/textColor"/>
 
@@ -52,7 +51,6 @@
                 android:id="@+id/creator_cr_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mitsos_creations"
                 android:textSize="20sp"
                 android:textAllCaps="false"
                 android:textColor="?android:attr/textColor"
@@ -80,7 +78,7 @@
                 android:id="@+id/listing_photo_cr"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:background="@drawable/bag"
+                android:scaleType="centerCrop"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/see_more_cr"
                 android:contentDescription="@string/photo_profile" />
@@ -111,7 +109,6 @@
                     android:id="@+id/username_cr"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="@string/lorem_ipsum"
                     android:textSize="18sp"
                     android:textColor="?android:attr/textColor"/>
             </ScrollView>
@@ -135,8 +132,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="18sp"
                         android:layout_marginStart="4dp"
-                        android:layout_marginLeft="4dp"
-                        android:text="Καλλιθέα"/>
+                        android:layout_marginLeft="4dp"/>
                 </HorizontalScrollView>
             </LinearLayout>
 
@@ -159,8 +155,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="19sp"
                     android:layout_marginStart="4dp"
-                    android:layout_marginLeft="4dp"
-                    android:text="15"/>
+                    android:layout_marginLeft="4dp"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -195,8 +190,7 @@
             android:gravity="center"
             android:layout_gravity="center_vertical"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:text="30,49"/>
+            android:textStyle="bold"/>
     </LinearLayout>
 
     <Button
