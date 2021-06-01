@@ -157,7 +157,7 @@ public class CreatorProfile extends AppCompatActivity {
         startActivity(eval);
     }
 
-    public void reviewListing(int listing_id) {
+    public void reviewListing(int listing_id, byte[] thumbnail) {
         Intent listing_review;
         if(username.equals(MainActivity.username)) {
             listing_review = new Intent(CreatorProfile.this, ListingPrivateActivity.class);
@@ -167,6 +167,7 @@ public class CreatorProfile extends AppCompatActivity {
             listing_review.putExtra("previous", username); //TODO send creator's username
         }
         listing_review.putExtra("listing_id", listing_id);
+        listing_review.putExtra("thumbnail", thumbnail);
         startActivity(listing_review);
     }
 

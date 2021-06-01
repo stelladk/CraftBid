@@ -34,6 +34,7 @@ public class ListingPublicActivity extends AppCompatActivity {
     Dialog dialog;
 
     public static Listing listing;
+    public static byte[] thumbnail;
     public static ArrayList<byte[]> listing_photos;
 
     @Override
@@ -44,6 +45,9 @@ public class ListingPublicActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         if(b!=null){
             listing_id = b.getInt("listing_id");
+            Log.d("LISTING", "onCreate: listing_id");
+            thumbnail = b.getByteArray("thumbnail");
+            Log.d("LISTING", "onCreate: thumbnail");
             previous = b.getString("previous", previous);
         }
         Log.d("ListingPublic", "onCreate: listing_id "+listing_id);
@@ -128,9 +132,12 @@ public class ListingPublicActivity extends AppCompatActivity {
                 out.writeObject(listing_id);
 
                 listing = (Listing)in.readObject();
+
                 if(listing != null) {
                     listing_photos = (ArrayList<byte[]>) in.readObject();
+                    listing_photos.add(0, thumbnail);
                 }
+
             }catch(IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
