@@ -284,7 +284,7 @@ public class Server {
             Statement stm = db_connect.createStatement();
             ResultSet res = stm.executeQuery(query);
             ArrayList<Thumbnail> listing_thumbnails =new ArrayList<Thumbnail>();
-            while(res.next()) { //TODO get more (maybe add index of last loaded)
+            while(res.next()) {
                 //create a list of listing thumbnails
                 int id = res.getInt("id");
                 String name =  res.getString("name");
@@ -302,6 +302,7 @@ public class Server {
                 thumbnail = new byte[(int) f2.length()];
                 int error = in.read(thumbnail);
                 listing_thumbnails.add(new Thumbnail(id,name,desc,category,min_price,thumbnail));
+                if(listing_thumbnails.size() > 20) break;
             }
             output.writeObject(listing_thumbnails); //send thumbnails
             output.flush();
@@ -320,11 +321,11 @@ public class Server {
         try {
             String search_text = (String)input.readObject();
             //get a list of all listings, if name, category, or creator username matches
-            String query = "SELECT * FROM Listing WHERE name LIKE '%"+search_text+"%' OR published_by LIKE '%"+search_text+"%' OR category LIKE '%"+search_text+"%';";
+            String query = "SELECT * FROM Listing WHERE (name LIKE '%"+search_text+"%' OR published_by LIKE '%"+search_text+"%' OR category LIKE '%"+search_text+"%') ORDER BY date_published;";
             Statement stm = db_connect.createStatement();
             ResultSet res = stm.executeQuery(query);
             ArrayList<Thumbnail> listing_thumbnails =new ArrayList<Thumbnail>();
-            while(res.next()) { //TODO get more (maybe add index of last loaded)
+            while(res.next()) {
                 //create a list of listing thumbnails
                 int id = res.getInt("id");
                 String name =  res.getString("name");
@@ -342,6 +343,7 @@ public class Server {
                 thumbnail = new byte[(int) f2.length()];
                 int error = in.read(thumbnail);
                 listing_thumbnails.add(new Thumbnail(id,name,desc,category,min_price,thumbnail));
+                if(listing_thumbnails.size() > 20) break;
             }
             output.writeObject(listing_thumbnails); //send thumbnails
             output.flush();
@@ -568,7 +570,7 @@ public class Server {
             }
             //get the rest of the photos and add them to bucket
             byte[] picture = null;
-            for(int i = 0; i < listing.getTotal_photos(); i++) {
+            for(int i = 1; i < listing.getTotal_photos(); i++) {
                 //put picture to the bucket as "username/listing_name/i.jpeg"
                 picture= (byte[])input.readObject(); // the new image
                 String bucket_path = listing.getPublished_by()+"/"+listing.getName()+"/"+i+".jpeg";
@@ -610,7 +612,7 @@ public class Server {
                 //get all the photos from bucket and send them to client as byte arrays
                 ArrayList<byte[]> photos = new ArrayList<byte[]>();
                 byte[] photo = null;
-                for(int i = 0; i < listing.getTotal_photos(); i++) {
+                for(int i = 1; i < listing.getTotal_photos(); i++) {
                     //get picture from the bucket in "published_by/listing_name/i.jpeg"
                     String filepath = res.getString("published_by")+"/"+res.getString("name")+"/"+i+".jpeg";
                     AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket
@@ -848,7 +850,7 @@ public class Server {
         System.out.println("Received a new REQUEST_LOCATIONS request");
         try {
             //get a list of all locations
-            String query = "SELECT * FROM Location;";
+            String query = "SELECT * FROM Location ORDER BY name;";
             Statement stm = db_connect.createStatement();
             ResultSet res = stm.executeQuery(query);
             ArrayList<String> locations =new ArrayList<String>();
@@ -872,7 +874,7 @@ public class Server {
         System.out.println("Received a new REQUEST_CATEGORIES request");
         try {
             //get a list of all categories
-            String query = "SELECT * FROM Category;";
+            String query = "SELECT * FROM Category ORDER BY name;";
             Statement stm = db_connect.createStatement();
             ResultSet res = stm.executeQuery(query);
             ArrayList<String> categories =new ArrayList<String>();
@@ -896,7 +898,7 @@ public class Server {
         System.out.println("Received a new REQUEST_EXPERTISES request");
         try {
             //get a list of all expertises
-            String query = "SELECT * FROM Expertise;";
+            String query = "SELECT * FROM Expertise ORDER BY name;";
             Statement stm = db_connect.createStatement();
             ResultSet res = stm.executeQuery(query);
             ArrayList<String> expertises =new ArrayList<String>();

@@ -168,5 +168,5 @@ public class SignupCustomerActivity extends AppCompatActivity {
                 startActivity(mainscreen);
             }
         }
-    }
+    }//signup task
 }

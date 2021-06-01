@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
 
     public static boolean logged_in = false;
     private List<Thumbnail> thumbnails;
+    private String search_text;
     private RecyclerView recycler;
     private FeedRecyclerAdapter adapter;
     private ProgressBar progressBar;
@@ -57,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
     public static boolean creator;
     public static final String GUEST = "@guest";
     public static final String MAIN = "@main";
-    private static final int SHOWN_ITEMS = 2; //TODO change regarding how many items we want to show each time seeMore is clicked
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,23 +79,7 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         setSupportActionBar(toolbar);
 
 
-        /*
-        USELESSSSSSSSSSSSSSSSSSSSSSSSSS
-
-        toolbar.setTitle("feed");
-        AppBarLayout appBar = findViewById(R.id.appBar);
-        appBar.setExpanded(true);
-        byte[] test = new byte[2];
-        thumbnails = new ArrayList<>();
-        thumbnails.add(new Thumbnail(0, "Πλεκτή τσάντα", "Ωραιότατη πλεκτή τσάντα πάρε πάρε όλα 5 ευρώ αρχική","Πλεκτά, Τσάντες", 5, test));
-        thumbnails.add(new Thumbnail(1, "Βραχιόλια", "Βραχιολι χειροποιητο αν θες το παιρνεις", "Κοσμήματα",  5, test));
-        thumbnails.add(new Thumbnail(2, "Πλεκτά για όλους", "Πλεκτά ρούχα για όλες τις ηλικίε δεχόμαστε παραγγελίες", "Πλεκτά",  15, test));
-        thumbnails.add(new Thumbnail(3, "Πασχαλινό κερί χειροποίητο", "Κεριά Πασχαλινά για την Ανάσταση. Χρόνια Πολλά!", "Κεριά", 20, test));
-    */
-
-
         recycler = findViewById(R.id.feed_recyclerview);
-        //USELESS RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         GridLayoutManager manager = new GridLayoutManager(this, 2);
         manager.setOrientation(RecyclerView.VERTICAL);
         recycler.setLayoutManager(manager);
@@ -165,12 +149,14 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) { }
 
-    /** ???? */
+    /** Listener for search bar */
     @Override
     public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
         boolean handled = false;
         if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-            filterSearch(view.getText().toString());
+            search_text = view.getText().toString();
+            new SearchTask().execute();
+            //filterSearch(view.getText().toString());
             view.clearFocus();
             recycler.requestFocus();
             hideKeyboard(this);
@@ -178,15 +164,14 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         }
         return handled;
     }
+    /*
     private void filterSearch(String text) {
-        //ArrayList<Thumbnail> filteredList = new ArrayList<>();
         //TODO search in database and return results
         Log.d("SEARCH", "filterSearch: "+ text);
 
         adapter.filter(thumbnails);
     }
-
-    /** Hide the keyboard */
+     */
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
@@ -198,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+
     /** Open new screens */
     /** Open user's private profile */
     private void openPrivateProfile() {
@@ -207,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         }else{
             profile = new Intent(MainActivity.this, CustomerProfilePrivate.class);
         }
+        profile.putExtra("username",username);
         profile.putExtra("previous", MAIN);
         startActivity(profile);
     }
@@ -214,15 +201,9 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
     /** Open the notifications panel */
     private void openNotifications(){
         Intent notif = new Intent(MainActivity.this, NotificationsActivity.class);
+        notif.putExtra("username",username); //the username of current user to view their notifs
         startActivity(notif);
     }
-
-    /* USELESS
-    //Temporary
-    public int getDrawable(String name) {
-        return this.getResources().getIdentifier(name, "drawable", this.getPackageName());
-        //return ActivityCompat.getDrawable(this, resourceId);
-    } */
 
     /** Open the listing details */
     public void reviewListing(int listing_id){
@@ -237,19 +218,6 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         else listing_review.putExtra("previous", GUEST);
         startActivity(listing_review);
     }
-
-
-    /* USELESS
-    /** Updates recycler's content so that more listings appear
-    /* FIXME when all thumbnails appear, sort method sorts what it should plus the hidden element :(
-     *  in this way if the hidden element changes position another element gets hidden, and eventually there are blank spaces in the list
-    public void seeMore() {
-        int more = adapter.getItemCount()-1 + SHOWN_ITEMS;
-        while(more > thumbnails.size()) more--;
-
-        adapter.setThumbnails(new ArrayList<>(thumbnails.subList(0,more)));
-        recycler.setAdapter(adapter);
-    }*/
 
     //a getter for the list of thumbnails
     public List<Thumbnail> getThumbnails() {
@@ -299,7 +267,6 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
             }
 
             progressDialog.dismiss();
-            //TODO once sort method is fixed this works adapter = new FeedRecyclerAdapter(new ArrayList<>(thumbnails.subList(0,SHOWN_ITEMS)), this);
             adapter = new FeedRecyclerAdapter(thumbnails, MainActivity.this);
             recycler.setAdapter(adapter);
 
@@ -312,5 +279,58 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
             EditText searchBar = findViewById(R.id.searchBar);
             searchBar.setOnEditorActionListener(MainActivity.this);
         }
-    }
+    }//load main task
+
+
+    /** AsyncTask running when search bar is submitted, showing search results */
+    private class SearchTask extends AsyncTask<String, String, Void> {
+        ProgressDialog progressDialog;
+        Socket socket = null;
+        ObjectOutputStream out = null;
+        ObjectInputStream in = null;
+
+        @Override
+        protected Void doInBackground(String... params) {
+
+            try {
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("SEARCH");
+                out.writeObject(search_text);
+                thumbnails = (ArrayList<Thumbnail>) in.readObject(); //get list of thumbnails
+
+            }catch(IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            Log.d("here","here");
+            progressDialog = ProgressDialog.show(MainActivity.this,
+                    "Getting search results...",
+                    "Connecting to server...");
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            try {
+                in.close();
+                out.close();
+                socket.close();
+            }catch(IOException e) {
+                e.printStackTrace();
+            }
+
+            progressDialog.dismiss();
+            for(Thumbnail t : thumbnails) Log.d("Prints",t.getName());
+            adapter = new FeedRecyclerAdapter(thumbnails, MainActivity.this);
+            recycler.setAdapter(adapter);
+        }
+    }//search task
+
+
 }
