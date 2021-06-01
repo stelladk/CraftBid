@@ -164,7 +164,6 @@ public class RewardsCustomerActivity extends AppCompatActivity {
             if(rewards!=null){
                 TextView claimed_points = findViewById(R.id.reward_points);
                 claimed_points.setText(getResources().getString(R.string.num_claimed_reward_points, reward_points));
-                //TODO FIX the points are not showing
                 adapter.notifyDataSetChanged();
             }
         }

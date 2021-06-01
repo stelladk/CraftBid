@@ -77,4 +77,9 @@ public class ListingPrivateActivity extends ListingPublicActivity {
         profile.putExtra("previous", listing_id); //Send listing id
         startActivity(profile);
     }
+
+    public void seeMore(View view){
+        Intent full = new Intent(ListingPrivateActivity.this, FullscreenGalleryActivity.class);
+        startActivity(full);
+    }
 }

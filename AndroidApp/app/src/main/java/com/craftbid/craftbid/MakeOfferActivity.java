@@ -117,9 +117,9 @@ public class MakeOfferActivity extends AppCompatActivity {
         }
     }
 
-    // TODO
     public void viewPhotos(View view) {
-        Log.d("photos", "Viewing photos");
+        Intent full = new Intent(MakeOfferActivity.this, FullscreenGalleryActivity.class);
+        startActivity(full);
     }
 
     public void submitOffer(View view) {

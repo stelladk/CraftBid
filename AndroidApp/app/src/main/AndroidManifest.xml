@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.craftbid.craftbid">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,8 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CraftBid">
-        <activity android:name=".OffersActivity"/>
-        <activity android:name=".NotificationsActivity"/>
+        <activity android:name=".FullscreenGalleryActivity" />
+        <activity android:name=".OffersActivity" />
+        <activity android:name=".NotificationsActivity" />
         <activity android:name=".CustomerProfilePrivate" />
         <activity android:name=".EditListingActivity" />
         <activity android:name=".CreatorProfilePrivate" />
@@ -30,20 +38,12 @@
         <activity android:name=".SignupCustomerActivity" />
         <activity android:name=".CustomerProfile" />
         <activity android:name=".ReportActivity" />
-        <activity android:name=".PurchaseActivity"/>
-        <activity android:name=".EvaluationActivity"/>
-        <activity android:name=".CreateRewardActivity"/>
-        <activity android:name=".MakeOfferActivity"/>
-        <activity android:name=".ListingPublicActivity"/>
-        <activity android:name=".ListingPrivateActivity"/>
-
+        <activity android:name=".PurchaseActivity" />
+        <activity android:name=".EvaluationActivity" />
+        <activity android:name=".CreateRewardActivity" />
+        <activity android:name=".MakeOfferActivity" />
+        <activity android:name=".ListingPublicActivity" />
+        <activity android:name=".ListingPrivateActivity" />
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
 
 </manifest>
