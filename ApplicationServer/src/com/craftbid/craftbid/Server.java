@@ -74,6 +74,9 @@ public class Server {
                 case "LOGIN":
                     login(db_connect,input,output);
                     break;
+                case "IS_CREATOR":
+                    is_creator(db_connect,input,output);
+                    break;
                 case "SIGNUP_USER":
                     signup(db_connect,input,output);
                     break;
@@ -168,15 +171,14 @@ public class Server {
                     System.out.println("Password correct! Login Successful");
                     output.writeObject("LOGIN SUCCESSFUL");
                     output.flush();
-                    //getting the profile type (customer or creator)
-                    String profile = "customer";
+                    boolean is_creator = false;
                     query = "SELECT * FROM Creator WHERE username= '" + username + "';";
                     stm = db_connect.createStatement();
                     res = stm.executeQuery(query);
                     if(res.next()) {
-                        profile = "creator";
+                        is_creator = true;
                     }
-                    output.writeObject(profile);
+                    output.writeObject(is_creator);
                     output.flush();
                 } else {
                     System.out.println("Password incorrect!");
@@ -193,6 +195,27 @@ public class Server {
             e.printStackTrace();
         }
     }//login
+
+    /** IS_CREATOR
+     * Check if the user is a creator */
+    public void is_creator(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new IS_CREATOR request");
+        try {
+            String username = (String)input.readObject();
+            boolean is_creator = false;
+            String query = "SELECT * FROM Creator WHERE username= '" + username + "';";
+            Statement stm = db_connect.createStatement();
+            ResultSet res = stm.executeQuery(query);
+            if(res.next()) {
+                is_creator = true;
+            }
+            output.writeObject(is_creator); //send if profile is creator profile
+            output.flush();
+        }catch(IOException | ClassNotFoundException | SQLException e) {
+            System.err.println("Unable to process is creator request");
+            e.printStackTrace();
+        }
+    }//is creator
 
 
     /** SIGNUP
