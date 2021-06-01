@@ -228,7 +228,7 @@ public class CreateListingActivity extends AppCompatActivity {
             int points = getEditTextValue(findViewById(R.id.points_edit), 0);
             int quantity = getEditTextValue(findViewById(R.id.quantity_edit), 1);
             float min_price = getEditTextValue(findViewById(R.id.init_price_edit), 0.0F);
-            String date = String.valueOf(new Date()); //TODO take date format from database
+            String date = String.valueOf(new Date());
             SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy", Locale.ENGLISH);
             SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
             Date formattedDate;
@@ -272,7 +272,6 @@ public class CreateListingActivity extends AppCompatActivity {
                     out.writeObject(img);
                     out.flush();
                 }
-
                 String response = (String)in.readObject();
                 if (response.equals("LISTING CREATION SUCCESSFUL")) {
                     success = true;

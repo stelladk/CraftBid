@@ -206,13 +206,14 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
     }
 
     /** Open the listing details */
-    public void reviewListing(int listing_id){
+    public void reviewListing(int listing_id, byte[] thumbnail){
         // TODO set PRIVATE true/false based on whether user is the creator of the listing
         boolean PRIVATE = false;
         Intent listing_review;
         if(PRIVATE) listing_review = new Intent(MainActivity.this, ListingPrivateActivity.class);
         else listing_review = new Intent(MainActivity.this, ListingPublicActivity.class);
         listing_review.putExtra("listing_id", listing_id);
+        listing_review.putExtra("thumbnail", thumbnail);
 
         if(logged_in) listing_review.putExtra("previous", MAIN);
         else listing_review.putExtra("previous", GUEST);

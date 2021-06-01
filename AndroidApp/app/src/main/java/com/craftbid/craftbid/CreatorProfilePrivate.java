@@ -77,10 +77,11 @@ public class CreatorProfilePrivate extends CreatorProfile {
     }
 
     @Override
-    public void reviewListing(int listing_id){
+    public void reviewListing(int listing_id, byte[] thumbnail){
         Intent listing_review;
         listing_review = new Intent(CreatorProfilePrivate.this, ListingPrivateActivity.class);
         listing_review.putExtra("listing_id", listing_id);
+        listing_review.putExtra("thumbnail", thumbnail);
         listing_review.putExtra("previous", "@profile");
         startActivity(listing_review);
     }
