@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.app.Notification;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -37,6 +38,7 @@ public class OffersActivity extends AppCompatActivity {
     private OffersRecyclerAdapter adapter;
     private RecyclerView recycler;
     private TextView empty_message;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,7 @@ public class OffersActivity extends AppCompatActivity {
         recycler.setLayoutManager(manager);
 
         new LoadOffersTask().execute();
+        dialog = new Dialog(this);
     }
 
     @Override
@@ -90,9 +93,21 @@ public class OffersActivity extends AppCompatActivity {
         }
     }
 
+    /** Opens popup for confirmation and runs AsyncTask to send request to AppServer */
     public void acceptOffer(int id) {
-        //TODO show popup and send Notification in DB
-        // after accept goBack()
+        dialog.setContentView(R.layout.popup_confirm);
+        ((TextView)dialog.findViewById(R.id.confirm_message)).setText(R.string.accept_offer);
+        dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
+        dialog.show();
+        dialog.findViewById(R.id.yes_btn).setOnClickListener(v -> {
+            // TODO execute AsyncTask to send Notification to DB (-> goBack())
+        });
+        dialog.findViewById(R.id.no_btn).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+    }
+    public void closePopup(View view) {
+        dialog.dismiss();
     }
 
     public void declineOffer(int id) {
