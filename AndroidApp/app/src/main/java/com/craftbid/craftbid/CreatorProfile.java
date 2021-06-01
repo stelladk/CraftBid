@@ -89,6 +89,7 @@ public class CreatorProfile extends AppCompatActivity {
         report_btn.addOnCheckedChangeListener((button, isChecked) -> {
             Intent report = new Intent(CreatorProfile.this, ReportActivity.class);
             // TODO pass creator's info (profile photo,username,email,phone)
+            report.putExtra("username", username);
             startActivity(report);
         });
 

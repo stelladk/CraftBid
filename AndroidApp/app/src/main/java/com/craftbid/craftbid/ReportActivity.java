@@ -1,13 +1,31 @@
 package com.craftbid.craftbid;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import com.craftbid.craftbid.model.Offer;
+import com.craftbid.craftbid.model.Report;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class ReportActivity extends AppCompatActivity {
     private String username;
@@ -52,7 +70,62 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     public void submitReport(View view){
-        //TODO create report object and send it to AppServer
-        goBack();
+        new SubmitTask().execute();
+    }
+
+    private class SubmitTask extends AsyncTask<Void, Void, Void> {
+        ProgressDialog progressDialog;
+        Socket socket = null;
+        ObjectOutputStream out = null;
+        ObjectInputStream in = null;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            // collect user's inputs
+            String description = ((EditText) findViewById(R.id.report_comments)).getText().toString();
+            String date = new Date(System.currentTimeMillis()).toString();
+            int reason_id = ((RadioGroup) findViewById(R.id.reasons_group)).getCheckedRadioButtonId();
+            String reason;
+            if(reason_id==R.id.report_message) reason = "report_message";
+            else if(reason_id==R.id.report_no_reality) reason = "report_no_reality";
+            else if(reason_id==R.id.report_no_showUp) reason = "report_no_showUp";
+            else reason = "report_deceive";
+
+            Log.d("MOUA", creatorUsername+" "+MainActivity.username);
+            //connect to server to send the report
+            try {
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("CREATE_REPORT");
+
+                //Create Report object and send it
+                Report report = new Report(-1, MainActivity.username, creatorUsername, reason, description, date);
+                out.writeObject(report);
+            }catch(IOException e) {
+               e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(ReportActivity.this,
+                    "Submit Report...",
+                    "Connecting to server...");
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            try {
+                socket.close();
+                out.close();
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            progressDialog.dismiss();
+            goBack();
+        }
     }
 }

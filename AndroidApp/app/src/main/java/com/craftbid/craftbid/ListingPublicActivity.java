@@ -97,7 +97,7 @@ public class ListingPublicActivity extends AppCompatActivity {
 
     public void openProfile(View view){
         Intent profile = new Intent(ListingPublicActivity.this, CreatorProfile.class);
-        profile.putExtra("username", "username"); //send creators username
+        profile.putExtra("username", "mam"); //TODO send creators username
         profile.putExtra("previous", String.valueOf(listing_id));
         startActivity(profile);
     }
