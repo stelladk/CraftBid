@@ -97,11 +97,11 @@ public class SignupCustomerActivity extends AppCompatActivity {
         ProgressDialog progressDialog;
         String resultmsg = null;
         String username;
+        Socket socket = null;
+        ObjectOutputStream out = null;
+        ObjectInputStream in = null;
         @Override
         protected Void doInBackground(String... params) {
-            Socket socket = null;
-            ObjectOutputStream out = null;
-            ObjectInputStream in = null;
             String response;
             //get values from input fields
             String name = ((EditText)findViewById(R.id.fullname_edit)).getText().toString();
@@ -158,6 +158,14 @@ public class SignupCustomerActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void result) {
+            try {
+                in.close();
+                out.close();
+                socket.close();
+            }catch(IOException e) {
+                e.printStackTrace();
+            }
+
             progressDialog.dismiss();
             Snackbar.make( getWindow().getDecorView().getRootView(), resultmsg , Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
