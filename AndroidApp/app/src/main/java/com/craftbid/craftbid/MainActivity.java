@@ -293,6 +293,7 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
                 in = new ObjectInputStream(socket.getInputStream());
                 out = new ObjectOutputStream(socket.getOutputStream());
                 out.writeObject("SEARCH");
+                out.writeObject(false);
                 out.writeObject(search_text);
                 thumbnails = (ArrayList<Thumbnail>) in.readObject(); //get list of thumbnails
 

@@ -342,9 +342,16 @@ public class Server {
     public void search(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
         System.out.println("Received a new SEARCH request");
         try {
+            boolean search_by_id = (boolean)input.readObject();
             String search_text = (String)input.readObject();
-            //get a list of all listings, if name, category, or creator username matches
-            String query = "SELECT * FROM Listing WHERE (name LIKE '%"+search_text+"%' OR published_by LIKE '%"+search_text+"%' OR category LIKE '%"+search_text+"%') ORDER BY date_published DESC;";
+            String query;
+            if(!search_by_id) {
+                //get a list of all listings, if name, category, or creator username matches
+                query = "SELECT * FROM Listing WHERE (name LIKE '%"+search_text+"%' OR published_by LIKE '%"+search_text+"%' OR category LIKE '%"+search_text+"%') ORDER BY date_published DESC;";
+            }else {
+                //get thumbnail of listing with this id
+                query = "SELECT * FROM Listing WHERE id = "+search_text+";";
+            }
             Statement stm = db_connect.createStatement();
             ResultSet res = stm.executeQuery(query);
             ArrayList<Thumbnail> listing_thumbnails =new ArrayList<Thumbnail>();
