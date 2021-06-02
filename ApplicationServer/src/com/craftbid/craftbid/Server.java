@@ -92,7 +92,7 @@ public class Server {
                 case "UPDATE_PROFILE":
                     update_profile(db_connect,input,output);
                     break;
-                case "CHANGE_PROFILE_IMAGE":
+                case "CHANGE_PROFILE_PICTURE":
                     change_profile_picture(input,output);
                     break;
                 case "CREATE_LISTING":

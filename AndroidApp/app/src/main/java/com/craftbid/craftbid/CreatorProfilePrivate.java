@@ -204,7 +204,7 @@ public class CreatorProfilePrivate extends CreatorProfile {
                 freelancer.setText(isFreelancer_new);
             }if(changed_pic) {
                 changed_pic = false;
-                //todo asynctask to change profile pic
+                new ChangeProfilePicTask().execute();
             }
         }
 
@@ -311,6 +311,54 @@ public class CreatorProfilePrivate extends CreatorProfile {
             progressDialog.dismiss();
         }
     }//change info task
+
+
+    /** AsyncTask running to send a new profile pic  */
+    private class ChangeProfilePicTask extends AsyncTask<String, String, Void> {
+        ProgressDialog progressDialog;
+        Socket socket = null;
+        ObjectOutputStream out = null;
+        ObjectInputStream in = null;
+        String reply;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("CHANGE_PROFILE_PICTURE");
+                out.writeObject(username);
+                out.writeObject(pfp);
+                out.flush();
+
+                reply = (String)in.readObject();
+            }catch(IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(CreatorProfilePrivate.this,
+                    "Updating profile pic...",
+                    "Connecting to server...");
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            try {
+                in.close();
+                out.close();
+                socket.close();
+            }catch(IOException e) {
+                e.printStackTrace();
+            }
+
+            progressDialog.dismiss();
+        }
+    }//change profile pic task
 
 
     /** AsyncTask running when screen is created, connecting to server to get user info */
