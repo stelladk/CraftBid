@@ -125,6 +125,9 @@ public class Server {
                 case "ADD_REWARD":
                     add_reward(db_connect,input,output);
                     break;
+                case "REMOVE_REWARD":
+                    remove_reward(db_connect,input,output);
+                    break;
                 case "REQUEST_LOCATIONS":
                     request_locations(db_connect,input,output);
                     break;
@@ -600,8 +603,6 @@ public class Server {
     }//change profile picture
 
 
-    /** Checkpoint */
-
     /** CREATE LISTING
      * Creator publishes a new listing for a handmade product */
     public void create_listing(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
@@ -728,7 +729,7 @@ public class Server {
             String new_val = (String)input.readObject(); //the new value
             int id = (Integer)input.readObject(); // the id of the listing
             String query = null;
-            if(field.equals("description")) {
+            if(field.equals("description") || field.equals("category") || field.equals("delivery") || field.equals("is_located")) {
                 query = "UPDATE Listing SET "+field+" = '"+new_val+"' WHERE id= "+id+";";
             }else if(field.equals("reward_points") || field.equals("quantity")){
                 query = "UPDATE Listing SET "+field+" = "+new_val+" WHERE id= "+id+";";
@@ -738,6 +739,8 @@ public class Server {
             //update the value in the database
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
+            output.writeObject("LISTING UPDATED");
+            output.flush();
         }catch(IOException | ClassNotFoundException| SQLException e) {
             System.err.println("Unable to process update listing request");
             e.printStackTrace();
@@ -756,6 +759,8 @@ public class Server {
                     "VALUES("+offer.getPrice()+",'"+ offer.getSubmitted_by()+"',"+offer.getSubmitted_for()+");";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
+            output.writeObject("OFFER ADDED");
+            output.flush();
         }catch(IOException | ClassNotFoundException| SQLException e) {
             System.err.println("Unable to process create offer request");
             e.printStackTrace();
@@ -800,7 +805,8 @@ public class Server {
             String query = "DELETE FROM Offer WHERE id="+id+";";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
-
+            output.writeObject("OFFER DECLINED");
+            output.flush();
         }catch(IOException | ClassNotFoundException| SQLException e) {
             System.err.println("Unable to process decline offer request");
             e.printStackTrace();
@@ -820,6 +826,8 @@ public class Server {
                     +evaluation.getRating()+",'"+evaluation.getDate()+"','"+evaluation.getComment()+"');";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
+            output.writeObject("EVALUATION ADDED");
+            output.flush();
         }catch(IOException | ClassNotFoundException| SQLException e) {
             System.err.println("Unable to process create evaluation request");
             e.printStackTrace();
@@ -839,6 +847,8 @@ public class Server {
                     +report.getReason()+"','"+report.getDate()+"','"+report.getDescription()+"');";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
+            output.writeObject("REPORT ADDED");
+            output.flush();
         }catch(IOException | ClassNotFoundException| SQLException e) {
             System.err.println("Unable to process create report request");
             e.printStackTrace();
@@ -922,11 +932,31 @@ public class Server {
                 S3Bucket.addToFolder(bucket_path,f2,connect);
                 System.out.println("Added image to bucket!");
             }
+            output.writeObject("REWARD ADDED");
+            output.flush();
         }catch(IOException | ClassNotFoundException| SQLException e) {
             System.err.println("Unable to process add reward request");
             e.printStackTrace();
         }
     }//add reward
+
+
+    /** REMOVE REWARD
+     * Creator removes a reward */
+    public void remove_reward(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new REMOVE_REWARD request");
+        try {
+            int id = (int)input.readObject();
+            String query = "DELETE FROM Reward WHERE id = "+id+";";
+            Statement stm = db_connect.createStatement();
+            stm.executeUpdate(query);
+            output.writeObject("REWARD REMOVED");
+            output.flush();
+        }catch(IOException | ClassNotFoundException| SQLException e) {
+            System.err.println("Unable to process remove reward request");
+            e.printStackTrace();
+        }
+    }//remove reward
 
 
     /** REQUEST LOCATIONS
@@ -1013,6 +1043,9 @@ public class Server {
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
             //TODO remove all other offers and notifications if any exist, remove the listing as well
+
+            output.writeObject("PURCHASE ADDED");
+            output.flush();
         }catch(IOException | ClassNotFoundException | SQLException e) {
             System.err.println("Unable to process create purchase request");
             e.printStackTrace();
@@ -1037,6 +1070,8 @@ public class Server {
             query = "DELETE FROM Offer WHERE submitted_for = "+notification.getListing_id()+";";
             stm = db_connect.createStatement();
             stm.executeUpdate(query); */ //TODO MOVE TO ADD PURCHASE
+            output.writeObject("NOTIFICATION ADDED");
+            output.flush();
         }catch(IOException | ClassNotFoundException | SQLException e) {
             System.err.println("Unable to process send notification request");
             e.printStackTrace();
