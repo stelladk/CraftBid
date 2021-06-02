@@ -97,12 +97,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:text="@string/report_no_reality"
-                    android:textSize="20sp"/>
+                    android:textSize="20sp"
+                    android:layout_marginVertical="10dp"/>
                 <RadioButton
                     android:id="@+id/report_no_showUp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="10dp"
                     android:text="@string/report_no_showUp"
                     android:textSize="20sp"/>
                 <RadioButton
