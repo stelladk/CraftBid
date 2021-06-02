@@ -6,12 +6,21 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.craftbid.craftbid.adapters.EvaluationsRecyclerAdapter;
 import com.craftbid.craftbid.adapters.FeedRecyclerAdapter;
@@ -19,14 +28,18 @@ import com.craftbid.craftbid.model.Evaluation;
 import com.craftbid.craftbid.model.Listing;
 import com.craftbid.craftbid.model.Thumbnail;
 import com.google.android.material.button.MaterialButton;
+import com.stelladk.arclib.ArcLayout;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 public class CreatorProfile extends AppCompatActivity {
-    private static final int SHOWN_ITEMS = 2; //TODO change regarding how many ites we want to show each time seeMore is clicked
     private String username;
     private static String previous;
     protected ArrayList<Thumbnail> thumbnails;
@@ -35,6 +48,11 @@ public class CreatorProfile extends AppCompatActivity {
     protected RecyclerView evaluations_recycler;
     protected FeedRecyclerAdapter adapter;
     protected EvaluationsRecyclerAdapter adapter2;
+    protected TextView fullname, email, phone, description, freelancer,expertise;
+    protected EditText fullname_edit, email_edit, phone_edit, description_edit;
+    protected CheckBox freelancer_choice;
+    protected ArcLayout profile_pic;
+    protected byte[] pfp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,42 +73,31 @@ public class CreatorProfile extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        /*
-        //Thumbnails RecyclerView
-        byte[] test = new byte[2];
-        thumbnails = new ArrayList<>();
-        thumbnails.add(new Thumbnail(0, "Ξύλινη Καρέκλα", "Ωραιότατη Ξύλινη Καρέκλα", "Καρέκλες", 15, test));
-        thumbnails.add(new Thumbnail(1, "Ξύλινη Καρέκλα", "Ξύλινη Καρέκλα Κήπου", "Καρέκλες", 20, test));
-        thumbnails.add(new Thumbnail(2, "Ξύλινη Καρέκλα", "Απλή Ξύλινη Καρέκλα", "Καρέκλες", 15, test));
-        thumbnails.add(new Thumbnail(3, "Ξύλινη Καρέκλα", "Χειροποίητη Ξύλινη Καρέκλα", "Καρέκλες", 15, test));
-        */
-
         thumbnails_recycler = findViewById(R.id.thumbnails_recyclerview);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         thumbnails_recycler.setLayoutManager(manager);
-
-        //adapter = new FeedRecyclerAdapter(new ArrayList<>(thumbnails.subList(0,SHOWN_ITEMS)), this);
-        //thumbnails_recycler.setAdapter(adapter);
-
-        /*
-        //Reviews RecyclerView
-        String now = "random date";
-        List<Evaluation> evaluations = new ArrayList<>();
-        evaluations.add(new Evaluation(0, "aekara_21", "mitsos_creations", 4, now, getResources().getString(R.string.lorem_ipsum)));
-        evaluations.add(new Evaluation(1, "maria_karen", "mitsos_creations", 3, now, getResources().getString(R.string.lorem_ipsum)));
-        evaluations.add(new Evaluation(2, "takis_32", "mitsos_creations", 4, now, getResources().getString(R.string.lorem_ipsum)));
-        evaluations.add(new Evaluation(3, "someone", "mitsos_creations", 5, now, getResources().getString(R.string.lorem_ipsum)));
-        evaluations.add(new Evaluation(4, "someone2", "mitsos_creations", 4, now, getResources().getString(R.string.lorem_ipsum)));
-        evaluations.add(new Evaluation(5, "someone3", "mitsos_creations", 5, now, getResources().getString(R.string.lorem_ipsum)));
-        */
 
         evaluations_recycler = findViewById(R.id.reviews_recyclerview);
         RecyclerView.LayoutManager manager_r = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         evaluations_recycler.setLayoutManager(manager_r);
 
-        //adapter2 = new EvaluationsRecyclerAdapter(evaluations, this);
-        //evaluations_recycler.setAdapter(adapter2);
+        fullname_edit = findViewById(R.id.fullname_edit);
+        fullname = findViewById(R.id.fullname);
+        email_edit = findViewById(R.id.email_edit);
+        email = findViewById(R.id.email);
+        phone_edit = findViewById(R.id.phone_edit);
+        phone = findViewById(R.id.phone);
+        description_edit = findViewById(R.id.description_edit);
+        description = findViewById(R.id.description);
+        freelancer_choice = findViewById(R.id.freelancer_choice);
+        freelancer = findViewById(R.id.freelancer);
+        expertise = findViewById(R.id.expertise);
+        profile_pic = findViewById(R.id.profile_photo);
 
+        //Add async task to get profile info from server
+        new GetInfoTask().execute();
+
+        //report button
         MaterialButton report_btn = findViewById(R.id.report_btn);
         report_btn.addOnCheckedChangeListener((button, isChecked) -> {
             Intent report = new Intent(CreatorProfile.this, ReportActivity.class);
@@ -175,5 +182,93 @@ public class CreatorProfile extends AppCompatActivity {
     public List<Thumbnail> getThumbnails() {
         return thumbnails;
     }
+
+
+
+    /** AsyncTask running when screen is created, connecting to server to get user info */
+    private class GetInfoTask extends AsyncTask<String, String, Void> {
+        ProgressDialog progressDialog;
+        Socket socket = null;
+        ObjectOutputStream out = null;
+        ObjectInputStream in = null;
+        String fullname_txt,email_txt,phone_txt,descr_txt,hasExpertise_txt;
+        int isFreelancer;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("REQUEST_PROFILE");
+                out.writeObject(username);
+                out.writeObject(true);
+                out.flush();
+                //get basic info
+                ArrayList<String> info = (ArrayList<String>)in.readObject();
+                fullname_txt = info.get(0);
+                email_txt = info.get(1);
+                phone_txt = info.get(2);
+                descr_txt = info.get(3);
+                //get profile pic
+                pfp = (byte[])in.readObject();
+                //get additional creator info
+                hasExpertise_txt = (String)in.readObject();
+                isFreelancer = (int)in.readObject();
+                //get list of evaluations
+                evaluations = (ArrayList<Evaluation>)in.readObject();
+                //get list of listing thumbnails
+                thumbnails = (ArrayList<Thumbnail>)in.readObject();
+            }catch(IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(CreatorProfile.this,
+                    "Getting profile info! ...",
+                    "Connecting to server...");
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            try {
+                in.close();
+                out.close();
+                socket.close();
+            }catch(IOException e) {
+                e.printStackTrace();
+            }
+
+            fullname.setText(fullname_txt);
+            fullname_edit.setText(fullname_txt);
+            email.setText(email_txt);
+            email_edit.setText(email_txt);
+            phone.setText(phone_txt);
+            phone_edit.setText(phone_txt);
+            description.setText(descr_txt);
+            description_edit.setText(descr_txt);
+            freelancer.setText(isFreelancer==1 ? "Freelancer" : "");
+            freelancer_choice.setChecked(isFreelancer==1 ? true : false);
+            expertise.setText(hasExpertise_txt);
+            //view profile picture
+            if(pfp!=null) {
+                Bitmap pfp_view = BitmapFactory.decodeByteArray(pfp,0, pfp.length);
+                Drawable d = new BitmapDrawable(getResources(), pfp_view);
+                profile_pic.setBackground(d);
+            }
+            //change listings and evaluations
+            //listings
+            adapter = new FeedRecyclerAdapter(thumbnails, CreatorProfile.this);
+            thumbnails_recycler.setAdapter(adapter);
+            //evaluations
+            adapter2 = new EvaluationsRecyclerAdapter(evaluations, CreatorProfile.this);
+            evaluations_recycler.setAdapter(adapter2);
+
+            progressDialog.dismiss();
+        }
+    }//get info task
 
 }
