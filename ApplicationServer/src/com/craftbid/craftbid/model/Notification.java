@@ -1,11 +1,13 @@
 package com.craftbid.craftbid.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class Notification implements Serializable {
     private int listing_id;
     private String belongs_to;
     private float price;
+    private byte[] photo;
 
     public Notification(int listing_id,String belongs_to, float price) {
         this.listing_id = listing_id;
@@ -35,5 +37,13 @@ public class Notification implements Serializable {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public byte[] getPhoto() {
+        return this.photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo= Arrays.copyOfRange(photo,0,photo.length-1);
     }
 }

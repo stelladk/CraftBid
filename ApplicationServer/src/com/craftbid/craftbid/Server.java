@@ -9,9 +9,6 @@ import java.util.*;
 
 import com.craftbid.craftbid.model.*;
 
-//TODO add replies to all requests where the client sends a message last (server must be the last to message)
-//TODO check for quotes in numeric values in queries
-
 public class Server {
 
     String ip; int port,concurrent_requests;
@@ -1042,7 +1039,21 @@ public class Server {
                     "VALUES('"+purchase.getDone_by()+"',"+purchase.getDone_on()+",'"+purchase.getDate()+"');";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
-            //TODO remove all other offers and notifications if any exist, remove the listing as well
+            //remove all other offers and notifications if any exist, remove the listing as well
+            //remove all offers for this listing
+            query = "DELETE FROM Offer WHERE submitted_for = "+purchase.getDone_on()+";";
+            stm = db_connect.createStatement();
+            stm.executeUpdate(query);
+
+            //remove other notifications for this listing (if they exist)
+            query = "DELETE FROM Notification WHERE listing_id = "+purchase.getDone_on()+";";
+            stm = db_connect.createStatement();
+            stm.executeUpdate(query);
+
+            //remove the listing
+            query = "DELETE FROM Listing WHERE id = "+purchase.getDone_on()+";";
+            stm = db_connect.createStatement();
+            stm.executeUpdate(query);
 
             output.writeObject("PURCHASE ADDED");
             output.flush();
@@ -1065,11 +1076,6 @@ public class Server {
                     "VALUES("+notification.getListing_id()+",'"+notification.getBelongs_to()+"',"+notification.getPrice()+");";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
-            /*
-            //delete all other offers for this listing id
-            query = "DELETE FROM Offer WHERE submitted_for = "+notification.getListing_id()+";";
-            stm = db_connect.createStatement();
-            stm.executeUpdate(query); */ //TODO MOVE TO ADD PURCHASE
             output.writeObject("NOTIFICATION ADDED");
             output.flush();
         }catch(IOException | ClassNotFoundException | SQLException e) {
@@ -1094,7 +1100,30 @@ public class Server {
                 //create a list of notifications
                 int listing_id = res.getInt("listing_id");
                 float price = res.getFloat("price");
-                notifications.add(new Notification(listing_id,username,price));
+
+                //get thumbnail of listing for this notification (from bucket)
+                //first get listing name and published by
+                String name = null;
+                String published_by = null;
+                query = "SELECT * FROM Listing WHERE id = "+listing_id+";";
+                Statement stm2 = db_connect.createStatement();
+                ResultSet res2 = stm2.executeQuery(query);
+                if(res2.next()) {
+                    name = res2.getString("name");
+                    published_by = res2.getString("published_by");
+                }
+                byte[] thumbnail = null;
+                String filepath = published_by+"/"+name+"/thumbnail.jpeg";
+                AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket
+                S3Bucket.getFromFolder(filepath,connect,"temp/"+name+"thumbnail.jpeg");
+                //read file from temp folder and convert to byte array
+                File f2 = new File("temp/"+name+"thumbnail.jpeg");
+                FileInputStream in = new FileInputStream(f2);
+                thumbnail = new byte[(int) f2.length()];
+                int error = in.read(thumbnail);
+                Notification n = new Notification(listing_id,username,price);
+                n.setPhoto(thumbnail);
+                notifications.add(n);
             }
             output.writeObject(notifications); //send notifications
             output.flush();
