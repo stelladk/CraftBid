@@ -15,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.craftbid.craftbid.adapters.FullscreenGalleryAdapter;
 
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 
 public class FullscreenGalleryActivity extends AppCompatActivity {
     private ArrayList<byte[]> images;
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +35,18 @@ public class FullscreenGalleryActivity extends AppCompatActivity {
 
         if(ListingPublicActivity.listing_photos != null){
             images = ListingPublicActivity.listing_photos;
+            name = ListingPublicActivity.listing.getName();
         }else {
             images = new ArrayList<>();
+            name = "";
         }
 
         ViewPager pager = findViewById(R.id.viewPager);
-        FullscreenGalleryAdapter adapter = new FullscreenGalleryAdapter(this, images);
+        FullscreenGalleryAdapter adapter = new FullscreenGalleryAdapter(images);
         pager.setAdapter(adapter);
+
+        TextView title = findViewById(R.id.title);
+        title.setText(name);
 
         // close button click event
         ImageButton close_btn = findViewById(R.id.close_btn);

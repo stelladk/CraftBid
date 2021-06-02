@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -17,15 +18,15 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.craftbid.craftbid.R;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.zip.Inflater;
 
 public class FullscreenGalleryAdapter extends PagerAdapter {
-    private Activity activity;
     private ArrayList<byte[]> images;
 
-    public FullscreenGalleryAdapter(Activity activity, ArrayList<byte[]> images) {
-        this.activity = activity;
+    public FullscreenGalleryAdapter(ArrayList<byte[]> images) {
         this.images = images;
     }
 
