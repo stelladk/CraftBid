@@ -31,8 +31,9 @@ import java.util.ArrayList;
 
 public class EditListingActivity extends CreateListingActivity implements View.OnClickListener {
     private int listing_id;
-    private Listing listing;
-    private ArrayList<byte[]> listing_photos;
+    //Transfered to CreateListing
+//    private Listing listing;
+//    private ArrayList<byte[]> listing_photos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,7 @@ public class EditListingActivity extends CreateListingActivity implements View.O
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recycler.setLayoutManager(manager);
         collectionAdapter = new CollectionRecyclerAdapter(listing_photos, this); //TODO show pictures correctly
+        collectionAdapter.setAdd_option(false);
         recycler.setAdapter(collectionAdapter);
 
         //Listing title is not editable
@@ -78,16 +80,6 @@ public class EditListingActivity extends CreateListingActivity implements View.O
         if(listing.getMin_price() != 0F) {
             ((EditText) findViewById(R.id.init_price_edit)).setText(String.format("%s", listing.getMin_price()));
         }
-
-        //Set Location
-        Spinner location = findViewById(R.id.location_spinner);
-        int pos = ((ArrayAdapter<String>)(location).getAdapter()).getPosition(listing.getLocation());
-        location.setSelection(pos);
-
-        //Set Category
-        Spinner category = findViewById(R.id.listing_category);
-        pos = ((ArrayAdapter<String>)(category).getAdapter()).getPosition(listing.getCategory());
-        category.setSelection(pos);
 
         //Set Quantity
         ((EditText)findViewById(R.id.quantity_edit)).setText(listing.getQuantity()+"");
@@ -139,22 +131,33 @@ public class EditListingActivity extends CreateListingActivity implements View.O
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
-                in = new ObjectInputStream(socket.getInputStream());
-                out = new ObjectOutputStream(socket.getOutputStream());
 
-                //TODO add more pictures not available
                 //TODO change delivery not available
                 //TODO make their views not editable
 
+                //Request change of quantity
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
                 EditText quantity = findViewById(R.id.quantity_edit);
                 requestChange(out, "quantity", quantity.getText().toString());
+                close();
 
+                //Request change of points
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
                 EditText points = findViewById(R.id.points_edit);
                 requestChange(out, "reward_points", points.getText().toString());
+                close();
 
+                //Request change of description
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
                 EditText desc = findViewById(R.id.description_edit);
                 requestChange(out, "description", desc.getText().toString());
+                close();
 
             }catch(IOException e) {
                 e.printStackTrace();
@@ -172,13 +175,7 @@ public class EditListingActivity extends CreateListingActivity implements View.O
         @Override
         protected void onPostExecute(Void aVoid) {
             progressDialog.dismiss();
-            try {
-                out.close();
-                in.close();
-                socket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            close();
             goBack();
         }
 
@@ -190,6 +187,18 @@ public class EditListingActivity extends CreateListingActivity implements View.O
             out.flush();
             //TODO not working
             Log.d("EDIT_LISTING", "requestChange: sent "+field);
+        }
+
+        private void close(){
+            try {
+                if(socket != null){
+                    out.close();
+                    in.close();
+                    socket.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }

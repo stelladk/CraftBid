@@ -25,6 +25,7 @@ import java.util.List;
 public class CollectionRecyclerAdapter extends RecyclerView.Adapter<CollectionRecyclerAdapter.ViewHolder> {
 
     ArrayList<byte[]> collection;
+    private boolean add_option = true;
 
     public CollectionRecyclerAdapter(ArrayList<byte[]> collection){
         this.collection = collection;
@@ -71,7 +72,11 @@ public class CollectionRecyclerAdapter extends RecyclerView.Adapter<CollectionRe
 
     @Override
     public int getItemCount() {
-        return collection.size() + 1;
+        return add_option? collection.size() + 1 : collection.size();
+    }
+
+    public void setAdd_option(boolean add_option){
+        this.add_option = add_option;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

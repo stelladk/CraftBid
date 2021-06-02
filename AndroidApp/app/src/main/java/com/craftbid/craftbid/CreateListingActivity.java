@@ -45,6 +45,9 @@ public class CreateListingActivity extends AppCompatActivity {
     private ArrayList<byte[]> collection;
     CollectionRecyclerAdapter collectionAdapter;
 
+    Listing listing = null;
+    ArrayList<byte[]> listing_photos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -193,19 +196,28 @@ public class CreateListingActivity extends AppCompatActivity {
             }catch(IOException e) {
                 e.printStackTrace();
             }
-            progressDialog.dismiss();
+
 
             //set content of spinner of category
             Spinner category = findViewById(R.id.listing_category);
             ArrayAdapter<String> category_adapter = new ArrayAdapter<>(CreateListingActivity.this, android.R.layout.simple_spinner_item, categories);
             category_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             category.setAdapter(category_adapter);
+            if(listing !=null){
+                int pos = (category_adapter).getPosition(listing.getCategory());
+                category.setSelection(pos);
+            }
 
             //set content of spinner of location
             Spinner location = findViewById(R.id.location_spinner);
             ArrayAdapter<String> location_adapter = new ArrayAdapter<>(CreateListingActivity.this, android.R.layout.simple_spinner_item, locations);
             location_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             location.setAdapter(location_adapter);
+            if(listing !=null) {
+                int pos = (location_adapter).getPosition(listing.getLocation());
+                location.setSelection(pos);
+            }
+            progressDialog.dismiss();
         }
     }
 
@@ -273,6 +285,7 @@ public class CreateListingActivity extends AppCompatActivity {
                     out.flush();
                 }
                 String response = (String)in.readObject();
+                //TODO check if listing name exists
                 if (response.equals("LISTING CREATION SUCCESSFUL")) {
                     success = true;
                 }
