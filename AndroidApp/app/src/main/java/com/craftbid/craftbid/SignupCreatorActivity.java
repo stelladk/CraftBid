@@ -71,8 +71,6 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         expertise_selected = adapterView.getItemAtPosition(i).toString();
-        Snackbar.make(view, "Selected Expertise " + expertise_selected, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
     }
 
     @Override

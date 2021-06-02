@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,11 +31,14 @@ import com.craftbid.craftbid.adapters.FeedRecyclerAdapter;
 import com.craftbid.craftbid.model.Evaluation;
 import com.craftbid.craftbid.model.Thumbnail;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.stelladk.arclib.ArcLayout;
 
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -46,10 +50,14 @@ public class CreatorProfilePrivate extends CreatorProfile {
 
     private static boolean SAVE_MODE=false;
     private String username;
+    private final int PHOTO_PICK = 1;
+    private byte[] pfp;
 
     private EditText fullname_edit, email_edit, phone_edit, description_edit;
     private TextView fullname, email, phone, description, freelancer,expertise;
     private CheckBox freelancer_choice;
+    private ArcLayout profile_pic;
+    boolean changed_pic = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +91,7 @@ public class CreatorProfilePrivate extends CreatorProfile {
         freelancer_choice = findViewById(R.id.freelancer_choice);
         freelancer = findViewById(R.id.freelancer);
         expertise = findViewById(R.id.expertise);
+        profile_pic = findViewById(R.id.profile_photo);
 
         //Add async task to get profile info from server
         new GetInfoTask().execute();
@@ -128,12 +137,21 @@ public class CreatorProfilePrivate extends CreatorProfile {
         SAVE_MODE = !SAVE_MODE;
     }
 
+    String fullname_txt;
+    String email_txt;
+    String phone_txt;
+    String description_txt;
+    String isFreelancer_txt;
     public void editCreator(View view) {
         Button edit_btn = (Button)view;
         edit_btn.setText(getResources().getString(R.string.save));
 
-        //TODO get old values of fields that can be edited
-        //TODO add asynctask to edit profile info
+        //get old values of fields that can be edited
+        fullname_txt = fullname.getText().toString();
+        email_txt = email.getText().toString() ;
+        phone_txt = phone.getText().toString() ;
+        description_txt = description.getText().toString();
+        isFreelancer_txt = freelancer.getText().toString();
 
         fullname_edit.setVisibility(View.VISIBLE);
         email_edit.setVisibility(View.VISIBLE);
@@ -152,6 +170,41 @@ public class CreatorProfilePrivate extends CreatorProfile {
         Button edit_btn = (Button)view;
         edit_btn.setText(getResources().getString(R.string.edit));
 
+        //TODO add asynctask to edit profile info
+        //get new values of edit texts to compare with old values from textviews
+        //start an asynctask for each change
+        String fullname_new = fullname_edit.getText().toString();
+        String email_new = email_edit.getText().toString();
+        String phone_new = phone_edit.getText().toString();
+        String description_new = description_edit.getText().toString();
+        String isFreelancer_new = freelancer_choice.isChecked() == true ? "Freelancer" : "";
+
+        if(phone_new.equals("")) {
+            //phone cannot be null for creators
+            Snackbar.make(view, "Phone cannot be blank for Creators", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }else {
+            if(!fullname_new.equals(fullname_txt)) {
+                //asynctask
+                //change text view
+            }
+            if(!email_new.equals(email_txt)) {
+                //asynctask
+            }
+            if(!phone_new.equals(phone_txt)) {
+                //asynctask
+            }
+            if(!description_new.equals(description_txt)) {
+                //asynctask
+            }
+            if(!isFreelancer_new.equals(isFreelancer_txt)) {
+                //asynctask
+            }if(changed_pic) {
+                changed_pic = false;
+                //todo asynctask to change profile pic
+            }
+        }
+
         fullname_edit.setVisibility(View.GONE);
         email_edit.setVisibility(View.GONE);
         phone_edit.setVisibility(View.GONE);
@@ -165,6 +218,38 @@ public class CreatorProfilePrivate extends CreatorProfile {
         freelancer.setVisibility(View.VISIBLE);
     }
 
+    /** click on arc layout image to get an image from gallery */
+    public void onImageClick(View view) {
+        Intent photo_picker = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        photo_picker.setType("image/jpeg");
+        startActivityForResult(photo_picker,PHOTO_PICK);
+    }
+    @Override
+    protected void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+        if(reqCode == PHOTO_PICK) {
+            if (resultCode == RESULT_OK) {
+                try {
+                    Uri uri = data.getData();
+                    InputStream in = getContentResolver().openInputStream(uri);
+                    Bitmap photo = BitmapFactory.decodeStream(in);
+                    Drawable d = new BitmapDrawable(getResources(), photo);
+                    profile_pic.setBackground(d);
+                    //convert photo to byte array to send to server
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    photo.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+                    pfp = stream.toByteArray();
+                    changed_pic = true;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }else {
+                Log.d("error","no image given");
+            }
+        }
+    }
+
 
 
     /** AsyncTask running when screen is created, connecting to server to get user info */
@@ -175,7 +260,6 @@ public class CreatorProfilePrivate extends CreatorProfile {
         ObjectInputStream in = null;
         String fullname_txt,email_txt,phone_txt,descr_txt,hasExpertise_txt;
         int isFreelancer;
-        byte[] pfp;
 
         @Override
         protected Void doInBackground(String... params) {
@@ -234,11 +318,18 @@ public class CreatorProfilePrivate extends CreatorProfile {
             expertise.setText(hasExpertise_txt);
             //view profile picture
             if(pfp!=null) {
-                ArcLayout photo = findViewById(R.id.profile_photo);
                 Bitmap pfp_view = BitmapFactory.decodeByteArray(pfp,0, pfp.length);
                 Drawable d = new BitmapDrawable(getResources(), pfp_view);
-                photo.setBackground(d);
+                profile_pic.setBackground(d);
             }
+            profile_pic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(SAVE_MODE) {
+                        onImageClick(v);
+                    }
+                }
+            });
             //change listings and evaluations
             //listings
             adapter = new FeedRecyclerAdapter(thumbnails, CreatorProfilePrivate.this);
