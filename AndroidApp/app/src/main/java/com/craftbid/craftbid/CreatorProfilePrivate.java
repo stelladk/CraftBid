@@ -43,7 +43,6 @@ public class CreatorProfilePrivate extends CreatorProfile {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(MainActivity.username);
-        Log.d("CreatorProfilePrivate", "onCreate: title "+toolbar.getTitle());
 
         Button edit_btn = findViewById(R.id.edit_btn);
         Button add_listing_btn = findViewById(R.id.add_listing_btn);
