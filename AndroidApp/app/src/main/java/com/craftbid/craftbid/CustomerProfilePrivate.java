@@ -15,8 +15,8 @@ public class CustomerProfilePrivate extends CustomerProfile {
 
     private static boolean SAVE_MODE=false;
 
-    private EditText fullname_edit, email_edit, description_edit;
-    private TextView fullname, email, description;
+    //private EditText fullname_edit, email_edit, description_edit;
+    //private TextView fullname, email, description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,6 @@ public class CustomerProfilePrivate extends CustomerProfile {
 
         Button edit_btn = findViewById(R.id.edit_btn);
         edit_btn.setVisibility(View.VISIBLE);
-
 
         fullname_edit = findViewById(R.id.fullname_edit);
         fullname = findViewById(R.id.fullname);

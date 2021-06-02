@@ -42,6 +42,7 @@ import java.util.List;
 public class CreatorProfile extends AppCompatActivity {
     private String username;
     private static String previous;
+
     protected ArrayList<Thumbnail> thumbnails;
     protected ArrayList<Evaluation> evaluations;
     protected RecyclerView thumbnails_recycler;
