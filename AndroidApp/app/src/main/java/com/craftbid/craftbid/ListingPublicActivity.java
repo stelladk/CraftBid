@@ -178,20 +178,13 @@ public class ListingPublicActivity extends AppCompatActivity {
                 TextView location = findViewById(R.id.location);
                 location.setText(listing.getLocation());
                 TextView value = findViewById(R.id.points_value);
-                Log.d("PUBLIC LISTING", "onPostExecute: value "+value);
                 value.setText(listing.getReward_points()+"");
                 TextView price = findViewById(R.id.price);
                 price.setText(String.format("%s", listing.getMin_price()));
-                Log.d("LISTING PUBLIC", "onPostExecute: photos "+listing.getTotal_photos());
-                Log.d("LISTING PUBLIC", "onPostExecute: listing_photos "+listing_photos.size());
                 //set the thumbnail
                 ImageView photo = findViewById(R.id.listing_photo);
                 Bitmap thumbnail_view = BitmapFactory.decodeByteArray(thumbnail,0, thumbnail.length);
                 photo.setImageBitmap(thumbnail_view);
-                //set the rest of the pics
-                if(listing_photos.size() > 0){
-                    //TODO add the rest of the pics
-                }
             }
             try {
                 out.close();

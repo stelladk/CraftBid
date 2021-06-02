@@ -66,7 +66,7 @@ public class EditListingActivity extends CreateListingActivity implements View.O
         RecyclerView recycler = findViewById(R.id.collection_recyclerview);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recycler.setLayoutManager(manager);
-        collectionAdapter = new CollectionRecyclerAdapter(listing_photos, this); //TODO show pictures correctly
+        collectionAdapter = new CollectionRecyclerAdapter(listing_photos, this);
         collectionAdapter.setAdd_option(false);
         recycler.setAdapter(collectionAdapter);
 
@@ -185,8 +185,6 @@ public class EditListingActivity extends CreateListingActivity implements View.O
             out.writeObject(value);
             out.writeObject(listing_id);
             out.flush();
-            //TODO not working
-            Log.d("EDIT_LISTING", "requestChange: sent "+field);
         }
 
         private void close(){

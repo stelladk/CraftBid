@@ -98,6 +98,7 @@
     <string name="accept_offer">Είστε σίγουροι ότι θέλετε να αποδεχτείτε αυτή την προσφορά;</string>
     <string name="offers_title">Προσφορές</string>
     <string name="decline_offer">Είστε σίγουροι ότι θέλετε να απορρίψετε αυτή την προσφορά;</string>
+    <string name="close">Κλείσιμο</string>
     <string-array name="sort_options">
         <item>Ημερομηνία</item>
         <item>Τιμή</item>

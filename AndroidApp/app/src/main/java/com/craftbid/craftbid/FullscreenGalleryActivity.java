@@ -46,9 +46,8 @@ public class FullscreenGalleryActivity extends AppCompatActivity {
         close_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("FULLSCREEN", "onClick: CLICKED ON BUTTON");
-                FullscreenGalleryActivity.this.finish();
-            } //TODO not working
+                onBackPressed();
+            }
         });
     }
 
