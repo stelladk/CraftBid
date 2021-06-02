@@ -19,6 +19,7 @@ import com.craftbid.craftbid.MainActivity;
 import com.craftbid.craftbid.NotificationsActivity;
 import com.craftbid.craftbid.PurchaseActivity;
 import com.craftbid.craftbid.R;
+import com.craftbid.craftbid.model.Notification;
 import com.craftbid.craftbid.model.Thumbnail;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -26,15 +27,15 @@ import java.util.List;
 
 public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdapter.ViewHolder> {
 
-    private List<Thumbnail> notifications;
+    private List<Notification> notifications;
 
-    public NotificationsAdapter(List<Thumbnail> notifications) {
+    public NotificationsAdapter(List<Notification> notifications) {
         this.notifications = notifications;
     }
 
     //Temporary
     private NotificationsActivity context = null;
-    public NotificationsAdapter(List<Thumbnail> notifications, NotificationsActivity context) {
+    public NotificationsAdapter(List<Notification> notifications, NotificationsActivity context) {
         this.notifications = notifications;
         this.context = context;
     }
@@ -50,13 +51,13 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     public void onBindViewHolder(@NonNull NotificationsAdapter.ViewHolder holder, int i) {
         if(context != null){
 //            holder.thumbnail.setImageResource(context.getDrawable(notifications.get(i).getThumbnail()));
-            Drawable drawable = new BitmapDrawable(context.getResources(), BitmapFactory.decodeByteArray(notifications.get(i).getThumbnail(), 0, notifications.get(i).getThumbnail().length));
+            Drawable drawable = new BitmapDrawable(context.getResources(), BitmapFactory.decodeByteArray(notifications.get(i).getPhoto(), 0, notifications.get(i).getPhoto().length));
             holder.thumbnail.setBackground(drawable);
         }else{
             holder.thumbnail.setImageResource(R.drawable.chair1);
         }
 //        holder.notif_text.setText();
-        holder.final_price.setText(notifications.get(i).getMin_price()+"");
+        holder.final_price.setText(notifications.get(i).getPrice()+"");
     }
 
     @Override
@@ -83,7 +84,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         public void onClick(View view) {
             /*Snackbar.make(view, "Clicked on item " + getAbsoluteAdapterPosition(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();*/
-            final Thumbnail notification = notifications.get(getAbsoluteAdapterPosition());
+            final Notification notification = notifications.get(getAbsoluteAdapterPosition());
             context.purchase(notification);
         }
     }

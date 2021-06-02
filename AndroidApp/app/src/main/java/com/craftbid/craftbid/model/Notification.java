@@ -6,11 +6,13 @@ public class Notification implements Serializable {
     private int listing_id;
     private String belongs_to;
     private float price;
+    private byte[] photo;
 
-    public Notification(int listing_id,String belongs_to, float price) {
+    public Notification(int listing_id,String belongs_to, float price, byte[] photo) {
         this.listing_id = listing_id;
         this.belongs_to = belongs_to;
         this.price = price;
+        this.photo = photo;
     }
 
     public int getListing_id() {
@@ -36,4 +38,8 @@ public class Notification implements Serializable {
     public void setPrice(float price) {
         this.price = price;
     }
+
+    public byte[] getPhoto() { return this.photo;}
+
+    public void setPhoto(byte[] photo) { this.photo = photo;}
 }
