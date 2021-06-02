@@ -1,11 +1,14 @@
 package com.craftbid.craftbid;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -80,6 +83,13 @@ public class ListingPrivateActivity extends ListingPublicActivity {
 
     public void seeMore(View view){
         Intent full = new Intent(ListingPrivateActivity.this, FullscreenGalleryActivity.class);
-        startActivity(full);
+        View image = findViewById(R.id.listing_photo);
+        Pair<View, String> anim_pair = new Pair<>(image, "thumbnail");
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(ListingPrivateActivity.this, anim_pair);
+            startActivity(full, options.toBundle());
+        }else{
+            startActivity(full);
+        }
     }
 }

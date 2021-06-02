@@ -99,6 +99,8 @@ public class MakeOfferActivity extends AppCompatActivity {
         TextView delivery = findViewById(R.id.delivery);
         //Set delivery methods
         String deliveryText = "";
+        //TODO return to greek when we change database
+        //delivery.setText(listing.getDelivery());
         if(listing.getDelivery().toLowerCase().contains("shipping")){
             deliveryText = "ταχυδρομικά";
             if(listing.getDelivery().toLowerCase().contains("hand-in-hand")){
@@ -135,14 +137,19 @@ public class MakeOfferActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            //connect to server to loa listing info
+            EditText offer_edit = findViewById(R.id.offer);
+            float price = Float.parseFloat((offer_edit).getText().toString());
+            if(price <= listing.getMin_price()){
+                offer_edit.setError("Η προσφορά πρέπει να ξεπερνάει την επικρατούσα!");
+                return null;
+            }
+            //connect to server to load listing info
             try {
                 socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
                 in = new ObjectInputStream(socket.getInputStream());
                 out = new ObjectOutputStream(socket.getOutputStream());
                 out.writeObject("CREATE_BID");
                 //Create Offer object
-                float price = Float.parseFloat(((EditText)findViewById(R.id.offer)).getText().toString());
                 Offer bid = new Offer(-1, listing.getId(), MainActivity.username, price);
                 out.writeObject(bid);
             }catch(IOException e) {
@@ -162,9 +169,11 @@ public class MakeOfferActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             progressDialog.dismiss();
             try{
-                out.close();
-                in.close();
-                socket.close();
+                if(socket != null){
+                    out.close();
+                    in.close();
+                    socket.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -45,6 +46,7 @@ public class FullscreenGalleryActivity extends AppCompatActivity {
         close_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("FULLSCREEN", "onClick: CLICKED ON BUTTON");
                 FullscreenGalleryActivity.this.finish();
             } //TODO not working
         });

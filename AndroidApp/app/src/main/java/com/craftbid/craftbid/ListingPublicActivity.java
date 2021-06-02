@@ -1,5 +1,6 @@
 package com.craftbid.craftbid;
 
+import android.app.ActivityOptions;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -106,7 +108,14 @@ public class ListingPublicActivity extends AppCompatActivity {
 
     public void seeMore(View view){
         Intent full = new Intent(ListingPublicActivity.this, FullscreenGalleryActivity.class);
-        startActivity(full);
+        View image = findViewById(R.id.listing_photo);
+        Pair<View, String> anim_pair = new Pair<>(image, "thumbnail");
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(ListingPublicActivity.this, anim_pair);
+            startActivity(full, options.toBundle());
+        }else{
+            startActivity(full);
+        }
     }
 
     private void showPopup(){
