@@ -461,17 +461,17 @@ public class Server {
                     String comment = res.getString("comment");
 
                     //get customer's profile picture from the bucket
-                    //TODO add case where user pfp doesn't exist in bucket
                     byte[] pfp = null;
                     String filepath = res.getString("submitted_by")+"/"+res.getString("submitted_by")+"_pfp.jpeg";
                     AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket
-                    S3Bucket.getFromFolder(filepath,connect,"temp/"+res.getString("submitted_by")+".jpeg");
-                    //read file from temp folder and convert to byte array
-                    File f2 = new File("temp/"+res.getString("submitted_by")+".jpeg");
-                    FileInputStream in = new FileInputStream(f2);
-                    pfp = new byte[(int) f2.length()];
-                    int error = in.read(pfp);
-
+                    int e = S3Bucket.getFromFolder(filepath,connect,"temp/"+res.getString("submitted_by")+".jpeg");
+                    if(e!=0) { //pic remains null if user has no pfp in bucket
+                        //read file from temp folder and convert to byte array
+                        File f2 = new File("temp/"+res.getString("submitted_by")+".jpeg");
+                        FileInputStream in = new FileInputStream(f2);
+                        pfp = new byte[(int) f2.length()];
+                        int error = in.read(pfp);
+                    }
                     //create new evaluation object
                     Evaluation temp = new Evaluation(id,submitted_by,username,rating,date,comment);
                     temp.setThumbnail(pfp);
@@ -514,6 +514,7 @@ public class Server {
         }
     }//request_profile
 
+    /** Checkpoint */
 
     /** UPDATE PROFILE
      * Modify a UserInfo or Creator's field in the database */
@@ -565,7 +566,7 @@ public class Server {
             String username = (String)input.readObject(); //the username
             byte[] new_img = (byte[])input.readObject(); // the new image
             String bucket_path = username+"/"+username+"_pfp.jpeg";
-            //first put profile image to the bucket as "username/username_pfp.png"
+            //put profile image to the bucket as "username/username_pfp.png"
             File f2 = new File("temp/"+username+".jpeg"); //write to temp file
             FileOutputStream out = new FileOutputStream(f2);
             out.write(new_img);
@@ -573,6 +574,8 @@ public class Server {
             AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket and write file inside
             S3Bucket.addToFolder(bucket_path,f2,connect);
             System.out.println("Added image to bucket!");
+            output.writeObject("PROFILE IMAGE CHANGED");
+            output.flush();
         }catch(IOException | ClassNotFoundException e) {
             System.err.println("Unable to process change profile picture request");
             e.printStackTrace();
@@ -586,43 +589,54 @@ public class Server {
         System.out.println("Received a new CREATE_LISTING request");
         try {
             Listing listing = (Listing)input.readObject(); //android client sends a Listing object with all the info for this Listing
-            //add the listing to the database
-            String query = "INSERT INTO Listing(name,description,category,min_price,reward_points,quantity,is_located,published_by,date_published,delivery,total_photos) "+
-                    "VALUES('"+listing.getName()+"','"+listing.getDescription()+"','"
-                    +listing.getCategory()+"',"+listing.getMin_price()+","+listing.getReward_points()+","
-                    +listing.getQuantity()+",'"+listing.getLocation()+"','"+listing.getPublished_by()+"','"
-                    +listing.getDatePublished()+"','"+listing.getDelivery()+"',"+listing.getTotal_photos()+");";
+            //check if the user has 2 listings with the same name
+            String query = "SELECT * FROM Listing WHERE name = '"+listing.getName()+"' AND published_by = '"+listing.getPublished_by()+"'";
             Statement stm = db_connect.createStatement();
-            stm.executeUpdate(query);
-            //add thumbnail to bucket (receive as byte array from client) !!!! photo is never null in a listing
-            byte[] thumbnail = (byte[])input.readObject();
-            if(thumbnail!= null) {
-                String bucket_path = listing.getPublished_by()+"/"+listing.getName()+"/thumbnail.jpeg";
-                //put thumbnail to the bucket as "username/listing_name/thumbnail.jpeg"
-                File f2 = new File("temp/"+listing.getName()+"thumbnail.jpeg"); //write to temp file
-                FileOutputStream out = new FileOutputStream(f2);
-                out.write(thumbnail);
-                out.close();
-                AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket and write file inside
-                S3Bucket.addToFolder(bucket_path,f2,connect);
-                System.out.println("Added image to bucket!");
+            ResultSet res = stm.executeQuery(query);
+            if(res.next()) {
+                System.out.println("This creator already has a Listing with the same name");
+                output.writeObject("NAME ALREADY EXISTS");
+                output.flush();
+            }else {
+                System.out.println("Adding listing");
+                //add the listing to the database
+                query = "INSERT INTO Listing(name,description,category,min_price,reward_points,quantity,is_located,published_by,date_published,delivery,total_photos) "+
+                        "VALUES('"+listing.getName()+"','"+listing.getDescription()+"','"
+                        +listing.getCategory()+"',"+listing.getMin_price()+","+listing.getReward_points()+","
+                        +listing.getQuantity()+",'"+listing.getLocation()+"','"+listing.getPublished_by()+"','"
+                        +listing.getDatePublished()+"','"+listing.getDelivery()+"',"+listing.getTotal_photos()+");";
+                stm = db_connect.createStatement();
+                stm.executeUpdate(query);
+                //add thumbnail to bucket (receive as byte array from client) !!!! photo is never null in a listing
+                byte[] thumbnail = (byte[])input.readObject();
+                if(thumbnail!= null) {
+                    String bucket_path = listing.getPublished_by()+"/"+listing.getName()+"/thumbnail.jpeg";
+                    //put thumbnail to the bucket as "username/listing_name/thumbnail.jpeg"
+                    File f2 = new File("temp/"+listing.getName()+"thumbnail.jpeg"); //write to temp file
+                    FileOutputStream out = new FileOutputStream(f2);
+                    out.write(thumbnail);
+                    out.close();
+                    AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket and write file inside
+                    S3Bucket.addToFolder(bucket_path,f2,connect);
+                    System.out.println("Added image to bucket!");
+                }
+                //get the rest of the photos and add them to bucket
+                byte[] picture = null;
+                for(int i = 1; i < listing.getTotal_photos(); i++) {
+                    //put picture to the bucket as "username/listing_name/i.jpeg"
+                    picture= (byte[])input.readObject(); // the new image
+                    String bucket_path = listing.getPublished_by()+"/"+listing.getName()+"/"+i+".jpeg";
+                    File f2 = new File("temp/"+listing.getName()+i+".jpeg"); //write to temp file
+                    FileOutputStream out = new FileOutputStream(f2);
+                    out.write(picture);
+                    out.close();
+                    AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket and write file inside
+                    S3Bucket.addToFolder(bucket_path,f2,connect);
+                    System.out.println("Added image to bucket!");
+                }
+                output.writeObject("LISTING CREATION SUCCESSFUL");
+                output.flush();
             }
-            //get the rest of the photos and add them to bucket
-            byte[] picture = null;
-            for(int i = 1; i < listing.getTotal_photos(); i++) {
-                //put picture to the bucket as "username/listing_name/i.jpeg"
-                picture= (byte[])input.readObject(); // the new image
-                String bucket_path = listing.getPublished_by()+"/"+listing.getName()+"/"+i+".jpeg";
-                File f2 = new File("temp/"+listing.getName()+i+".jpeg"); //write to temp file
-                FileOutputStream out = new FileOutputStream(f2);
-                out.write(picture);
-                out.close();
-                AmazonS3 connect = S3Bucket.connectToBucket(); //connect to bucket and write file inside
-                S3Bucket.addToFolder(bucket_path,f2,connect);
-                System.out.println("Added image to bucket!");
-            }
-            output.writeObject("LISTING CREATION SUCCESSFUL");
-            output.flush();
         }catch(IOException | ClassNotFoundException| SQLException e) {
             System.err.println("Unable to process create listing request");
             e.printStackTrace();
@@ -695,7 +709,7 @@ public class Server {
             String new_val = (String)input.readObject(); //the new value
             int id = (Integer)input.readObject(); // the id of the listing
             String query = null;
-            if(field.equals("description") || field.equals("name")) {
+            if(field.equals("description")) {
                 query = "UPDATE Listing SET "+field+" = '"+new_val+"' WHERE id= "+id+";";
             }else if(field.equals("reward_points") || field.equals("quantity")){
                 query = "UPDATE Listing SET "+field+" = "+new_val+" WHERE id= "+id+";";
