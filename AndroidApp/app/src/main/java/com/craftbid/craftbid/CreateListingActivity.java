@@ -232,9 +232,8 @@ public class CreateListingActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             //get values from input fields
-            //TODO check if they are empty
-            String title = ((EditText)findViewById(R.id.title_edit)).getText().toString();
-            String description = ((EditText)findViewById(R.id.description_edit)).getText().toString();
+            EditText title = findViewById(R.id.title_edit);
+            EditText description = findViewById(R.id.description_edit);
             String category = ((Spinner)findViewById(R.id.listing_category)).getSelectedItem().toString();
             String location = ((Spinner)findViewById(R.id.location_spinner)).getSelectedItem().toString();
             int points = getEditTextValue(findViewById(R.id.points_edit), 0);
@@ -247,16 +246,22 @@ public class CreateListingActivity extends AppCompatActivity {
             try {
                 formattedDate = inputFormat.parse(date);
                 date = outputFormat.format(formattedDate);
-                Log.d("CREATE LISTING", "doInBackground: DATE "+date);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
             boolean shipment = ((CheckBox)findViewById(R.id.shipment_check)).isChecked();
             boolean handin = ((CheckBox)findViewById(R.id.handin_check)).isChecked();
+            //TODO: change back to greek when we have the new database
             String delivery = (shipment? "shipping":"") + ", " + (handin? "hand-in-hand":"");
 
-            if(title.equals("") || description.equals("")){
+            if(title.getText().toString().equals("")){
                 msg = "Συμπληρώστε τίτλο και περιγραφή!";
+                title.setError("Ο τίτλος είναι υποχρεωτικός!");
+                return null;
+            }
+            if(description.getText().toString().equals("")){
+                msg = "";
+                description.setError("Η περιγραφή είναι υποχρεωτική!");
                 return null;
             }
             if(delivery.equals(", ")){
@@ -268,10 +273,9 @@ public class CreateListingActivity extends AppCompatActivity {
                 return null;
             }
 
-            Listing newListing = new Listing(-1, title, description, category, MainActivity.username,
+            Listing newListing = new Listing(-1, title.getText().toString(), description.getText().toString(), category, MainActivity.username,
                     location, points, quantity, min_price, date, delivery, collection.size());
 
-            //TODO check if inputs are empty
             try {
                 socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
                 in = new ObjectInputStream(socket.getInputStream());
