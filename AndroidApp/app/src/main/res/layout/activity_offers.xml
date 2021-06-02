@@ -25,14 +25,14 @@
         android:orientation="horizontal"
         android:paddingTop="10dp">
         <ImageView
-            android:id="@+id/listing_photo_cr"
+            android:id="@+id/offer_listing_photo"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center"
             android:background="@drawable/bag"
             android:contentDescription="@string/photo_profile" />
         <LinearLayout
-            android:id="@+id/listing_details"
+            android:id="@+id/offer_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -41,9 +41,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="150dp">
                 <TextView
-                    android:id="@+id/username_cr"
+                    android:id="@+id/offer_listing_details"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="@string/lorem_ipsum"
                     android:textSize="18sp"
                     android:textColor="?android:attr/textColor"/>
@@ -54,23 +54,20 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <ImageView
-                    android:id="@+id/pin_cr"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:background="@android:drawable/ic_dialog_map"
-                    android:backgroundTint="?attr/colorPrimary"
-                    android:contentDescription="Τοποθεσία"/>
+                    android:backgroundTint="?attr/colorPrimary"/>
                 <HorizontalScrollView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:id="@+id/location_cr"
+                        android:id="@+id/offer_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="18sp"
                         android:layout_marginStart="4dp"
-                        android:layout_marginLeft="4dp"
-                        android:text="Καλλιθέα"/>
+                        android:layout_marginLeft="4dp"/>
                 </HorizontalScrollView>
             </LinearLayout>
 
@@ -79,7 +76,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <TextView
-                    android:id="@+id/points_cr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -88,7 +84,7 @@
                     android:textStyle="bold"
                     android:textColor="?android:attr/textColor"/>
                 <TextView
-                    android:id="@+id/points_value_cr"
+                    android:id="@+id/offer_points_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="19sp"
