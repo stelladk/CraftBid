@@ -71,13 +71,11 @@ public class OffersActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                goBack();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {
+            goBack();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
     private void goBack() {
         Intent listing = new Intent(OffersActivity.this, ListingPrivateActivity.class);
@@ -216,8 +214,7 @@ public class OffersActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             progressDialog.dismiss();
-            adapter = new OffersRecyclerAdapter(offers, OffersActivity.this);
-            recycler.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
             goBack();
         }
     }
