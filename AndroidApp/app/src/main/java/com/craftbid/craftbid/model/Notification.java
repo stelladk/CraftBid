@@ -15,6 +15,12 @@ public class Notification implements Serializable {
         this.photo = photo;
     }
 
+    public Notification(int listing_id,String belongs_to, float price) {
+        this.listing_id = listing_id;
+        this.belongs_to = belongs_to;
+        this.price = price;
+    }
+
     public int getListing_id() {
         return listing_id;
     }
