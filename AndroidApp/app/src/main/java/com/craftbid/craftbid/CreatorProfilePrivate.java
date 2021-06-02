@@ -170,7 +170,6 @@ public class CreatorProfilePrivate extends CreatorProfile {
         Button edit_btn = (Button)view;
         edit_btn.setText(getResources().getString(R.string.edit));
 
-        //TODO add asynctask to edit profile info
         //get new values of edit texts to compare with old values from textviews
         //start an asynctask for each change
         String fullname_new = fullname_edit.getText().toString();
@@ -184,21 +183,25 @@ public class CreatorProfilePrivate extends CreatorProfile {
             Snackbar.make(view, "Phone cannot be blank for Creators", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }else {
-            if(!fullname_new.equals(fullname_txt)) {
-                //asynctask
-                //change text view
+            if(!fullname_new.equals(fullname_txt) && !fullname_new.equals("Όνομα")) {
+                new ChangeInfoTask().execute("fullname",fullname_new);
+                fullname.setText(fullname_new);
             }
-            if(!email_new.equals(email_txt)) {
-                //asynctask
+            if(!email_new.equals(email_txt) && !email_new.equals("Email")) {
+                new ChangeInfoTask().execute("email",email_new);
+                email.setText(email_new);
             }
-            if(!phone_new.equals(phone_txt)) {
-                //asynctask
+            if(!phone_new.equals(phone_txt) && !phone_new.equals("Τηλέφωνο")) {
+                new ChangeInfoTask().execute("phoneNumber",phone_new);
+                phone.setText(phone_new);
             }
-            if(!description_new.equals(description_txt)) {
-                //asynctask
+            if(!description_new.equals(description_txt) && !description_new.equals("Περιγραφή Προφίλ")) {
+                new ChangeInfoTask().execute("description",description_new);
+                description.setText(description_new);
             }
             if(!isFreelancer_new.equals(isFreelancer_txt)) {
-                //asynctask
+                new ChangeInfoTask().execute("isFreelancer", (isFreelancer_new.equals("") ? "0" : "1"));
+                freelancer.setText(isFreelancer_new);
             }if(changed_pic) {
                 changed_pic = false;
                 //todo asynctask to change profile pic
@@ -252,6 +255,64 @@ public class CreatorProfilePrivate extends CreatorProfile {
 
 
 
+    /** AsyncTask running to send a change in profile info */
+    private class ChangeInfoTask extends AsyncTask<String, String, Void> {
+        ProgressDialog progressDialog;
+        Socket socket = null;
+        ObjectOutputStream out = null;
+        ObjectInputStream in = null;
+        String field,new_val;
+        String reply;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                //get field to be changed and new value from parameters
+                field = params[0];
+                new_val = params[1];
+
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("UPDATE_PROFILE");
+                out.writeObject(username);
+                out.writeObject(field);
+                out.writeObject(new_val);
+                out.flush();
+
+                reply = (String)in.readObject();
+            }catch(IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(CreatorProfilePrivate.this,
+                    "Updating profile info...",
+                    "Connecting to server...");
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            try {
+                in.close();
+                out.close();
+                socket.close();
+            }catch(IOException e) {
+                e.printStackTrace();
+            }
+            if(reply.equals("MAIL ALREADY EXISTS!")) {
+                //email wasn't change cause given mail already exists
+                Snackbar.make( getWindow().getDecorView().getRootView(), "Mail Already Exists", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+            progressDialog.dismiss();
+        }
+    }//change info task
+
+
     /** AsyncTask running when screen is created, connecting to server to get user info */
     private class GetInfoTask extends AsyncTask<String, String, Void> {
         ProgressDialog progressDialog;
@@ -294,7 +355,6 @@ public class CreatorProfilePrivate extends CreatorProfile {
 
         @Override
         protected void onPreExecute() {
-            Log.d("here","here");
             progressDialog = ProgressDialog.show(CreatorProfilePrivate.this,
                     "Getting profile info...",
                     "Connecting to server...");
@@ -311,10 +371,15 @@ public class CreatorProfilePrivate extends CreatorProfile {
             }
 
             fullname.setText(fullname_txt);
+            fullname_edit.setText(fullname_txt);
             email.setText(email_txt);
+            email_edit.setText(email_txt);
             phone.setText(phone_txt);
+            phone_edit.setText(phone_txt);
             description.setText(descr_txt);
+            description_edit.setText(descr_txt);
             freelancer.setText(isFreelancer==1 ? "Freelancer" : "");
+            freelancer_choice.setChecked(isFreelancer==1 ? true : false);
             expertise.setText(hasExpertise_txt);
             //view profile picture
             if(pfp!=null) {
@@ -340,5 +405,5 @@ public class CreatorProfilePrivate extends CreatorProfile {
 
             progressDialog.dismiss();
         }
-    }//load main task
+    }//get info task
 }

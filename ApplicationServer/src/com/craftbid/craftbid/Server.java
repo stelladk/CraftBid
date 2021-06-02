@@ -521,9 +521,11 @@ public class Server {
     public void update_profile(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
         System.out.println("Received a new UPDATE_PROFILE request");
         try {
+            String resultmsg = null;
             String username = (String)input.readObject(); //the username
             String field = (String)input.readObject(); //the column to be changed
             String new_val = (String)input.readObject(); //the new value
+            System.out.println("Changing field "+field+" with new value "+new_val+" for user "+username);
             String query = null;
             Statement stm;
             ResultSet res;
@@ -537,6 +539,7 @@ public class Server {
                     stm = db_connect.createStatement();
                     res = stm.executeQuery(query);
                     if(res.next()) {
+                        resultmsg="MAIL ALREADY EXISTS!";
                         System.out.println("Email already exists!");
                         mail_ok=false;
                     }
@@ -549,7 +552,10 @@ public class Server {
                 //update the value in the database
                 stm = db_connect.createStatement();
                 stm.executeUpdate(query);
+                resultmsg="UPDATE DONE";
             }
+            output.writeObject(resultmsg);
+            output.flush();
         }catch(IOException | ClassNotFoundException| SQLException e) {
             System.err.println("Unable to process update profile request");
             e.printStackTrace();
