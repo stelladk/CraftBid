@@ -112,7 +112,7 @@ public class OffersActivity extends AppCompatActivity {
         dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
         dialog.show();
         dialog.findViewById(R.id.yes_btn).setOnClickListener(v -> {
-            // TODO run AsyncTask to remove Offer from DB (-> toggleEmptyMessage())
+            new DeclineOfferTask().execute(offer);
         });
         dialog.findViewById(R.id.no_btn).setOnClickListener(v -> {
             dialog.dismiss();
@@ -216,6 +216,53 @@ public class OffersActivity extends AppCompatActivity {
             progressDialog.dismiss();
             adapter.notifyDataSetChanged();
             goBack();
+        }
+    }
+
+    /** On declining an offer, connects to server to delete customer's offer from DB*/
+    private class DeclineOfferTask extends AsyncTask<Offer, Void, Void> {
+        ProgressDialog progressDialog;
+        Socket socket = null;
+        ObjectOutputStream out = null;
+        ObjectInputStream in = null;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(OffersActivity.this,
+                    "Declining offer...",
+                    "Connecting to server...");
+        }
+
+        @Override
+        protected Void doInBackground(Offer... params) {
+            try {
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("DECLINE_OFFER");
+
+                out.writeObject(params[0].getId());
+                // TODO after server's last response/success
+                offers.remove(params[0]);
+            }catch(IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            try {
+                in.close();
+                out.close();
+                socket.close();
+            }catch(IOException e) {
+                e.printStackTrace();
+            }
+            progressDialog.dismiss();
+            adapter.notifyDataSetChanged();
+            dialog.dismiss();
+            toggleEmptyMessage();
         }
     }
 }
