@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    tools:context=".CreateListingActivity">
 
     <com.stelladk.arclib.ArcLayout
         android:layout_width="match_parent"
@@ -13,17 +14,20 @@
         app:ArcType="inner"
         app:ArcRadius="50dp"
         android:layout_marginHorizontal="10dp">
-        <Button
+        <ImageButton
             android:id="@+id/close_btn"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:text="X"
+            android:src="@drawable/ic_close"
+            android:tint="?attr/colorOnPrimary"
+            app:backgroundTint="?attr/colorPrimary"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:layout_marginRight="25dp"
             android:layout_marginEnd="25dp"
-            android:onClick="closePopup"/>
+            android:onClick="closePopup"
+            android:contentDescription="@string/close"/>
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

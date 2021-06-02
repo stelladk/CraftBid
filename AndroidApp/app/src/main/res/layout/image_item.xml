@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="130dp"
     android:layout_height="130dp"
     android:layout_margin="5dp"
@@ -18,8 +17,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="5dp"
         android:layout_gravity="top|center_horizontal"
-        android:src="@drawable/ic_add"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/listing_photo" />
     <ImageView
         android:id="@+id/plus_sign"
         android:layout_width="100dp"
@@ -30,7 +29,8 @@
         android:layout_gravity="top|center_horizontal"
         android:background="@drawable/ic_add"
         android:scaleType="centerCrop"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:contentDescription="@string/add_photo" />
 
     <TextView
         android:id="@+id/textAdd"

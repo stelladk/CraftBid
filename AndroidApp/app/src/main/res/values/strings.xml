@@ -99,6 +99,14 @@
     <string name="offers_title">Προσφορές</string>
     <string name="decline_offer">Είστε σίγουροι ότι θέλετε να απορρίψετε αυτή την προσφορά;</string>
     <string name="close">Κλείσιμο</string>
+    <string name="listing_photo">Φωτογραφία Αγγελίας</string>
+    <string name="you_have_been_selected">Επιλεχθήκατε ως τελικός αγοραστής του προϊόντος!</string>
+    <string name="continue_btn">Συνέχεια</string>
+    <string name="bid">Προσφορά:</string>
+    <string name="sell">Πώληση</string>
+    <string name="decline">Απόρριψη</string>
+    <string name="cannot_change_msg">*αν έχει ήδη υποβληθεί προσφορά δεν αλλάζει</string>
+    <string name="example_bid">πχ. 50,30</string>
     <string-array name="sort_options">
         <item>Ημερομηνία</item>
         <item>Τιμή</item>

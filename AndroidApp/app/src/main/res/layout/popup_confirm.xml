@@ -13,16 +13,19 @@
         app:ArcType="inner"
         app:ArcRadius="50dp"
         android:layout_marginHorizontal="10dp">
-        <Button
+        <ImageButton
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:text="X"
+            android:tint="?attr/colorOnPrimary"
+            app:backgroundTint="?attr/colorPrimary"
+            android:src="@drawable/ic_close"
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_gravity="end"
             android:layout_marginRight="25dp"
             android:layout_marginEnd="25dp"
-            android:onClick="closePopup"/>
+            android:onClick="closePopup"
+            android:contentDescription="@string/close" />
         <TextView
             android:id="@+id/confirm_message"
             android:layout_width="wrap_content"
@@ -39,7 +42,7 @@
             android:id="@+id/yes_btn"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/green"
+            app:backgroundTint="@color/green"
             android:layout_gravity="bottom|start"
             android:text="@string/yes"
             android:textAllCaps="false"

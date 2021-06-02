@@ -83,7 +83,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/listing_photo"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:onClick="viewPhotos"/>
+                android:onClick="viewPhotos"
+                tools:ignore="SmallSp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -101,7 +102,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:textSize="18sp"
-                    android:textColor="?android:attr/textColor"/>
+                    android:textColor="?android:attr/textColor"
+                    tools:ignore="ScrollViewSize" />
             </ScrollView>
 
             <LinearLayout
@@ -113,7 +115,8 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:background="@android:drawable/ic_dialog_map"
-                    android:backgroundTint="?attr/colorPrimary"/>
+                    app:backgroundTint="?attr/colorPrimary"
+                    android:contentDescription="@string/location"/>
                 <HorizontalScrollView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -218,7 +221,9 @@
                         android:layout_gravity="center_vertical"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        android:hint="πχ. 50,30"/>
+                        android:hint="@string/example_bid"
+                        android:inputType="number"
+                        android:importantForAutofill="no" />
                     <TextView
                         android:id="@+id/note"
                         android:layout_width="match_parent"

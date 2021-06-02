@@ -17,7 +17,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/offer_static"
         android:scaleType="centerCrop"
-        android:src="@drawable/karen"
         android:contentDescription="@string/profile"/>
 
     <TextView
@@ -31,7 +30,6 @@
         android:layout_marginStart="15dp"
         android:layout_marginLeft="15dp"
         android:gravity="start"
-        android:text="@string/username_en"
         android:textSize="15sp"
         android:textColor="?android:attr/textColor" />
 
@@ -48,7 +46,7 @@
         android:paddingEnd="10dp"
         android:paddingRight="10dp"
         android:gravity="start"
-        android:text="Προσφορά:"
+        android:text="@string/bid"
         android:textSize="15sp"
         android:textColor="?android:attr/textColor"/>
 
@@ -61,7 +59,6 @@
         app:layout_constraintEnd_toStartOf="@id/decline_btn"
         android:layout_marginBottom="10dp"
         android:gravity="start|bottom"
-        android:text="30.45"
         android:textSize="15sp"
         android:textColor="?android:attr/textColor"
         android:textStyle="bold"/>
@@ -77,7 +74,7 @@
         app:backgroundTint="@android:color/holo_green_light"
         android:padding="0dp"
         android:textAllCaps="false"
-        android:text="Πώληση"
+        android:text="@string/sell"
         android:textSize="13sp"
         android:textColor="@color/black"/>
     <Button
@@ -91,7 +88,7 @@
         app:backgroundTint="@android:color/holo_red_light"
         android:padding="0dp"
         android:textAllCaps="false"
-        android:text="Απόρριψη"
+        android:text="@string/decline"
         android:textSize="13sp"
         android:textColor="@color/black"/>
 

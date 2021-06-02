@@ -31,7 +31,6 @@
             android:layout_marginLeft="10dp"
             app:ArcType="inner"
             app:ArcRadius="75dp"
-            android:background="@drawable/mitsos"
             android:contentDescription="@string/photo_profile"/>
 
         <LinearLayout
@@ -47,7 +46,6 @@
                 android:id="@+id/report_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mitsos_creations"
                 android:textSize="20sp"
                 android:textColor="?android:attr/textColor"/>
 
@@ -55,7 +53,6 @@
                 android:id="@+id/report_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="mitsos_creations@gmail.com"
                 android:textSize="15sp"
                 android:textColor="?android:attr/textColor"/>
 
@@ -63,7 +60,6 @@
                 android:id="@+id/report_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Τηλέφωνο: 0123456789"
                 android:textSize="15sp"
                 android:textColor="?android:attr/textColor"/>
         </LinearLayout>
@@ -91,6 +87,7 @@
                     android:id="@+id/report_message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="0dp"
                     android:text="@string/report_message"
                     android:textSize="20sp"
                     android:checked="true"/>
@@ -98,12 +95,14 @@
                     android:id="@+id/report_no_reality"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
                     android:text="@string/report_no_reality"
                     android:textSize="20sp"/>
                 <RadioButton
                     android:id="@+id/report_no_showUp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
                     android:text="@string/report_no_showUp"
                     android:textSize="20sp"/>
                 <RadioButton
@@ -145,10 +144,11 @@
                     android:singleLine="false"
                     android:scrollHorizontally="false"
                     android:importantForAutofill="no"
-                    android:gravity="top|left"
+                    android:gravity="top|start"
                     android:layout_marginRight="15dp"
                     android:layout_marginEnd="15dp"
-                    android:padding="3dp"/>
+                    android:padding="3dp"
+                    tools:ignore="LabelFor" />
                 <Button
                     android:id="@+id/submit_report_btn"
                     android:layout_width="120dp"

@@ -31,7 +31,6 @@
             android:layout_marginLeft="10dp"
             app:ArcType="inner"
             app:ArcRadius="75dp"
-            android:background="@drawable/mitsos"
             android:contentDescription="@string/photo_profile"/>
 
         <LinearLayout
@@ -47,7 +46,6 @@
                 android:id="@+id/eval_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mitsos_creations"
                 android:textSize="20sp"
                 android:textColor="?android:attr/textColor"/>
 
@@ -55,7 +53,6 @@
                 android:id="@+id/eval_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="mitsos_creations@gmail.com"
                 android:textSize="15sp"
                 android:textColor="?android:attr/textColor"/>
 
@@ -63,7 +60,6 @@
                 android:id="@+id/eval_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Τηλέφωνο: 0123456789"
                 android:textSize="15sp"
                 android:textColor="?android:attr/textColor"/>
         </LinearLayout>
@@ -79,7 +75,7 @@
         android:progressTint="@color/gold"
         android:progressBackgroundTint="?android:attr/textColor"
         android:background="@android:color/transparent"
-        android:backgroundTint="@android:color/transparent"
+        app:backgroundTint="@android:color/transparent"
         android:isIndicator="false"
         android:transformPivotX="100dp"
         android:transformPivotY="25dp"
@@ -114,9 +110,10 @@
         android:singleLine="false"
         android:scrollHorizontally="false"
         android:importantForAutofill="no"
-        android:gravity="top|left"
+        android:gravity="top|start"
         android:layout_marginHorizontal="30dp"
-        android:padding="3dp"/>
+        android:padding="3dp"
+        tools:ignore="LabelFor" />
 
     <Button
         android:id="@+id/submit_eval_btn"

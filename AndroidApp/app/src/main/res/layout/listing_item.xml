@@ -9,14 +9,11 @@
     android:background="?attr/colorPrimary"
     app:ArcType="inner"
     app:ArcRadius="30dp">
-<!--    android:layout_width="175dp"-->
-<!--    android:layout_height="200dp"-->
 
     <com.stelladk.arclib.ArcLayout
         android:id="@+id/img_item"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:background="@drawable/bag"
         android:layout_gravity="top"
         app:ArcType="inner"
         app:BottomLeftArc="outer"
@@ -28,7 +25,8 @@
             android:layout_gravity="top|center_horizontal"
             android:background="@drawable/ic_add"
             android:scaleType="centerCrop"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:contentDescription="@string/add_photo"/>
     </com.stelladk.arclib.ArcLayout>
 
     <RelativeLayout
@@ -47,7 +45,6 @@
             android:layout_alignParentRight="true"
             android:layout_marginHorizontal="10dp"
             android:gravity="center"
-            android:text="Wolt Market Athens"
             android:textStyle="bold"
             android:textColor="?attr/colorOnPrimary"
             android:textSize="20sp"
@@ -64,7 +61,6 @@
             android:layout_below="@id/title_item"
             android:layout_marginHorizontal="10dp"
             android:gravity="start"
-            android:text="grocery"
             android:textAllCaps="true"
             android:textColor="?attr/colorOnPrimary"
             android:textSize="15sp"
@@ -83,7 +79,6 @@
             android:layout_alignRight="@id/category_item"
             android:layout_marginHorizontal="10dp"
             android:gravity="end"
-            android:text="15€"
             android:textColor="?attr/colorOnPrimary"
             android:textSize="15sp"
             android:lines="1"
@@ -102,7 +97,6 @@
             android:layout_marginHorizontal="10dp"
             android:layout_marginBottom="5dp"
             android:gravity="start"
-            android:text="@string/lorem_ipsum"
             android:textColor="?attr/colorOnPrimary"
             android:textSize="15sp"
             android:lines="2"

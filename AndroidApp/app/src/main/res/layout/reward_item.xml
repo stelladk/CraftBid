@@ -23,7 +23,6 @@
         app:layout_constraintStart_toEndOf="@id/listing"
         app:layout_constraintEnd_toEndOf="parent"
         android:gravity="center"
-        android:text="@string/num_points"
         android:textSize="30sp"
         android:textColor="?android:attr/textColor"/>
 

@@ -54,7 +54,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_margin="10dp"
-            android:background="@drawable/ic_insert_photo"
+            android:src="@drawable/ic_insert_photo"
             android:contentDescription="@string/photo_profile"
             android:onClick="onImageClick" />
 
@@ -78,6 +78,7 @@
                 android:id="@+id/fullname_edit"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
                 android:textColor="?android:attr/textColor"
                 android:textSize="20sp"
                 android:inputType="text"
@@ -128,11 +129,11 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_weight="1"
-            android:hint=""
             android:textSize="20sp"
             android:textColor="?android:attr/textColor"
             android:inputType="textEmailAddress"
-            android:importantForAutofill="no" />
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
     </LinearLayout>
 
     <LinearLayout
@@ -162,11 +163,11 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_weight="1"
-            android:hint=""
             android:textSize="20sp"
             android:textColor="?android:attr/textColor"
             android:inputType="phone"
-            android:importantForAutofill="no" />
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
     </LinearLayout>
 
     <LinearLayout
@@ -197,11 +198,11 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_weight="1"
-            android:hint=""
             android:importantForAutofill="no"
             android:inputType="text"
             android:textColor="?android:attr/textColor"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            tools:ignore="LabelFor" />
     </LinearLayout>
 
     <LinearLayout
@@ -231,11 +232,11 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_weight="1"
-            android:hint=""
             android:textSize="20sp"
             android:textColor="?android:attr/textColor"
             android:inputType="textPassword"
-            android:importantForAutofill="no" />
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
     </LinearLayout>
     <TextView
         android:id="@+id/note"
@@ -277,12 +278,11 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_weight="1"
-            android:hint=""
             android:textSize="20sp"
             android:textColor="?android:attr/textColor"
             android:inputType="textPassword"
-
-            android:importantForAutofill="no" />
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
     </LinearLayout>
 
 

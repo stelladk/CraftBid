@@ -47,7 +47,6 @@
             android:layout_toStartOf="@id/report_btn"
             android:layout_toLeftOf="@id/report_btn"
             android:gravity="center"
-            android:text="@string/fullname"
             android:textSize="30sp"
             android:textColor="?android:attr/textColor"/>
 
@@ -84,7 +83,6 @@
             android:layout_marginLeft="10dp"
             app:ArcType="inner"
             app:ArcRadius="75dp"
-            android:background="@drawable/mitsos"
             android:contentDescription="@string/photo_profile"/>
 
         <LinearLayout
@@ -94,49 +92,6 @@
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             android:orientation="vertical">
-<!--            <com.google.android.material.button.MaterialButton-->
-<!--                android:id="@+id/report_btn"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="end|top"-->
-<!--                android:padding="0dp"-->
-<!--                app:backgroundTint="@android:color/transparent"-->
-<!--                app:rippleColor="?attr/colorPrimary"-->
-<!--                app:strokeColor="?android:attr/textColor"-->
-<!--                app:strokeWidth="2dp"-->
-<!--                android:text="@string/report"-->
-<!--                android:textSize="15sp"-->
-<!--                android:textColor="?android:attr/textColor"-->
-<!--                android:textAllCaps="false"/>-->
-<!--            <EditText-->
-<!--                android:id="@+id/fullname_edit"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:maxHeight="50dp"-->
-<!--                android:gravity="center"-->
-<!--                android:hint="@string/fullname"-->
-<!--                android:text="@string/fullname"-->
-<!--                android:textSize="30sp"-->
-<!--                android:textColor="?android:attr/textColor"-->
-<!--                android:inputType="text"-->
-<!--                android:importantForAutofill="no"-->
-<!--                android:visibility="gone"/>-->
-<!--            <TextView-->
-<!--                android:id="@+id/fullname"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:gravity="center"-->
-<!--                android:text="@string/fullname"-->
-<!--                android:textSize="30sp"-->
-<!--                android:textColor="?android:attr/textColor"/>-->
-<!--            <TextView-->
-<!--                android:id="@+id/username"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:gravity="center"-->
-<!--                android:text="@string/username_en"-->
-<!--                android:textSize="15sp"-->
-<!--                android:textColor="?android:attr/textColor"/>-->
             <EditText
                 android:id="@+id/email_edit"
                 android:layout_width="match_parent"
@@ -155,7 +110,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/email"
                 android:textSize="15sp"
                 android:textColor="?android:attr/textColor"/>
             <EditText
@@ -176,7 +130,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/phone"
                 android:textSize="15sp"
                 android:textColor="?android:attr/textColor"/>
             <LinearLayout
@@ -189,7 +142,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="@string/expertise"
                     android:textSize="15sp"
                     android:textColor="?android:attr/textColor"/>
                 <CheckBox
@@ -233,19 +185,9 @@
                 android:layout_height="wrap_content"
                 android:maxHeight="100dp"
                 android:gravity="center"
-                android:text="@string/profile_description"
                 android:textSize="15sp"
                 android:textColor="?android:attr/textColor"
                 android:maxLines="3"/>
-<!--            <Button-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:text="@string/see_rewards"-->
-<!--                android:textSize="15sp"-->
-<!--                android:textAllCaps="false"-->
-<!--                android:textStyle="bold"-->
-<!--                android:onClick="openRewardsCustomer"/>-->
         </LinearLayout>
     </LinearLayout>
 

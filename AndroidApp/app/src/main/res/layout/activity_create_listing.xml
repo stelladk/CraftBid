@@ -71,7 +71,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:gravity="center"
-        android:text="*αν έχει ήδη υποβληθεί προσφορά δεν αλλάζει"
+        android:text="@string/cannot_change_msg"
         android:textSize="12sp"
         android:textColor="@color/error"
         android:visibility="gone"/>
@@ -174,7 +174,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:gravity="center"
             android:inputType="number"
-            android:importantForAutofill="no" />
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
         <ImageButton
             android:id="@+id/points_help"
             android:layout_width="wrap_content"

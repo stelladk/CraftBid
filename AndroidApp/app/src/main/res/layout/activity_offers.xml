@@ -29,7 +29,6 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center"
-            android:background="@drawable/bag"
             android:contentDescription="@string/photo_profile" />
         <LinearLayout
             android:id="@+id/offer_description"
@@ -44,7 +43,6 @@
                     android:id="@+id/offer_listing_details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/lorem_ipsum"
                     android:textSize="18sp"
                     android:textColor="?android:attr/textColor"/>
             </ScrollView>
@@ -57,7 +55,8 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:background="@android:drawable/ic_dialog_map"
-                    android:backgroundTint="?attr/colorPrimary"/>
+                    app:backgroundTint="?attr/colorPrimary"
+                    android:contentDescription="@string/location"/>
                 <HorizontalScrollView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">

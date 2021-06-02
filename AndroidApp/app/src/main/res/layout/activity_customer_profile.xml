@@ -27,7 +27,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/fullname"
         android:textSize="30sp"
         android:textColor="?android:attr/textColor"/>
 
@@ -45,7 +44,6 @@
                 android:layout_marginLeft="10dp"
                 app:ArcType="inner"
                 app:ArcRadius="75dp"
-                android:background="@drawable/karen"
                 android:contentDescription="@string/photo_profile"/>
 
             <LinearLayout
@@ -82,7 +80,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="@string/email"
                     android:textSize="25sp"
                     android:textColor="?android:attr/textColor"/>
                 <EditText
@@ -106,7 +103,6 @@
                     android:layout_height="70dp"
                     android:maxHeight="100dp"
                     android:gravity="center"
-                    android:text="@string/description"
                     android:textSize="20sp"
                     android:textColor="?android:attr/textColor"
                     android:maxLines="4"/>
@@ -142,5 +138,4 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="5dp"/>
 
-<!--    </RelativeLayout>-->
 </LinearLayout>
