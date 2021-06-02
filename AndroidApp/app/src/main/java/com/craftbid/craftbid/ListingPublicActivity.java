@@ -100,7 +100,12 @@ public class ListingPublicActivity extends AppCompatActivity {
     }
 
     public void openProfile(View view){
-        Intent profile = new Intent(ListingPublicActivity.this, CreatorProfile.class);
+        Intent profile;
+        if(MainActivity.username.equals(listing.getPublished_by())) {
+            profile = new Intent(ListingPublicActivity.this, CreatorProfilePrivate.class);
+        }else {
+            profile = new Intent(ListingPublicActivity.this, CreatorProfile.class);
+        }
         profile.putExtra("username", listing.getPublished_by());
         profile.putExtra("previous", String.valueOf(listing_id));
         startActivity(profile);

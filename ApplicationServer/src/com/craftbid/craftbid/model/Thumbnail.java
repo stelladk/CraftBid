@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 public class Thumbnail implements Serializable{
     private int id;
-    private String name, description,category;
+    private String name, description,category,published_by;
     private float min_price;
     byte[] thumbnail;
 
@@ -64,5 +64,13 @@ public class Thumbnail implements Serializable{
 
     public void setThumbnail(byte[] thumbnail) {
         this.thumbnail = Arrays.copyOfRange(thumbnail,0,thumbnail.length-1);
+    }
+
+    public String getPublished_by() {
+        return published_by;
+    }
+
+    public void setPublished_by(String published_by) {
+        this.published_by = published_by;
     }
 }

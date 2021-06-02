@@ -314,6 +314,7 @@ public class Server {
                 String desc = res.getString("description");
                 String category = res.getString("category");
                 float min_price = res.getFloat("min_price");
+                String published_by = res.getString("published_by");
                 //get the listing thumbnail from the bucket and add it to thumbnail object as byte array
                 byte[] thumbnail = null;
                 String filepath = res.getString("published_by")+"/"+name+"/thumbnail.jpeg";
@@ -324,7 +325,9 @@ public class Server {
                 FileInputStream in = new FileInputStream(f2);
                 thumbnail = new byte[(int) f2.length()];
                 int error = in.read(thumbnail);
-                listing_thumbnails.add(new Thumbnail(id,name,desc,category,min_price,thumbnail));
+                Thumbnail t = new Thumbnail(id,name,desc,category,min_price,thumbnail);
+                t.setPublished_by(published_by);
+                listing_thumbnails.add(t);
                 if(listing_thumbnails.size() > 20) break;
             }
             output.writeObject(listing_thumbnails); //send thumbnails
@@ -362,6 +365,7 @@ public class Server {
                 String desc = res.getString("description");
                 String category = res.getString("category");
                 float min_price = res.getFloat("min_price");
+                String published_by = res.getString("published_by");
                 //get the listing thumbnail from the bucket and add it to thumbnail object as byte array
                 byte[] thumbnail = null;
                 String filepath = res.getString("published_by")+"/"+name+"/thumbnail.jpeg";
@@ -372,7 +376,9 @@ public class Server {
                 FileInputStream in = new FileInputStream(f2);
                 thumbnail = new byte[(int) f2.length()];
                 int error = in.read(thumbnail);
-                listing_thumbnails.add(new Thumbnail(id,name,desc,category,min_price,thumbnail));
+                Thumbnail t = new Thumbnail(id,name,desc,category,min_price,thumbnail);
+                t.setPublished_by(published_by);
+                listing_thumbnails.add(t);
                 if(listing_thumbnails.size() > 20) break;
             }
             output.writeObject(listing_thumbnails); //send thumbnails
@@ -466,7 +472,7 @@ public class Server {
                     int rating = res.getInt("rating");
                     String date = res.getString("date");
                     String comment = res.getString("comment");
-
+                    Evaluation temp = new Evaluation(id,submitted_by,username,rating,date,comment);
                     //get customer's profile picture from the bucket
                     byte[] pfp = null;
                     String filepath = res.getString("submitted_by")+"/"+res.getString("submitted_by")+"_pfp.jpeg";
@@ -478,10 +484,9 @@ public class Server {
                         FileInputStream in = new FileInputStream(f2);
                         pfp = new byte[(int) f2.length()];
                         int error = in.read(pfp);
+                        //create new evaluation object
+                        temp.setThumbnail(pfp);
                     }
-                    //create new evaluation object
-                    Evaluation temp = new Evaluation(id,submitted_by,username,rating,date,comment);
-                    temp.setThumbnail(pfp);
                     evaluations.add(temp);
                 }
                 output.writeObject(evaluations);
@@ -521,7 +526,6 @@ public class Server {
         }
     }//request_profile
 
-    /** Checkpoint */
 
     /** UPDATE PROFILE
      * Modify a UserInfo or Creator's field in the database */
@@ -595,6 +599,8 @@ public class Server {
         }
     }//change profile picture
 
+
+    /** Checkpoint */
 
     /** CREATE LISTING
      * Creator publishes a new listing for a handmade product */
@@ -1006,6 +1012,7 @@ public class Server {
                     "VALUES('"+purchase.getDone_by()+"',"+purchase.getDone_on()+",'"+purchase.getDate()+"');";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
+            //TODO remove all other offers and notifications if any exist, remove the listing as well
         }catch(IOException | ClassNotFoundException | SQLException e) {
             System.err.println("Unable to process create purchase request");
             e.printStackTrace();
@@ -1025,10 +1032,11 @@ public class Server {
                     "VALUES("+notification.getListing_id()+",'"+notification.getBelongs_to()+"',"+notification.getPrice()+");";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
+            /*
             //delete all other offers for this listing id
             query = "DELETE FROM Offer WHERE submitted_for = "+notification.getListing_id()+";";
             stm = db_connect.createStatement();
-            stm.executeUpdate(query);
+            stm.executeUpdate(query); */ //TODO MOVE TO ADD PURCHASE
         }catch(IOException | ClassNotFoundException | SQLException e) {
             System.err.println("Unable to process send notification request");
             e.printStackTrace();
