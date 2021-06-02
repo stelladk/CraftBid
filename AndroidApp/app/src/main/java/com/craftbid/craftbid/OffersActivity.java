@@ -1,27 +1,26 @@
 package com.craftbid.craftbid;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
-
-import com.craftbid.craftbid.adapters.FeedRecyclerAdapter;
 import com.craftbid.craftbid.adapters.OffersRecyclerAdapter;
-import com.craftbid.craftbid.model.Listing;
 import com.craftbid.craftbid.model.Notification;
 import com.craftbid.craftbid.model.Offer;
 import com.craftbid.craftbid.model.Thumbnail;
@@ -32,13 +31,16 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class OffersActivity extends AppCompatActivity {
-    private int listing_id;
+    private int listing_id, points;
+    private String location;
     private List<Offer> offers;
     private OffersRecyclerAdapter adapter;
     private RecyclerView recycler;
-    private TextView empty_message;
+    private TextView empty_message, listing_details, listing_location, listing_points;
+    private ImageView listing_photo;
     private Dialog dialog;
 
     @Override
@@ -49,6 +51,8 @@ public class OffersActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         if(b!=null){
             listing_id = b.getInt("listing_id");
+            location = b.getString("listing_location");
+            points = b.getInt("listing_points", 0);
         }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -56,17 +60,21 @@ public class OffersActivity extends AppCompatActivity {
         toolbar.setTitle("Προσφορές");
 
         //Set Back Arrow
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         empty_message = findViewById(R.id.empty_msg);
+        listing_details = findViewById(R.id.offer_listing_details);
+        listing_location = findViewById(R.id.offer_location);
+        listing_points = findViewById(R.id.offer_points_value);
+        listing_photo = findViewById(R.id.offer_listing_photo);
 
         recycler = findViewById(R.id.offers_recyclerview);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recycler.setLayoutManager(manager);
+        dialog = new Dialog(this);
 
         new LoadOffersTask().execute();
-        dialog = new Dialog(this);
     }
 
     @Override
@@ -135,6 +143,7 @@ public class OffersActivity extends AppCompatActivity {
         Socket socket = null;
         ObjectOutputStream out = null;
         ObjectInputStream in = null;
+        Thumbnail thumbnail;
 
         @Override
         protected void onPreExecute() {
@@ -146,6 +155,18 @@ public class OffersActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
+                // get listing's info
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("SEARCH");
+                out.writeObject(true);  //request search by listing_id
+                out.writeObject(String.valueOf(listing_id));
+                thumbnail = (Thumbnail) ((ArrayList<Thumbnail>) in.readObject()).get(0);
+                //TODO get server's last response for view_listing
+                close();
+
+                // get offers request
                 socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
                 in = new ObjectInputStream(socket.getInputStream());
                 out = new ObjectOutputStream(socket.getOutputStream());
@@ -153,6 +174,8 @@ public class OffersActivity extends AppCompatActivity {
                 out.writeObject(listing_id);
                 // get offers list
                 offers = (ArrayList<Offer>) in.readObject();
+                //TODO get server's last response for view_offers
+
             }catch(IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -161,6 +184,26 @@ public class OffersActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void result) {
+            close();
+            // set listing image
+            byte[] photo = thumbnail.getThumbnail();
+            if(photo!=null) {
+                Bitmap view = BitmapFactory.decodeByteArray(photo,0, photo.length);
+                Drawable d = new BitmapDrawable(getResources(), view);
+                listing_photo.setBackground(d);
+            }
+            // set description, location, points
+            listing_details.setText(thumbnail.getDescription());
+            listing_location.setText(location);
+            listing_points.setText(String.valueOf(points));
+
+            progressDialog.dismiss();
+            adapter = new OffersRecyclerAdapter(offers, OffersActivity.this);
+            recycler.setAdapter(adapter);
+            toggleEmptyMessage();
+        }
+
+        private void close() {
             try {
                 in.close();
                 out.close();
@@ -168,10 +211,6 @@ public class OffersActivity extends AppCompatActivity {
             }catch(IOException e) {
                 e.printStackTrace();
             }
-            progressDialog.dismiss();
-            adapter = new OffersRecyclerAdapter(offers, OffersActivity.this);
-            recycler.setAdapter(adapter);
-            toggleEmptyMessage();
         }
     }
 

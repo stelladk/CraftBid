@@ -48,6 +48,7 @@ public class ListingPrivateActivity extends ListingPublicActivity {
             Intent offers = new Intent(ListingPrivateActivity.this, OffersActivity.class);
             offers.putExtra("listing_id", listing_id);
             offers.putExtra("listing_location", listing.getLocation());
+            offers.putExtra("listing_points", listing.getReward_points());
             startActivity(offers);
         });
         edit_btn.setOnClickListener(v -> {
