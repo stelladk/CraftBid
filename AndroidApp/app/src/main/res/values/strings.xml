@@ -110,6 +110,8 @@
     <string name="notifications_empty">Δεν υπάρχουν ειδοποιήσεις.</string>
     <string name="contact_phone">Τηλέφωνο: </string>
     <string name="contact_email">Email : </string>
+    <string name="contact_creator_warning">Χρησιμοποιήστε τα παρακάτω για να επικοινωνήσετε. Αφού πατήσετε ΟΚ θα μεταφερθείτε στην οθόνη ειδοποιήσεων, και <b>δεν θα ξαναέχετε πρόσβαση</b> στα στοιχεία αυτά.</string>
+    <string name="okay">ΟΚ</string>
     <string-array name="sort_options">
         <item>Ημερομηνία</item>
         <item>Τιμή</item>

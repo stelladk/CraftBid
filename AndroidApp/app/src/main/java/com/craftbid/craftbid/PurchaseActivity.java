@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -32,7 +31,6 @@ public class PurchaseActivity extends AppCompatActivity {
     private TextView purchase_location;
     private Listing listing;
     private Dialog dialog;
-    private String phone, email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +49,7 @@ public class PurchaseActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        new LoadDeliveryOptionsTask().execute();
+        new LoadPurchaseScreenTask().execute();
         dialog = new Dialog(this);
     }
 
@@ -111,31 +109,33 @@ public class PurchaseActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     private void goBack() {
-        Intent main = new Intent(PurchaseActivity.this, MainActivity.class); // TODO go to notifications
-        startActivity(main);
+        Intent notifications = new Intent(PurchaseActivity.this, NotificationsActivity.class);
+        startActivity(notifications);
     }
 
-    /** Gets contact info from server and opens popup */
+    /** Gets contact info from server and opens popup after server's response*/
     public void contactCreator(View view) {
-        new CreatorInfoTask().execute();
+        dialog.show();
     }
     public void closePopup(View view) {
         dialog.dismiss();
     }
 
-    /** Loads delivery options and location on screen creation */
-    private class LoadDeliveryOptionsTask extends AsyncTask<Void, Void, Void> {
+    /** Loads delivery options and location on screen creation.
+     * If hand-to-hand option is available, loads creator's information too. */
+    private class LoadPurchaseScreenTask extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
         private Socket socket = null;
         private ObjectOutputStream out = null;
         private ObjectInputStream in = null;
         private final String resultmsg = "Προέκυψε σφάλμα.";
         private boolean is_successful = true;
+        private ArrayList<String> basicInfo;
 
         @Override
         protected void onPreExecute() {
             progressDialog = ProgressDialog.show(PurchaseActivity.this,
-                    "Load delivery options...",
+                    "Load delivery options and contact info...",
                     "Connecting to server...");
         }
 
@@ -153,6 +153,22 @@ public class PurchaseActivity extends AppCompatActivity {
                 // non needed info
                 in.readObject(); //thumbnail
                 in.readObject(); //photos
+                close();
+
+                // TODO after DB's collation change, make appropriate changes for delivery options
+                if(!listing.getDelivery().equals(getResources().getString(R.string.shipment))){
+                    socket = new Socket(NetInfo.getServer_ip(), NetInfo.getServer_port());
+                    in = new ObjectInputStream(socket.getInputStream());
+                    out = new ObjectOutputStream(socket.getOutputStream());
+                    out.writeObject("REQUEST_PROFILE");
+                    out.writeObject(listing.getPublished_by());
+                    out.writeObject(false);  // only basic info is needed
+                    basicInfo = (ArrayList<String>) in.readObject();
+
+                    // non needed info
+                    in.readObject(); // photo
+                    in.readObject(); // evaluations
+                }
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
                 is_successful = false;
@@ -162,14 +178,8 @@ public class PurchaseActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
+            close();
             progressDialog.dismiss();
-            try {
-                socket.close();
-                out.close();
-                in.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             if(!is_successful) {
                 Snackbar.make(getWindow().getDecorView().getRootView(), resultmsg, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
@@ -177,50 +187,23 @@ public class PurchaseActivity extends AppCompatActivity {
             }
             purchase_location.setText(listing.getLocation());
             availableDeliveryOptions(listing.getDelivery());
-        }
-    }
 
-    /** Loads creator's contact info when hand-to-hand option is selected as the final one */
-    private class CreatorInfoTask extends AsyncTask<Void, Void, Void> {
-        private ProgressDialog progressDialog;
-        Socket socket = null;
-        ObjectOutputStream out = null;
-        ObjectInputStream in = null;
-        String resultmsg;
-        boolean is_successful = true;
-        ArrayList<String> basicInfo;
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog = ProgressDialog.show(PurchaseActivity.this,
-                    "Getting creator's contact information...",
-                    "Connecting to server...");
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                socket = new Socket(NetInfo.getServer_ip(), NetInfo.getServer_port());
-                in = new ObjectInputStream(socket.getInputStream());
-                out = new ObjectOutputStream(socket.getOutputStream());
-                out.writeObject("REQUEST_PROFILE");
-                out.writeObject(listing.getPublished_by());
-                out.writeObject(false);  // only basic info is needed
-                basicInfo = (ArrayList<String>) in.readObject();
-
-                // non needed info
-                in.readObject(); // photo
-                in.readObject(); // evaluations
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-                is_successful = false;
+            // TODO same here
+            // set hand-to-hand popup parameters
+            if(!listing.getDelivery().equals(getResources().getString(R.string.shipment))) {
+                String email = basicInfo.get(1);
+                String phone = basicInfo.get(2);
+                dialog.setContentView(R.layout.popup_purchase);
+                ((TextView)dialog.findViewById(R.id.contact_phone)).setText(phone);
+                ((TextView)dialog.findViewById(R.id.contact_email)).setText(email);
+                dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
+                dialog.findViewById(R.id.purchase_okay).setOnClickListener(v -> {
+                    // TODO new PurchaseTask().execute();
+                });
             }
-            return null;
         }
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            progressDialog.dismiss();
+        private void close(){
             try {
                 socket.close();
                 out.close();
@@ -228,21 +211,6 @@ public class PurchaseActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if(!is_successful) {
-                Snackbar.make(getWindow().getDecorView().getRootView(), resultmsg, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                goBack();
-            }
-            email = basicInfo.get(1);
-            phone = basicInfo.get(2);
-
-            // show popup
-            dialog.setContentView(R.layout.popup_purchase);
-            ((TextView)dialog.findViewById(R.id.contact_phone)).setText(phone);
-            ((TextView)dialog.findViewById(R.id.contact_email)).setText(email);
-            Log.d("MOUA", email+" "+phone);
-            dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
-            dialog.show();
         }
     }
 }
