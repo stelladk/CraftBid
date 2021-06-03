@@ -1,13 +1,11 @@
 package com.craftbid.craftbid;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -21,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.craftbid.craftbid.model.Listing;
-import com.craftbid.craftbid.model.Reward;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
@@ -34,6 +31,8 @@ public class PurchaseActivity extends AppCompatActivity {
     private int listing_id;
     private TextView purchase_location;
     private Listing listing;
+    private Dialog dialog;
+    private String phone, email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +52,7 @@ public class PurchaseActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         new LoadDeliveryOptionsTask().execute();
+        dialog = new Dialog(this);
     }
 
     /** Disables unavailable delivery option if any*/
@@ -111,12 +111,16 @@ public class PurchaseActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     private void goBack() {
-        Intent main = new Intent(PurchaseActivity.this, MainActivity.class);
+        Intent main = new Intent(PurchaseActivity.this, MainActivity.class); // TODO go to notifications
         startActivity(main);
     }
 
-    public void openMain(View view) {
-        goBack();
+    /** Gets contact info from server and opens popup */
+    public void contactCreator(View view) {
+        new CreatorInfoTask().execute();
+    }
+    public void closePopup(View view) {
+        dialog.dismiss();
     }
 
     /** Loads delivery options and location on screen creation */
@@ -173,6 +177,72 @@ public class PurchaseActivity extends AppCompatActivity {
             }
             purchase_location.setText(listing.getLocation());
             availableDeliveryOptions(listing.getDelivery());
+        }
+    }
+
+    /** Loads creator's contact info when hand-to-hand option is selected as the final one */
+    private class CreatorInfoTask extends AsyncTask<Void, Void, Void> {
+        private ProgressDialog progressDialog;
+        Socket socket = null;
+        ObjectOutputStream out = null;
+        ObjectInputStream in = null;
+        String resultmsg;
+        boolean is_successful = true;
+        ArrayList<String> basicInfo;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(PurchaseActivity.this,
+                    "Getting creator's contact information...",
+                    "Connecting to server...");
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                socket = new Socket(NetInfo.getServer_ip(), NetInfo.getServer_port());
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("REQUEST_PROFILE");
+                out.writeObject(listing.getPublished_by());
+                out.writeObject(false);  // only basic info is needed
+                basicInfo = (ArrayList<String>) in.readObject();
+
+                // non needed info
+                in.readObject(); // photo
+                in.readObject(); // evaluations
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+                is_successful = false;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            progressDialog.dismiss();
+            try {
+                socket.close();
+                out.close();
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if(!is_successful) {
+                Snackbar.make(getWindow().getDecorView().getRootView(), resultmsg, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                goBack();
+            }
+            email = basicInfo.get(1);
+            phone = basicInfo.get(2);
+
+            // show popup
+            dialog.setContentView(R.layout.popup_purchase);
+            ((TextView)dialog.findViewById(R.id.contact_phone)).setText(phone);
+            ((TextView)dialog.findViewById(R.id.contact_email)).setText(email);
+            Log.d("MOUA", email+" "+phone);
+            dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
+            dialog.show();
         }
     }
 }

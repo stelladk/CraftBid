@@ -108,6 +108,8 @@
     <string name="cannot_change_msg">*αν έχει ήδη υποβληθεί προσφορά δεν αλλάζει</string>
     <string name="example_bid">πχ. 50,30</string>
     <string name="notifications_empty">Δεν υπάρχουν ειδοποιήσεις.</string>
+    <string name="contact_phone">Τηλέφωνο: </string>
+    <string name="contact_email">Email : </string>
     <string-array name="sort_options">
         <item>Ημερομηνία</item>
         <item>Τιμή</item>

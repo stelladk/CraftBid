@@ -140,7 +140,7 @@
                     android:textColor="@color/black"
                     android:textAllCaps="false"
                     android:layout_gravity="center"
-                    android:onClick="openMain"/>
+                    android:onClick="contactCreator"/>
             </LinearLayout>
         </RadioGroup>
     </ScrollView>
