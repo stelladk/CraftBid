@@ -18,6 +18,15 @@
         android:textSize="35sp"
         android:textColor="?android:attr/textColor"/>
 
+    <TextView
+        android:id="@+id/empty_msg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/notifications_empty"
+        android:textSize="20sp"
+        android:visibility="gone"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/notifications_recyclerview"
         android:layout_width="match_parent"
