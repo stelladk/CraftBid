@@ -89,7 +89,7 @@ public class ReportActivity extends AppCompatActivity {
         ObjectOutputStream out = null;
         ObjectInputStream in = null;
         String response, resultmsg;
-        boolean is_successful;
+        boolean is_successful = true;
         ArrayList<String> basicInfo;
         byte[] photo;
 
@@ -112,15 +112,10 @@ public class ReportActivity extends AppCompatActivity {
                 basicInfo = (ArrayList<String>) in.readObject();
                 photo = (byte[]) in.readObject();
 
-                // TODO get server's response for success
-                response = "REQUEST PROFILE SUCCESSFUL"; //(String)in.readObject();
-                if(response.equals("REQUEST PROFILE SUCCESSFUL")) {
-                    is_successful = true;
-                }else {
-                    resultmsg = "Προέκυψε σφάλμα";
-                }
             }catch(IOException | ClassNotFoundException e) {
                 e.printStackTrace();
+                is_successful = false;
+                resultmsg = "Προέκυψε σφάλμα";
             }
             return null;
         }
@@ -186,7 +181,7 @@ public class ReportActivity extends AppCompatActivity {
                 out.writeObject(report);
                 out.flush();
                 response = (String)in.readObject();
-                if(response.equals("CREATE REPORT SUCCESSFUL")) {
+                if(response.equals("REPORT ADDED")) {
                     resultmsg = "Η δημιουργία της αναφοράς ήταν επιτυχής!";
                     is_successful = true;
                 }else {

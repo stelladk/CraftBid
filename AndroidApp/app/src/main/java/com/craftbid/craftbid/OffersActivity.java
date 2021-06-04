@@ -24,6 +24,7 @@ import com.craftbid.craftbid.adapters.OffersRecyclerAdapter;
 import com.craftbid.craftbid.model.Notification;
 import com.craftbid.craftbid.model.Offer;
 import com.craftbid.craftbid.model.Thumbnail;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -146,6 +147,7 @@ public class OffersActivity extends AppCompatActivity {
         ObjectOutputStream out = null;
         ObjectInputStream in = null;
         Thumbnail thumbnail;
+        boolean is_successful = true;
 
         @Override
         protected void onPreExecute() {
@@ -165,7 +167,6 @@ public class OffersActivity extends AppCompatActivity {
                 out.writeObject(true);  //request search by listing_id
                 out.writeObject(String.valueOf(listing_id));
                 thumbnail = (Thumbnail) ((ArrayList<Thumbnail>) in.readObject()).get(0);
-                //TODO get server's last response for view_listing
                 close();
 
                 // get offers request
@@ -176,10 +177,10 @@ public class OffersActivity extends AppCompatActivity {
                 out.writeObject(listing_id);
                 // get offers list
                 offers = (ArrayList<Offer>) in.readObject();
-                //TODO get server's last response for view_offers
 
             }catch(IOException | ClassNotFoundException e) {
                 e.printStackTrace();
+                is_successful = false;
             }
             return null;
         }
@@ -187,6 +188,12 @@ public class OffersActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             close();
+
+            if(!is_successful){
+                Snackbar.make(getWindow().getDecorView().getRootView(), "Προέκυψε σφάλμα", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                goBack();
+            }
             // set listing image
             byte[] photo = thumbnail.getThumbnail();
             if(photo!=null) {
@@ -270,6 +277,7 @@ public class OffersActivity extends AppCompatActivity {
         Socket socket = null;
         ObjectOutputStream out = null;
         ObjectInputStream in = null;
+        private boolean is_successful = false;
 
         @Override
         protected void onPreExecute() {
@@ -287,11 +295,14 @@ public class OffersActivity extends AppCompatActivity {
                 in = new ObjectInputStream(socket.getInputStream());
                 out = new ObjectOutputStream(socket.getOutputStream());
                 out.writeObject("DECLINE_OFFER");
-
                 out.writeObject(params[0].getId());
-                // TODO after server's last response/success
-                offers.remove(params[0]);
-            }catch(IOException e) {
+
+                String response = (String) in.readObject();
+                if(response.equals("OFFER DECLINED")) {
+                    is_successful = true;
+                    offers.remove(params[0]);
+                }
+            }catch(IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
             return null;
@@ -300,14 +311,18 @@ public class OffersActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             try {
-                in.close();
-                out.close();
-                socket.close();
+                if(in!=null) in.close();
+                if(out!=null) out.close();
+                if(socket!=null) socket.close();
             }catch(IOException e) {
                 e.printStackTrace();
             }
             if(!after_accept) {
                 progressDialog.dismiss();
+            }
+            if(!is_successful) {
+                Snackbar.make(getWindow().getDecorView().getRootView(), "Προέκυψε σφάλμα.", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
             dialog.dismiss();
             adapter.notifyDataSetChanged();

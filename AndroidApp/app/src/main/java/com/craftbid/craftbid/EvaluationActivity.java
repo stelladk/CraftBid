@@ -42,6 +42,8 @@ public class EvaluationActivity extends AppCompatActivity {
         toolbar.setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        // TODO AsyncTask for creator's information
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -89,16 +91,14 @@ public class EvaluationActivity extends AppCompatActivity {
                 out.writeObject(review);
                 out.flush();
 
-                is_successful = true; // delete after uncomment
-                /* TODO uncomment when server last response is fixed
                 response = (String)in.readObject();
-                if(response.equals("CREATE EVALUATION SUCCESSFUL")) {
+                if(response.equals("EVALUATION ADDED")) {
                     resultmsg = "Η δημιουργία της αξιολόγησης ήταν επιτυχής!";
                     is_successful = true;
                 }else {
                     resultmsg = "Προέκυψε σφάλμα";
-                }*/
-            }catch(IOException /*TODO also uncomment | ClassNotFoundException*/ e) {
+                }
+            }catch(IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
             return null;

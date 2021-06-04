@@ -111,9 +111,9 @@ public class NotificationsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             try {
-                in.close();
-                out.close();
-                socket.close();
+                if(in!=null) in.close();
+                if(out!=null) out.close();
+                if(socket!=null) socket.close();
             }catch(IOException e) {
                 e.printStackTrace();
             }

@@ -107,7 +107,7 @@ public class CreateRewardActivity extends AppCompatActivity {
         ObjectOutputStream out = null;
         ObjectInputStream in = null;
         String response, resultmsg;
-        boolean is_successful;
+        boolean is_successful = false;
 
         @Override
         protected void onPreExecute() {
@@ -143,15 +143,14 @@ public class CreateRewardActivity extends AppCompatActivity {
                 out.writeObject(reward);
                 out.writeObject(buffer);
 
-                /* TODO uncomment when AppServer sends response
                 response = (String)in.readObject();
-                if(response.equals("ADD REWARD SUCCESSFUL")) {
+                if(response.equals("REWARD ADDED")) {
                     resultmsg = "Η προσθήκη του βραβείου ήταν επιτυχής!";
                     is_successful = true;
                 }
-                */
-            }catch(IOException /*TODO also uncomment| ClassNotFoundException*/ e) {
+            }catch(IOException | ClassNotFoundException e) {
                 e.printStackTrace();
+                resultmsg = "Προέκυψε σφάλμα.";
             }
             return null;
         }
