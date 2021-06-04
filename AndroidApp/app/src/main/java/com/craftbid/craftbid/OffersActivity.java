@@ -44,6 +44,7 @@ public class OffersActivity extends AppCompatActivity {
     private ImageView listing_photo;
     private Dialog dialog;
     private boolean after_accept =  false;
+    private boolean is_creator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,11 +134,9 @@ public class OffersActivity extends AppCompatActivity {
         dialog.dismiss();
     }
 
+    /** On profile click particular user's profile opens */
     public void openProfile(String username) {
-        //TODO check if he is a creator
-        Intent profile = new Intent(OffersActivity.this, CustomerProfile.class);
-        profile.putExtra("username", username); //Send user's username
-        startActivity(profile);
+        new IsCreatorTask().execute(username);
     }
 
     /** On creation of screen, connects to server to get list of Offers for particular listing*/
@@ -328,6 +327,59 @@ public class OffersActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
             toggleEmptyMessage();
             after_accept = false;
+        }
+    }
+
+    /** Connects if user who made the offer is creator */
+    private class IsCreatorTask extends AsyncTask<String, Void, Void> {
+        private ProgressDialog progressDialog;
+        private Socket socket = null;
+        private ObjectOutputStream out = null;
+        private ObjectInputStream in = null;
+        private String username;
+
+        @Override
+        protected void onPreExecute() {
+            if(!after_accept) {
+                progressDialog = ProgressDialog.show(OffersActivity.this,
+                        "Opening user's profile...",
+                        "Connecting to server...");
+            }
+        }
+
+        @Override
+        protected Void doInBackground(String... username) {
+            try {
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("IS_CREATOR");
+                out.writeObject(username[0]);
+                this.username = username[0];
+                is_creator = (boolean) in.readObject();
+            }catch(IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            progressDialog.dismiss();
+            try {
+                if(in!=null) in.close();
+                if(out!=null) out.close();
+                if(socket!=null) socket.close();
+            }catch(IOException e) {
+                e.printStackTrace();
+            }
+            // go to the one's who submitted the offer profile
+            Intent profile;
+            if(is_creator) profile = new Intent(OffersActivity.this, CreatorProfile.class);
+            else profile = new Intent(OffersActivity.this, CustomerProfile.class);
+            profile.putExtra("username", username); //Send user's username
+            profile.putExtra("previous", listing_id);
+            startActivity(profile);
         }
     }
 }
