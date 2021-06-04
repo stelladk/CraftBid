@@ -38,7 +38,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginStart="25dp"
-                android:layout_marginLeft="25dp">
+                android:layout_marginLeft="25dp"
+                android:onClick="setChecked">
                 <TextView
                     android:id="@+id/courier_not_offerer"
                     android:layout_width="wrap_content"
@@ -91,7 +92,7 @@
                     android:textColor="@color/black"
                     android:textAllCaps="false"
                     android:layout_gravity="center"
-                    android:onClick="openMain"/>
+                    android:onClick="submitPurchase"/>
             </LinearLayout>
             <RadioButton
                 android:id="@+id/delivery_handToHand"
@@ -100,7 +101,8 @@
                 android:text="@string/delivery_handToHand_text"
                 android:textSize="20sp"
                 android:textColor="?android:attr/textColor"
-                android:layout_marginTop="15dp">
+                android:layout_marginTop="15dp"
+                android:onClick="setChecked">
             </RadioButton>
             <LinearLayout
                 android:id="@+id/purchase_layout_hand"
@@ -108,7 +110,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginStart="30dp"
-                android:layout_marginLeft="30dp">
+                android:layout_marginLeft="30dp"
+                android:onClick="setChecked">
                 <TextView
                     android:id="@+id/hand_not_offered"
                     android:layout_width="wrap_content"

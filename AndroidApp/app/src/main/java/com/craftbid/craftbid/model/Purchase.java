@@ -1,6 +1,8 @@
 package com.craftbid.craftbid.model;
 
-public class Purchase {
+import java.io.Serializable;
+
+public class Purchase implements Serializable {
     private int id, done_on;
     private String done_by,date;
 

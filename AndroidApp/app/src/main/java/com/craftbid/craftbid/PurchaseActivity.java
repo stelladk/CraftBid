@@ -18,19 +18,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.craftbid.craftbid.model.Listing;
+import com.craftbid.craftbid.model.Purchase;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class PurchaseActivity extends AppCompatActivity {
     private int listing_id;
     private TextView purchase_location;
+    private EditText address, address_number, address_TK;
     private Listing listing;
     private Dialog dialog;
+    private RadioButton courier, handTohand;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,15 @@ public class PurchaseActivity extends AppCompatActivity {
             listing_id = b.getInt("listing_id");
         }
         purchase_location = findViewById(R.id.purchase_location);
+        address = findViewById(R.id.purchase_address_edit);
+        address_number = findViewById(R.id.purchase_number_edit);
+        address_TK = findViewById(R.id.purchase_TK_edit);
+        courier = findViewById(R.id.delivery_courier);
+        handTohand = findViewById(R.id.delivery_handToHand);
+
+        addFocusListeners(address);
+        addFocusListeners(address_number);
+        addFocusListeners(address_TK);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -51,6 +64,14 @@ public class PurchaseActivity extends AppCompatActivity {
 
         new LoadPurchaseScreenTask().execute();
         dialog = new Dialog(this);
+    }
+
+    /** Adds focus listener in input field to check right radiobutton*/
+    private void addFocusListeners(EditText field) {
+        field.setOnFocusChangeListener((v, hasFocus) -> {
+            handTohand.setChecked(!hasFocus);
+            courier.setChecked(hasFocus);
+        });
     }
 
     /** Disables unavailable delivery option if any*/
@@ -113,12 +134,40 @@ public class PurchaseActivity extends AppCompatActivity {
         startActivity(notifications);
     }
 
-    /** Gets contact info from server and opens popup after server's response*/
+    /** For courier delivery, connects to server to store purchase in DB*/
+    public void submitPurchase(View view) {
+        courier.setChecked(true);
+        // TODO maybe popup for confirmation
+        new PurchaseTask().execute(true);
+    }
+
+    /** Opens popup with creator's contact info */
     public void contactCreator(View view) {
+        handTohand.setChecked(true);
+        removeFocus();
         dialog.show();
     }
     public void closePopup(View view) {
         dialog.dismiss();
+    }
+
+
+    /** Set radiobutton checked based on user's click on screen */
+    public void setChecked(View view) {
+        if(view.getId() == R.id.purchase_layout_courier) {
+            courier.setChecked(true);
+        }
+        else {
+            handTohand.setChecked(true);
+            removeFocus();
+        }
+    }
+
+    /** Removes focus from input fields*/
+    private void removeFocus() {
+        address_number.clearFocus();
+        address.clearFocus();
+        address_TK.clearFocus();
     }
 
     /** Loads delivery options and location on screen creation.
@@ -198,7 +247,7 @@ public class PurchaseActivity extends AppCompatActivity {
                 ((TextView)dialog.findViewById(R.id.contact_email)).setText(email);
                 dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
                 dialog.findViewById(R.id.purchase_okay).setOnClickListener(v -> {
-                    // TODO new PurchaseTask().execute();
+                    new PurchaseTask().execute(false);
                 });
             }
         }
@@ -211,6 +260,72 @@ public class PurchaseActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    /** Connects to server to store Purchase in DB.
+     * Boolean parameter is needed to determine whether user's input is needed*/
+    private class PurchaseTask extends AsyncTask<Boolean, Void, Void> {
+        private ProgressDialog progressDialog;
+        private Socket socket = null;
+        private ObjectOutputStream out = null;
+        private ObjectInputStream in = null;
+        private String resultmsg = "Η παραγγελία σας καταχωρήθηκε.";
+        private boolean is_successful = true;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(PurchaseActivity.this,
+                    "Δημιουργία παραγγελίας...",
+                    "Σύνδεση με τον διακομιστή...");
+        }
+
+        @Override
+        protected Void doInBackground(Boolean... params) {
+            try {
+                if(params[0]) {
+                    CharSequence addr_num = address_number.getText();
+                    CharSequence addr_TK = address_TK.getText();
+                    if((address.getText()==null || addr_num==null || addr_TK==null) ||
+                            (addr_num.length()==0 || addr_TK.length()==0) ||
+                            (Integer.parseInt(addr_num.toString())==0 || Integer.parseInt(addr_TK.toString())==0)) {
+                        is_successful = false;
+                        resultmsg = "Παρακαλώ συμπληρώστε ορθά όλα τα στοιχεία.";
+                        return null;
+                    }
+                }
+                socket = new Socket(NetInfo.getServer_ip(), NetInfo.getServer_port());
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("CREATE_PURCHASE");
+                out.writeObject(new Purchase(-1, MainActivity.username, listing_id, new Date(System.currentTimeMillis()).toString()));
+                String response = (String) in.readObject();
+                if(!response.equals("PURCHASE ADDED")) {
+                    is_successful = false;
+                    resultmsg = "Προέκυψε σφάλμα.";
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+                is_successful = false;
+                resultmsg = "Προέκυψε σφάλμα.";
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            progressDialog.dismiss();
+            try {
+                if(socket!=null) socket.close();
+                if(out!=null) out.close();
+                if(in!=null) in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Snackbar.make(getWindow().getDecorView().getRootView(), resultmsg, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+
+            if(is_successful) goBack();
         }
     }
 }
