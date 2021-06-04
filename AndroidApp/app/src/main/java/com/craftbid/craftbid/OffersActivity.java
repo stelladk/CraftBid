@@ -42,6 +42,7 @@ public class OffersActivity extends AppCompatActivity {
     private TextView empty_message, listing_details, listing_location, listing_points;
     private ImageView listing_photo;
     private Dialog dialog;
+    private boolean after_accept =  false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +109,7 @@ public class OffersActivity extends AppCompatActivity {
         dialog.show();
         dialog.findViewById(R.id.yes_btn).setOnClickListener(v -> {
             new AcceptOfferTask().execute(offer);
+            dialog.dismiss();
         });
         dialog.findViewById(R.id.no_btn).setOnClickListener(v -> {
             dialog.dismiss();
@@ -220,6 +222,7 @@ public class OffersActivity extends AppCompatActivity {
         Socket socket = null;
         ObjectOutputStream out = null;
         ObjectInputStream in = null;
+        private Offer offer;
 
         @Override
         protected void onPreExecute() {
@@ -230,13 +233,14 @@ public class OffersActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Offer... params) {
+            offer = params[0];
             try {
                 socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
                 in = new ObjectInputStream(socket.getInputStream());
                 out = new ObjectOutputStream(socket.getOutputStream());
                 out.writeObject("SEND_NOTIFICATION");
 
-                out.writeObject(new Notification(params[0].getSubmitted_for(), params[0].getSubmitted_by(), params[0].getPrice()));
+                out.writeObject(new Notification(offer.getSubmitted_for(), offer.getSubmitted_by(), offer.getPrice()));
             }catch(IOException e) {
                 e.printStackTrace();
             }
@@ -252,9 +256,11 @@ public class OffersActivity extends AppCompatActivity {
             }catch(IOException e) {
                 e.printStackTrace();
             }
+            // send decline_offer to remove offer from DB
+            after_accept = true;
+            new DeclineOfferTask().execute(offer);
+
             progressDialog.dismiss();
-            adapter.notifyDataSetChanged();
-            goBack();
         }
     }
 
@@ -267,9 +273,11 @@ public class OffersActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            progressDialog = ProgressDialog.show(OffersActivity.this,
-                    "Declining offer...",
-                    "Connecting to server...");
+            if(!after_accept) {
+                progressDialog = ProgressDialog.show(OffersActivity.this,
+                        "Declining offer...",
+                        "Connecting to server...");
+            }
         }
 
         @Override
@@ -298,10 +306,13 @@ public class OffersActivity extends AppCompatActivity {
             }catch(IOException e) {
                 e.printStackTrace();
             }
-            progressDialog.dismiss();
-            adapter.notifyDataSetChanged();
+            if(!after_accept) {
+                progressDialog.dismiss();
+            }
             dialog.dismiss();
+            adapter.notifyDataSetChanged();
             toggleEmptyMessage();
+            after_accept = false;
         }
     }
 }
