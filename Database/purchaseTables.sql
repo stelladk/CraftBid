@@ -11,3 +11,6 @@ CREATE TABLE Offer (
 	submitted_by VARCHAR(20) FOREIGN KEY REFERENCES UserInfo(username) NOT NULL,
 	submitted_for INT FOREIGN KEY REFERENCES Listing(id) NOT NULL
 );
+
+ALTER TABLE Purchase
+DROP CONSTRAINT FK__Purchase__done_o__628FA481;
