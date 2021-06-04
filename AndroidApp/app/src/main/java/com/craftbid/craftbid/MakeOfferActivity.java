@@ -104,11 +104,11 @@ public class MakeOfferActivity extends AppCompatActivity {
         if(listing.getDelivery().toLowerCase().contains("shipping")){
             deliveryText = "ταχυδρομικά";
             if(listing.getDelivery().toLowerCase().contains("hand-in-hand")){
-                findViewById(R.id.handin_check).setSelected(true);
+//                findViewById(R.id.handin_check).setSelected(true);
                 deliveryText += ", χέρι-με-χέρι";
             }
         }else if(listing.getDelivery().toLowerCase().contains("hand-in-hand")){
-            findViewById(R.id.handin_check).setSelected(true);
+//            findViewById(R.id.handin_check).setSelected(true);
             deliveryText += "χέρι-με-χέρι";
         }
         delivery.setText(deliveryText);
@@ -134,13 +134,14 @@ public class MakeOfferActivity extends AppCompatActivity {
         Socket socket = null;
         ObjectOutputStream out = null;
         ObjectInputStream in = null;
+        boolean success = true;
 
         @Override
         protected Void doInBackground(Void... voids) {
             EditText offer_edit = findViewById(R.id.offer);
             float price = Float.parseFloat((offer_edit).getText().toString());
             if(price <= listing.getMin_price()){
-                offer_edit.setError("Η προσφορά πρέπει να ξεπερνάει την επικρατούσα!");
+                success = false;
                 return null;
             }
             //connect to server to load listing info
@@ -152,6 +153,7 @@ public class MakeOfferActivity extends AppCompatActivity {
                 //Create Offer object
                 Offer bid = new Offer(-1, listing.getId(), MainActivity.username, price);
                 out.writeObject(bid);
+                success = true;
             }catch(IOException e) {
                 e.printStackTrace();
             }
@@ -177,7 +179,12 @@ public class MakeOfferActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            goBack();
+            if(success){
+                goBack();
+            }else{
+                EditText offer_edit = findViewById(R.id.offer);
+                offer_edit.setError("Η προσφορά πρέπει να ξεπερνάει την επικρατούσα!");
+            }
         }
     }
 }

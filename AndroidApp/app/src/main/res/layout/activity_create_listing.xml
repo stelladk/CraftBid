@@ -47,11 +47,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
-        android:text="@string/title"
         android:textSize="25sp"
         android:textColor="?android:attr/textColor"
         android:visibility="gone"/>
 
+    <TextView
+        android:id="@+id/init_price_noedit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:textSize="25sp"
+        android:textColor="?android:attr/textColor"
+        android:visibility="gone"/>
     <EditText
         android:id="@+id/init_price_edit"
         android:layout_width="match_parent"
@@ -111,7 +118,7 @@
             android:hint="@string/one"
             android:textSize="20sp"
             android:textColor="?android:attr/textColor"
-            android:inputType="textEmailAddress"
+            android:inputType="number"
             android:importantForAutofill="no" />
     </LinearLayout>
 

@@ -77,9 +77,13 @@ public class EditListingActivity extends CreateListingActivity implements View.O
         title_noedit.setVisibility(View.VISIBLE);
 
         //Show minimum price if there is one
-        if(listing.getMin_price() != 0F) {
-            ((EditText) findViewById(R.id.init_price_edit)).setText(String.format("%s", listing.getMin_price()));
-        }
+        findViewById(R.id.init_price_edit).setVisibility(View.GONE);
+        TextView init_price_noedit = findViewById(R.id.init_price_noedit);
+        init_price_noedit.setText(String.format("%s", listing.getMin_price()));
+        init_price_noedit.setVisibility(View.VISIBLE);
+//        if(listing.getMin_price() != 0F) {
+//            ((EditText) findViewById(R.id.init_price_edit)).setText(String.format("%s", listing.getMin_price()));
+//        }
 
         //Set Quantity
         ((EditText)findViewById(R.id.quantity_edit)).setText(listing.getQuantity()+"");
@@ -119,47 +123,82 @@ public class EditListingActivity extends CreateListingActivity implements View.O
 
     @Override
     public void onClick(View v) {
-        new EditListingTask().execute();
+        String location = ((Spinner)findViewById(R.id.location_spinner)).getSelectedItem().toString();
+        String category = ((Spinner)findViewById(R.id.listing_category)).getSelectedItem().toString();
+        EditText quantity = findViewById(R.id.quantity_edit);
+        String points = ((EditText)findViewById(R.id.points_edit)).getText().toString().trim();
+        //TODO return to greek when we change database
+        String delivery = ((CheckBox)findViewById(R.id.shipment_check)).isChecked()? "shipping, " : "";
+        delivery += ((CheckBox)findViewById(R.id.handin_check)).isChecked()? "hand-in-hand" : "";
+        EditText description = findViewById(R.id.description_edit);
+
+        //Check for errors
+        if(quantity.getText().toString().trim().equals("") || quantity.getText().toString().equals("0")){
+            quantity.setError("Η ποσότητα δε μπορεί να είναι μηδέν");
+            return;
+        }
+        if(description.getText().toString().trim().equals("")){
+            description.setError("Η περιγραφή είναι υποχρεωτική");
+            return;
+        }
+        if(delivery.equals("")){
+            Snackbar.make( getWindow().getDecorView().getRootView(), "Επιλέξτε τουλάχιστον ένα τρόπο παράδοσης!", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            return;
+        }
+
+        //Check for changes
+        if(!location.equals(listing.getLocation())){
+            new EditListingTask().execute("is_located", location);
+        }
+        if(!category.equals(listing.getCategory())){
+            new EditListingTask().execute("category", category);
+        }
+        if(!delivery.equals(listing.getDelivery())){
+            new EditListingTask().execute("delivery", delivery);
+        }
+        if(!description.getText().toString().trim().equals(listing.getDelivery().trim())){
+            new EditListingTask().execute("description", description.getText().toString().trim());
+        }
+        if(Integer.parseInt(quantity.getText().toString()) != listing.getQuantity()){
+            new EditListingTask().execute("quantity", quantity.getText().toString().trim());
+        }
+        if(Integer.parseInt(points) != listing.getReward_points()){
+            new EditListingTask().execute("reward_points", points);
+        }
     }
 
-    private class EditListingTask extends AsyncTask<Void, Void, Void>{
+    private class EditListingTask extends AsyncTask<String, Void, Void>{
         ProgressDialog progressDialog;
         Socket socket;
         ObjectOutputStream out;
         ObjectInputStream in;
+        String field, value;
+        String reply;
+        boolean success = false;
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected Void doInBackground(String... params) {
             try {
-
-                //TODO change delivery not available
-                //TODO make their views not editable
+                field = params[0];
+                value = params[1];
 
                 //Request change of quantity
                 socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
                 in = new ObjectInputStream(socket.getInputStream());
                 out = new ObjectOutputStream(socket.getOutputStream());
-                EditText quantity = findViewById(R.id.quantity_edit);
-                requestChange(out, "quantity", quantity.getText().toString());
-                close();
+                out.writeObject("UPDATE_LISTING");
+                out.writeObject(field);
+                out.writeObject(value);
+                out.writeObject(listing_id);
+                out.flush();
 
-                //Request change of points
-                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
-                in = new ObjectInputStream(socket.getInputStream());
-                out = new ObjectOutputStream(socket.getOutputStream());
-                EditText points = findViewById(R.id.points_edit);
-                requestChange(out, "reward_points", points.getText().toString());
-                close();
+                reply = (String)in.readObject();
+                if(reply.equals("LISTING UPDATED")){
+                    success = true;
+                }
 
-                //Request change of description
-                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
-                in = new ObjectInputStream(socket.getInputStream());
-                out = new ObjectOutputStream(socket.getOutputStream());
-                EditText desc = findViewById(R.id.description_edit);
-                requestChange(out, "description", desc.getText().toString());
-                close();
-
-            }catch(IOException e) {
+            }catch(IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
             return null;
@@ -176,15 +215,12 @@ public class EditListingActivity extends CreateListingActivity implements View.O
         protected void onPostExecute(Void aVoid) {
             progressDialog.dismiss();
             close();
-            goBack();
-        }
-
-        private void requestChange(ObjectOutputStream out, String field, String value) throws IOException {
-            out.writeObject("UPDATE_LISTING");
-            out.writeObject(field);
-            out.writeObject(value);
-            out.writeObject(listing_id);
-            out.flush();
+            if(success){
+                goBack();
+            }else{
+                Snackbar.make( getWindow().getDecorView().getRootView(), "Το πεδίο "+field+" δεν ανανεώθηκε!", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
         }
 
         private void close(){

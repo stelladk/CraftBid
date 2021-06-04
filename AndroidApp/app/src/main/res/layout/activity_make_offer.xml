@@ -222,7 +222,7 @@
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:hint="@string/example_bid"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:importantForAutofill="no" />
                     <TextView
                         android:id="@+id/note"
