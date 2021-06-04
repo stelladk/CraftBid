@@ -28,15 +28,14 @@ import java.util.List;
 
 public class RewardsCreatorActivity extends AppCompatActivity {
     Dialog dialog;
-    private ArrayList<Reward> rewards;
+    private ArrayList<Reward> rewards = new ArrayList<>();
+    private RecyclerView recycler;
     private RewardsRecyclerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rewards);
-
-        new ViewRewardsTask().execute();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -48,23 +47,14 @@ public class RewardsCreatorActivity extends AppCompatActivity {
 
         TextView title = findViewById(R.id.rewards_title);
         title.setText(getResources().getString(R.string.my_rewards));
-//        TextView creator_username = findViewById(R.id.creator_username);
         TextView claimed_points = findViewById(R.id.reward_points);
         claimed_points.setText("");
 
-        byte[] test = new byte[2];
-        List<Reward> rewards = new ArrayList<>();
-//        rewards.add(new Reward(0, 40, "Ξύλινη καρέκλα",  "chair3", test));
-//        rewards.add(new Reward(1, 70, "Ξύλινη καρέκλα x2", "chair3", test));
-//        rewards.add(new Reward(2, 120, "Ξύλινη καρέκλα x4", "chair3",test));
-//        rewards.add(new Reward(3, 140, "Ξύλινη καρέκλα x5", "chair3",test));
-
-        RecyclerView recycler = findViewById(R.id.rewards_recyclerview);
+        recycler = findViewById(R.id.rewards_recyclerview);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recycler.setLayoutManager(manager);
-        adapter = new RewardsRecyclerAdapter(rewards, this);
-        adapter.setPrivateView(true);
-        recycler.setAdapter(adapter);
+
+        new ViewRewardsTask().execute();
 
         dialog = new Dialog(this);
     }
@@ -141,7 +131,6 @@ public class RewardsCreatorActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            progressDialog.dismiss();
             try{
                 out.close();
                 in.close();
@@ -150,8 +139,12 @@ public class RewardsCreatorActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             if(rewards!=null){
-                adapter.notifyDataSetChanged();
+                adapter = new RewardsRecyclerAdapter(rewards, RewardsCreatorActivity.this);
+                adapter.setPrivateView(true);
+                recycler.setAdapter(adapter);
+                progressDialog.dismiss();
             }
+
         }
     }
 }

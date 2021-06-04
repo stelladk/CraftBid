@@ -28,8 +28,9 @@ import java.util.List;
 
 public class RewardsCustomerActivity extends AppCompatActivity {
     private String username;
-    private ArrayList<Reward> rewards;
+    private ArrayList<Reward> rewards = new ArrayList<>();
     private int reward_points;
+    private RecyclerView recycler;
     private RewardsRecyclerAdapter adapter;
     Dialog dialog;
 
@@ -43,8 +44,6 @@ public class RewardsCustomerActivity extends AppCompatActivity {
             username = bundle.getString("username");
         }
 
-        new ViewRewardsTask().execute();
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Rewards");
@@ -56,18 +55,11 @@ public class RewardsCustomerActivity extends AppCompatActivity {
         TextView creator = findViewById(R.id.creator_username);
         creator.setText(username);
 
-        byte[] test = new byte[2];
-        rewards = new ArrayList<>();
-//        rewards.add(new Reward(0, 40, "Ξύλινη καρέκλα",  "chair3", test));
-//        rewards.add(new Reward(1, 70, "Ξύλινη καρέκλα x2", "chair3", test));
-//        rewards.add(new Reward(2, 120, "Ξύλινη καρέκλα x4", "chair3", test));
-//        rewards.add(new Reward(3, 140, "Ξύλινη καρέκλα x5", "chair3",  test));
-
-        RecyclerView recycler = findViewById(R.id.rewards_recyclerview);
+        recycler = findViewById(R.id.rewards_recyclerview);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recycler.setLayoutManager(manager);
-        adapter = new RewardsRecyclerAdapter(rewards, this);
-        recycler.setAdapter(adapter);
+
+        new ViewRewardsTask().execute();
 
         dialog = new Dialog(this);
     }
@@ -164,7 +156,8 @@ public class RewardsCustomerActivity extends AppCompatActivity {
             if(rewards!=null){
                 TextView claimed_points = findViewById(R.id.reward_points);
                 claimed_points.setText(getResources().getString(R.string.num_claimed_reward_points, reward_points));
-                adapter.notifyDataSetChanged();
+                adapter = new RewardsRecyclerAdapter(rewards, RewardsCustomerActivity.this);
+                recycler.setAdapter(adapter);
             }
         }
     }
