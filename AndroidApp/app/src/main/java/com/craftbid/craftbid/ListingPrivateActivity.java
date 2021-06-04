@@ -77,12 +77,13 @@ public class ListingPrivateActivity extends ListingPublicActivity {
         startActivity(back);
     }
 
+    @Override
     public void openProfile(View view) {
-        Intent profile = new Intent(ListingPrivateActivity.this, CreatorProfilePrivate.class);
-        profile.putExtra("username", MainActivity.username); //private listing only viewed by its creator
-        profile.putExtra("previous", String.valueOf(listing_id));
-        //profile.putExtra("previous", listing_id); //Send listing id
-        startActivity(profile);
+//        Intent profile = new Intent(ListingPrivateActivity.this, CreatorProfilePrivate.class);
+//        profile.putExtra("username", MainActivity.username); //private listing only viewed by its creator
+//        profile.putExtra("previous", String.valueOf(listing_id));
+//        //profile.putExtra("previous", listing_id); //Send listing id
+//        startActivity(profile);
     }
 
     public void seeMore(View view){
