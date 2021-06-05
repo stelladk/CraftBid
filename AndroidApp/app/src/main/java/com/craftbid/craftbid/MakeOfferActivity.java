@@ -78,9 +78,12 @@ public class MakeOfferActivity extends AppCompatActivity {
         }
     }
     private void goBack() {
+        this.finish();
+        /*
         Intent listing = new Intent(MakeOfferActivity.this, ListingPublicActivity.class);
         listing.putExtra("listing_id", listing_id);
         startActivity(listing);
+        */
     }
 
     private void loadListing(){

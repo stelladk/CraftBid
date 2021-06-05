@@ -69,12 +69,15 @@ public class ListingPrivateActivity extends ListingPublicActivity {
         }
     }
     private void goBack() {
+        /*
         Intent back;
         if(previous.equals("@main"))
             back = new Intent(ListingPrivateActivity.this, MainActivity.class);
         else
             back = new Intent(ListingPrivateActivity.this, CreatorProfilePrivate.class);
         startActivity(back);
+        */
+        this.finish();
     }
 
     @Override

@@ -84,8 +84,11 @@ public class RewardsCreatorActivity extends AppCompatActivity {
     }
 
     private void goBack() {
+        this.finish();
+        /*
         Intent back = new Intent(RewardsCreatorActivity.this, CreatorProfilePrivate.class);
         startActivity(back);
+         */
     }
 
     //Temporary

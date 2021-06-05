@@ -58,8 +58,9 @@ public class NotificationsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     private void goBack() {
-        Intent main = new Intent(NotificationsActivity.this, MainActivity.class);
-        startActivity(main);
+        this.finish();
+        /*Intent main = new Intent(NotificationsActivity.this, MainActivity.class);
+        startActivity(main);*/
     }
 
     /** Shows message if notification list is empty */

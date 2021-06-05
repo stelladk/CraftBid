@@ -79,6 +79,7 @@ public class ListingPublicActivity extends AppCompatActivity {
         }
     }
     private void goBack() {
+        /*
         Intent back;
         if(previous.equals(MainActivity.MAIN) || previous.equals(MainActivity.GUEST))
             back = new Intent(ListingPublicActivity.this, MainActivity.class);
@@ -87,6 +88,8 @@ public class ListingPublicActivity extends AppCompatActivity {
             back.putExtra("username", previous);
         }
         startActivity(back);
+         */
+        this.finish();
     }
 
     public void makeOffer(View view) {

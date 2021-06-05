@@ -68,9 +68,12 @@ public class EvaluationActivity extends AppCompatActivity {
         }
     }
     private void goBack() {
+        /*
         Intent profile = new Intent(EvaluationActivity.this, CreatorProfile.class);
         profile.putExtra("username", creatorUsername);
         startActivity(profile);
+        */
+        this.finish();
     }
 
     public void submitEvaluation(View view) {

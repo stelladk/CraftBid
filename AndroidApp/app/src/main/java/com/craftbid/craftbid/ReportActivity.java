@@ -72,9 +72,12 @@ public class ReportActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     private void goBack() {
+        /*
         Intent profile = new Intent(ReportActivity.this, CreatorProfile.class);
         profile.putExtra("username", creatorUsername);
         startActivity(profile);
+        */
+        this.finish();
     }
 
     public void submitReport(View view){

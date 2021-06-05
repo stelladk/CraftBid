@@ -57,8 +57,11 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
 
     /** Go back to login screen */
     public void goBack(View view) {
+        this.finish();
+        /*
         Intent login = new Intent(SignupCreatorActivity.this, LoginActivity.class);
         startActivity(login);
+         */
     }
 
     /** When signup button is clicked */

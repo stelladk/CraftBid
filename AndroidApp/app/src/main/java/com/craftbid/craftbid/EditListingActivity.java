@@ -115,10 +115,12 @@ public class EditListingActivity extends CreateListingActivity implements View.O
     }
 
     private void goBack() {
-        Log.d("EDIT", "openListing: OPENED");
+        /*
         Intent listing = new Intent(EditListingActivity.this, ListingPrivateActivity.class);
         listing.putExtra("listing_id", listing_id);
         startActivity(listing);
+         */
+        this.finish();
     }
 
     @Override

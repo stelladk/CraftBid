@@ -72,9 +72,6 @@ public class CreateListingActivity extends AppCompatActivity {
 
         //Thumbnails RecyclerView
         collection = new ArrayList<>();
-//        collection.add("chair1");
-//        collection.add("chair2");
-//        collection.add("chair3");
 
         RecyclerView recycler = findViewById(R.id.collection_recyclerview);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -96,8 +93,11 @@ public class CreateListingActivity extends AppCompatActivity {
     }
 
     private void goBack() {
+        /*
         Intent creator = new Intent(CreateListingActivity.this, CreatorProfilePrivate.class);
         startActivity(creator);
+         */
+        this.finish();
     }
 
     //Temporary
