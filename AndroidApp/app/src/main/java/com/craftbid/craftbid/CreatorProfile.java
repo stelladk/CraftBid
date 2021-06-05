@@ -126,6 +126,8 @@ public class CreatorProfile extends AppCompatActivity {
         }
     }
     private void goBack() {
+        this.finish();
+        /*
         Intent back;
         if(previous.equals(MainActivity.MAIN)){
             back = new Intent(CreatorProfile.this, MainActivity.class);
@@ -134,6 +136,7 @@ public class CreatorProfile extends AppCompatActivity {
             back.putExtra("listing_id", previous); //Send listing id
         }
         startActivity(back);
+         */
     }
 
     /** Open page with rewards as viewed by the customers */
@@ -145,7 +148,7 @@ public class CreatorProfile extends AppCompatActivity {
 
     /** Open the profile of a user from their evaluation */
     public void openProfile(String username) {
-        //TODO check if he is a creator
+        //TODO check if he is a creator (creators can add evaluations too)
         Intent profile = new Intent(CreatorProfile.this, CustomerProfile.class);
         profile.putExtra("username", username); //Send username of evaluation
         startActivity(profile);

@@ -51,7 +51,11 @@ public class CustomerProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_profile);
 
-        username = MainActivity.username;
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null){
+            username = bundle.getString("username");
+            previous = bundle.getString("previous");
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -87,8 +91,11 @@ public class CustomerProfile extends AppCompatActivity {
     }
 
     private void goBack() {
+        this.finish();
+        /*
         Intent main = new Intent(CustomerProfile.this, MainActivity.class);
         startActivity(main);
+         */
     }
 
     public void toggleEditCustomer(View view){ }
