@@ -1,5 +1,4 @@
 -- after offer insertion update price of listing
-USE [craftbid]
 GO
 CREATE TRIGGER updatePriceTrigger on Offer
 AFTER INSERT AS BEGIN
@@ -11,7 +10,6 @@ END
 GO
 
 -- after offer deletion update price of listing with MAX price offered
-USE [craftbid]
 GO
 CREATE TRIGGER updatePriceDeletionTrigger on Offer
 AFTER DELETE AS BEGIN

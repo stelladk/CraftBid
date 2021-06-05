@@ -3,8 +3,6 @@ CREATE TABLE Evaluation (
 	submitted_by VARCHAR(20) FOREIGN KEY REFERENCES UserInfo(username) NOT NULL,
 	refers_to VARCHAR(20) FOREIGN KEY REFERENCES UserInfo(username) NOT NULL,
 	rating INT NOT NULL,
-	date DATE NOT NULL
+	date DATE NOT NULL,
+	comment VARCHAR(100)
 );
-
--- github issue related
-ALTER TABLE Evaluation ADD comment VARCHAR(100);

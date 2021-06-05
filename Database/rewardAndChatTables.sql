@@ -2,23 +2,7 @@ CREATE TABLE Reward (
 	id INT IDENTITY(1,1) PRIMARY KEY,
 	name VARCHAR(40) NOT NULL,
 	price_in_points INT NOT NULL,
-	photo VARCHAR(40) NOT NULL,
 	offered_by VARCHAR(20) FOREIGN KEY REFERENCES Creator(username) NOT NULL
-);
-
-CREATE TABLE Conversation (
-	id INT IDENTITY(1,1) PRIMARY KEY,
-	client VARCHAR(20) FOREIGN KEY REFERENCES UserInfo(username) NOT NULL,
-	creator VARCHAR(20) FOREIGN KEY REFERENCES Creator(username) NOT NULL,
-);
-
-CREATE TABLE Message (
-	id INT IDENTITY(1,1) PRIMARY KEY,
-	conversation INT FOREIGN KEY REFERENCES Conversation(id) NOT NULL,
-	sent_from VARCHAR(20) FOREIGN KEY REFERENCES UserInfo(username) NOT NULL,
-	time_sent TIME NOT NULL,
-	date_sent DATE NOT NULL,
-	text VARCHAR(MAX) NOT NULL
 );
 
 CREATE TABLE RewardPoint (
