@@ -1,14 +1,7 @@
 package com.craftbid.craftbid;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,15 +9,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.craftbid.craftbid.adapters.RewardsRecyclerAdapter;
 import com.craftbid.craftbid.model.Reward;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 
 public class RewardsCreatorActivity extends AppCompatActivity {
     Dialog dialog;
@@ -69,14 +68,15 @@ public class RewardsCreatorActivity extends AppCompatActivity {
         }
     }
 
-    public void removeReward(int id){
+    public void removeReward(int pos){
         dialog.setContentView(R.layout.popup_confirm);
         dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
         dialog.show();
 
         dialog.findViewById(R.id.yes_btn).setOnClickListener(v -> {
             // TODO proceed to removing the reward
-            Log.d("reward","reward removed");
+            dialog.dismiss();
+            new RemoveRewardsTask().execute(pos);
         });
     }
     public void closePopup(View view) {
@@ -147,6 +147,67 @@ public class RewardsCreatorActivity extends AppCompatActivity {
                 recycler.setAdapter(adapter);
                 progressDialog.dismiss();
             }
+
+        }
+    }
+
+    private class RemoveRewardsTask extends AsyncTask<Integer, Void, Void> {
+        ProgressDialog progressDialog;
+        Socket socket;
+        ObjectOutputStream out;
+        ObjectInputStream in;
+        int pos, id;
+        String response;
+        boolean success = false;
+
+        @Override
+        protected Void doInBackground(Integer... integers) {
+            try {
+                pos = integers[0];
+                id = rewards.get(pos).getId();
+
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("REMOVE_REWARD");
+                out.writeObject(id); //sent reward id
+                out.flush();
+
+                response = (String)in.readObject();
+                if(response.equals("REWARD REMOVED")){
+                    success = true;
+                }
+
+            }catch(IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(RewardsCreatorActivity.this,
+                    "Removing Reward...",
+                    "Connecting to server...");
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            try{
+                out.close();
+                in.close();
+                socket.close();
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
+            if(success){
+                rewards.remove(pos);
+                adapter.notifyDataSetChanged();
+            }else{
+                Snackbar.make( getWindow().getDecorView().getRootView(), "Το βραβείο δεν αφαιρέθηκε!", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+            progressDialog.dismiss();
 
         }
     }

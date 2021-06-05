@@ -76,7 +76,7 @@ public class CreateListingActivity extends AppCompatActivity {
         RecyclerView recycler = findViewById(R.id.collection_recyclerview);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recycler.setLayoutManager(manager);
-        collectionAdapter = new CollectionRecyclerAdapter(collection, this); //TODO show pictures correctly
+        collectionAdapter = new CollectionRecyclerAdapter(collection, this);
         recycler.setAdapter(collectionAdapter);
 
         dialog = new Dialog(this);

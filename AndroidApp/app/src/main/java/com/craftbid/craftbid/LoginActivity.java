@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Intent main = new Intent(LoginActivity.this, MainActivity.class);
         main.putExtra("username", username);
-        main.putExtra("creator", creator);
+        main.putExtra("creator", true); //added true to login as creator
         startActivity(main);
     }
 

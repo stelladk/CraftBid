@@ -106,7 +106,7 @@ public class RewardsRecyclerAdapter extends RecyclerView.Adapter<RewardsRecycler
             @Override
             public void onClick(View view) {
                 if(PRIVATE_VIEW){
-                    contextCreator.removeReward(rewards.get(i).getId());
+                    contextCreator.removeReward(i);
                 }else{
                     contextCustomer.openPurchase(rewards.get(i).getId());
                 }
