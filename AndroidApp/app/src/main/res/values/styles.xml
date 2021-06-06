@@ -3,7 +3,5 @@
 
     <style name="LoginButton" parent="Widget.AppCompat.Button">
         <item name="backgroundTint">@android:color/darker_gray</item>
-<!--        <item name="android:textColor">?attr/android:textColor</item>-->
-
     </style>
 </resources>

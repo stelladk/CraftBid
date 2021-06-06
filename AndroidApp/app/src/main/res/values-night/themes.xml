@@ -3,6 +3,7 @@
     <style name="Theme.CraftBid" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowAnimationStyle">@null</item>
         <item name="android:logo">@drawable/app_logo_dark</item>
+        <item name="android:fontFamily">@font/ubuntu</item>
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/petrolLight</item>
         <item name="colorPrimaryVariant">@color/petrolDark</item>
