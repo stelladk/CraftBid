@@ -145,9 +145,11 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
         @Override
         protected void onPostExecute(Void result) {
             try {
-                in.close();
-                out.close();
-                socket.close();
+                if(socket!=null) {
+                    in.close();
+                    out.close();
+                    socket.close();
+                }
             }catch(IOException e) {
                 e.printStackTrace();
             }
@@ -250,9 +252,11 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
         @Override
         protected void onPostExecute(Void result) {
             try {
-                in.close();
-                out.close();
-                socket.close();
+                if(socket!=null) {
+                    in.close();
+                    out.close();
+                    socket.close();
+                }
             }catch(IOException e) {
                 e.printStackTrace();
             }

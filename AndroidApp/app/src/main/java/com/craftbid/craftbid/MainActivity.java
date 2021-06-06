@@ -2,12 +2,9 @@ package com.craftbid.craftbid;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -17,29 +14,22 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.craftbid.craftbid.adapters.FeedRecyclerAdapter;
 import com.craftbid.craftbid.model.Thumbnail;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.Array;
-import java.net.Inet4Address;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
     private String search_text;
     private RecyclerView recycler;
     private FeedRecyclerAdapter adapter;
-    private ProgressBar progressBar;
     public static String username;
     public static boolean creator;
     public static final String GUEST = "@guest";
@@ -63,8 +52,6 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        progressBar = findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.VISIBLE);
         //get content from previous screen
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
@@ -84,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         manager.setOrientation(RecyclerView.VERTICAL);
         recycler.setLayoutManager(manager);
         new LoadMainScreenTask().execute(); //execute AsyncTask to get list of listings
-        progressBar.setVisibility(View.GONE);
     }
 
     /** Create options menu on app bar */
@@ -127,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
     /** Sort list of thumbnails by price, name or category */
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-        progressBar.setVisibility(View.VISIBLE);
         ArrayList<Thumbnail> sorted = new ArrayList<>(thumbnails);
         if(position!=0) {
             //sort items
@@ -148,7 +133,6 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         adapter = new FeedRecyclerAdapter(sorted, MainActivity.this);
         recycler.setAdapter(adapter);
         //adapter.notifyDataSetChanged();
-        progressBar.setVisibility(View.GONE);
     }
 
     @Override

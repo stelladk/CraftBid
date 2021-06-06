@@ -30,10 +30,6 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
 
     private List<Thumbnail> thumbnails;
 
-//    public FeedRecyclerAdapter(List<Thumbnail> thumbnails) {
-//        this.thumbnails = thumbnails;
-//    }
-
     private MainActivity context = null;
     private CreatorProfile context2 = null;
     public FeedRecyclerAdapter(List<Thumbnail> thumbnails, MainActivity context) {
@@ -55,36 +51,11 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
-        if(position == thumbnails.size()) {
-            if ((context != null && context.getThumbnails().size() > thumbnails.size()) ||
-                    (context2!=null && context2.getThumbnails().size() > thumbnails.size())) {
-                holder.image.setBackgroundResource(0);
-                holder.title.setText("Δείτε Περισσότερα");
-                holder.category.setText("");
-                holder.description.setText("");
-                holder.price.setText("");
-                holder.plus_sign.setVisibility(View.VISIBLE);
-                holder.plus_sign.setOnClickListener(v -> {
-                    //TODO if (context != null) context.seeMore();
-                    //if(context2!=null) context2.seeMore();
-                });
-                return;
-            }else if ((context!=null && context.getThumbnails().size() == thumbnails.size() && holder.title.getText().equals("LASTELEMENTBUTTON") ||
-                        context2!=null && context2.getThumbnails().size() == thumbnails.size())/*position==context.getThumbnails().size()*/) {
-                holder.item.setVisibility(View.GONE);
-                return;
-            }
-            return;
-        }
-//        holder.image.setBackgroundResource(thumbnails.get(position).getThumbnail());
         holder.plus_sign.setVisibility(View.GONE);
         if(context != null){
-//            holder.image.setBackgroundResource(context.getDrawable(thumbnails.get(position).getThumbnail()));
             Drawable drawable = new BitmapDrawable(context.getResources(), BitmapFactory.decodeByteArray(thumbnails.get(position).getThumbnail(), 0, thumbnails.get(position).getThumbnail().length));
             holder.image.setBackground(drawable);
         }else if(context2!=null){
-//            holder.image.setBackgroundResource(context2.getDrawable(thumbnails.get(position).getThumbnail()));
             Drawable drawable = new BitmapDrawable(context2.getResources(), BitmapFactory.decodeByteArray(thumbnails.get(position).getThumbnail(), 0, thumbnails.get(position).getThumbnail().length));
             holder.image.setBackground(drawable);
         }else{

@@ -74,7 +74,6 @@ public class RewardsCreatorActivity extends AppCompatActivity {
         dialog.show();
 
         dialog.findViewById(R.id.yes_btn).setOnClickListener(v -> {
-            // TODO proceed to removing the reward
             dialog.dismiss();
             new RemoveRewardsTask().execute(pos);
         });

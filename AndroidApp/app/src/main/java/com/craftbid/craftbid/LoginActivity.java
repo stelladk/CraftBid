@@ -110,9 +110,11 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             progressDialog.dismiss();
             try {
-                socket.close();
-                out.close();
-                in.close();
+                if(socket!=null) {
+                    socket.close();
+                    out.close();
+                    in.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

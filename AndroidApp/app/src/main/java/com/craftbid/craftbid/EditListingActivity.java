@@ -129,7 +129,6 @@ public class EditListingActivity extends CreateListingActivity implements View.O
         String category = ((Spinner)findViewById(R.id.listing_category)).getSelectedItem().toString();
         EditText quantity = findViewById(R.id.quantity_edit);
         String points = ((EditText)findViewById(R.id.points_edit)).getText().toString().trim();
-        //TODO return to greek when we change database
         String delivery = ((CheckBox)findViewById(R.id.shipment_check)).isChecked()? "ταχυδρομικά, " : "";
         delivery += ((CheckBox)findViewById(R.id.handin_check)).isChecked()? "χέρι-με-χέρι" : "";
         EditText description = findViewById(R.id.description_edit);

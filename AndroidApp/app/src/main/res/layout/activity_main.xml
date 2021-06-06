@@ -1,108 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<!--    TODO remove progressbar-->
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="100dp"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <include layout="@layout/app_bar"/>
+
+    <TextView
+        android:id="@+id/list_title"
+        android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_centerInParent="true"
-        android:visibility="gone"/>
+        android:gravity="center_vertical|start"
+        android:layout_marginHorizontal="10dp"
+        android:text="@string/new_creations"
+        android:textStyle="bold"
+        android:textColor="?android:attr/textColor"
+        android:textSize="30sp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        tools:context=".MainActivity">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="20dp">
+        <ImageView
+            android:id="@+id/searchIcon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_search"
+            android:contentDescription="@string/search"/>
+        <EditText
+            android:id="@+id/searchBar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_gravity="center"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:gravity="center|start"
+            android:textAlignment="textStart"
+            android:hint="@string/search_here"
+            android:inputType="text"
+            android:importantForAutofill="no"
+            android:imeOptions="actionSearch"
+            android:background="@drawable/round_border" />
+    </LinearLayout>
 
-        <include layout="@layout/app_bar"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="10dp">
 
         <TextView
-            android:id="@+id/list_title"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:gravity="center_vertical|start"
-            android:layout_marginHorizontal="10dp"
-            android:text="@string/new_creations"
-            android:textStyle="bold"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center|end"
+            android:text="@string/sort"
             android:textColor="?android:attr/textColor"
-            android:textSize="30sp"/>
+            android:textSize="15sp"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginHorizontal="20dp">
-            <ImageView
-                android:id="@+id/searchIcon"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_search"
-                android:contentDescription="@string/search"/>
-            <EditText
-                android:id="@+id/searchBar"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_gravity="center"
-                android:paddingStart="10dp"
-                android:paddingLeft="10dp"
-                android:paddingEnd="0dp"
-                android:paddingRight="0dp"
-                android:gravity="center|start"
-                android:textAlignment="textStart"
-                android:hint="@string/search_here"
-                android:inputType="text"
-                android:importantForAutofill="no"
-                android:imeOptions="actionSearch"
-                android:background="@drawable/round_border" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginHorizontal="10dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:layout_gravity="center"
-                android:gravity="center|end"
-                android:text="@string/sort"
-                android:textColor="?android:attr/textColor"
-                android:textSize="15sp"/>
-
-            <Spinner
-                android:id="@+id/sort_spinner"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:textSize="20sp"
-                android:textColor="?android:attr/textColor"/>
-
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/feed_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="10dp"
-            android:layout_gravity="center_horizontal">
-
-        </androidx.recyclerview.widget.RecyclerView>
+        <Spinner
+            android:id="@+id/sort_spinner"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="?android:attr/textColor"/>
 
     </LinearLayout>
-</RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/feed_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="10dp"
+        android:layout_gravity="center_horizontal">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+</LinearLayout>
