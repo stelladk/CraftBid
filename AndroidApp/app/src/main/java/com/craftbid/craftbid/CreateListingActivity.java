@@ -252,7 +252,7 @@ public class CreateListingActivity extends AppCompatActivity {
             boolean shipment = ((CheckBox)findViewById(R.id.shipment_check)).isChecked();
             boolean handin = ((CheckBox)findViewById(R.id.handin_check)).isChecked();
             //TODO: change back to greek when we have the new database
-            String delivery = (shipment? "shipping":"") + ", " + (handin? "hand-in-hand":"");
+            String delivery = (shipment? "ταχυδρομικά":"") + ", " + (handin? "χέρι-με-χέρι":"");
 
             if(title.getText().toString().equals("")){
                 msg = "Συμπληρώστε τίτλο και περιγραφή!";
@@ -289,7 +289,6 @@ public class CreateListingActivity extends AppCompatActivity {
                     out.flush();
                 }
                 String response = (String)in.readObject();
-                //TODO check if listing name exists
                 if (response.equals("LISTING CREATION SUCCESSFUL")) {
                     success = true;
                 }

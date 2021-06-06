@@ -87,7 +87,6 @@ public class MakeOfferActivity extends AppCompatActivity {
     }
 
     private void loadListing(){
-//        TextView name = findViewById(R.id.listing_name);
         toolbar.setTitle(listing.getName());
         Button creator_btn = findViewById(R.id.creator_btn);
         creator_btn.setText(listing.getPublished_by());
@@ -99,22 +98,10 @@ public class MakeOfferActivity extends AppCompatActivity {
         value.setText(String.format("%d", listing.getReward_points()));
         TextView price = findViewById(R.id.price);
         price.setText(String.format("%s", listing.getMin_price()));
-        TextView delivery = findViewById(R.id.delivery);
         //Set delivery methods
-        String deliveryText = "";
-        //TODO return to greek when we change database
-        //delivery.setText(listing.getDelivery());
-        if(listing.getDelivery().toLowerCase().contains("shipping")){
-            deliveryText = "ταχυδρομικά";
-            if(listing.getDelivery().toLowerCase().contains("hand-in-hand")){
-//                findViewById(R.id.handin_check).setSelected(true);
-                deliveryText += ", χέρι-με-χέρι";
-            }
-        }else if(listing.getDelivery().toLowerCase().contains("hand-in-hand")){
-//            findViewById(R.id.handin_check).setSelected(true);
-            deliveryText += "χέρι-με-χέρι";
-        }
-        delivery.setText(deliveryText);
+        TextView delivery = findViewById(R.id.delivery);
+        delivery.setText(listing.getDelivery());
+
         if(listing_photos!=null && listing_photos.size()>0){
             ImageView photo = findViewById(R.id.listing_photo);
             Bitmap thumbnail = BitmapFactory.decodeByteArray(listing_photos.get(0),0, listing_photos.get(0).length);

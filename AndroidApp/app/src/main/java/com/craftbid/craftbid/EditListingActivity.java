@@ -89,10 +89,10 @@ public class EditListingActivity extends CreateListingActivity implements View.O
         ((EditText)findViewById(R.id.quantity_edit)).setText(listing.getQuantity()+"");
 
         //Set delivery methods
-        if(listing.getDelivery().toLowerCase().contains("shipping")){
+        if(listing.getDelivery().toLowerCase().contains("ταχυδρομικά")){
             findViewById(R.id.shipment_check).setSelected(true);
         }
-        if(listing.getDelivery().toLowerCase().contains("hand-in-hand")){
+        if(listing.getDelivery().toLowerCase().contains("χέρι")){
             findViewById(R.id.handin_check).setSelected(true);
         }
 
@@ -130,8 +130,8 @@ public class EditListingActivity extends CreateListingActivity implements View.O
         EditText quantity = findViewById(R.id.quantity_edit);
         String points = ((EditText)findViewById(R.id.points_edit)).getText().toString().trim();
         //TODO return to greek when we change database
-        String delivery = ((CheckBox)findViewById(R.id.shipment_check)).isChecked()? "shipping, " : "";
-        delivery += ((CheckBox)findViewById(R.id.handin_check)).isChecked()? "hand-in-hand" : "";
+        String delivery = ((CheckBox)findViewById(R.id.shipment_check)).isChecked()? "ταχυδρομικά, " : "";
+        delivery += ((CheckBox)findViewById(R.id.handin_check)).isChecked()? "χέρι-με-χέρι" : "";
         EditText description = findViewById(R.id.description_edit);
 
         //Check for errors
@@ -165,7 +165,7 @@ public class EditListingActivity extends CreateListingActivity implements View.O
         if(Integer.parseInt(quantity.getText().toString()) != listing.getQuantity()){
             new EditListingTask().execute("quantity", quantity.getText().toString().trim());
         }
-        if(Integer.parseInt(points) != listing.getReward_points()){
+        if(!points.equals("") && Integer.parseInt(points) != listing.getReward_points()){
             new EditListingTask().execute("reward_points", points);
         }
     }
@@ -215,7 +215,7 @@ public class EditListingActivity extends CreateListingActivity implements View.O
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            progressDialog.dismiss();
+            progressDialog.dismiss(); //TODO check why this bullshit is not closing
             close();
             if(success){
                 goBack();
