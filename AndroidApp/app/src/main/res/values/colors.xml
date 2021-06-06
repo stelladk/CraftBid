@@ -13,8 +13,12 @@
     <color name="grey">#736C6C</color>
     <color name="light_blue_600">#FF039BE5</color>
     <color name="light_blue_900">#FF01579B</color>
+    <color name="light_blue_900_dark">#004B87</color>
     <color name="light_blue_A200">#FF40C4FF</color>
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#4D000000</color>
     <color name="white_overlay">#4DFFFFFF</color>
+    <color name="petrol">#1b4c5b</color>
+    <color name="petrolDark">#134C5E</color>
+    <color name="petrolLight">#5193a3</color>
 </resources>

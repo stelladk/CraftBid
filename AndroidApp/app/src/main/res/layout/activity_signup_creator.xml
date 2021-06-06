@@ -10,25 +10,24 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/app_title"
+    <ImageView
+        android:id="@+id/app_logo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="0dp"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerInside"
+        android:src="?android:attr/logo"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:text="@string/app_name"
-        android:textColor="?android:attr/textColor"
-        android:textSize="60sp"
-        android:textStyle="bold"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/activity_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/app_title"
+        app:layout_constraintTop_toBottomOf="@id/app_logo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="10dp"
@@ -79,6 +78,10 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:paddingRight="0dp"
+                android:paddingEnd="0dp"
                 android:textColor="?android:attr/textColor"
                 android:textSize="20sp"
                 android:inputType="text"
@@ -328,8 +331,7 @@
         android:text="@string/signup"
         android:textSize="20sp"
         android:textAllCaps="false"
-        android:textColor="@color/black"
-        app:backgroundTint="@android:color/darker_gray"
+        android:textColor="?attr/colorOnPrimary"
         app:layout_constraintTop_toBottomOf="@id/repeat_password"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

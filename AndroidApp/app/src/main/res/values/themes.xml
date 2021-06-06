@@ -2,9 +2,10 @@
     <!-- Base application theme. -->
     <style name="Theme.CraftBid" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:logo">@drawable/app_logo</item>
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/petrol</item>
+        <item name="colorPrimaryVariant">@color/petrolDark</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorAccent">@color/black</item>
         <!-- Secondary brand color. -->

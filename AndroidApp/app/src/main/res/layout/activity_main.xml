@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+<!--    TODO remove progressbar-->
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="100dp"
@@ -24,23 +25,6 @@
 
         <include layout="@layout/app_bar"/>
 
-    <!--    <com.google.android.material.appbar.AppBarLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:background="?attr/colorPrimary"-->
-    <!--        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">-->
-
-    <!--        <androidx.appcompat.widget.Toolbar-->
-    <!--            android:id="@+id/toolbar"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="?attr/actionBarSize"-->
-    <!--            android:background="?attr/colorPrimary"-->
-    <!--            app:titleTextColor="@color/black"-->
-    <!--            app:title="Feed"-->
-    <!--            app:layout_scrollFlags="scroll|enterAlwaysCollapsed" />-->
-
-    <!--    </com.google.android.material.appbar.AppBarLayout>-->
-
         <TextView
             android:id="@+id/list_title"
             android:layout_width="match_parent"
@@ -52,19 +36,6 @@
             android:textColor="?android:attr/textColor"
             android:textSize="30sp"/>
 
-    <!--    <androidx.appcompat.widget.SearchView-->
-    <!--        android:id="@+id/searchBar"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginHorizontal="10dp"-->
-    <!--        android:layout_gravity="center"-->
-    <!--        android:gravity="center"-->
-    <!--        android:textAlignment="center"-->
-    <!--        android:iconifiedByDefault="false"-->
-    <!--        android:focusable="true"-->
-    <!--        android:clickable="true"-->
-    <!--        android:onClick="focusSearchBar"-->
-    <!--        android:background="@drawable/border"/>-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
