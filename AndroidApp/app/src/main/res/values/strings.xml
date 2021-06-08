@@ -113,6 +113,7 @@
     <string name="contact_creator_warning">Χρησιμοποιήστε τα παρακάτω για να επικοινωνήσετε. Αφού πατήσετε ΟΚ θα μεταφερθείτε στην οθόνη ειδοποιήσεων, και <b>δεν θα ξαναέχετε πρόσβαση</b> στα στοιχεία αυτά.</string>
     <string name="okay">ΟΚ</string>
     <string name="refresh">Ανανέωση</string>
+    <string name="auction_icon_by_icons8">Auction icon by Icons8</string>
     <string-array name="sort_options">
         <item>Ημερομηνία</item>
         <item>Τιμή</item>

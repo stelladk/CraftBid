@@ -45,13 +45,12 @@ public class EvaluationsRecyclerAdapter extends RecyclerView.Adapter<Evaluations
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int i) {
-        //holder.image.setImageResource(R.drawable.karen);
-        //change image to user photo (not Karen)
+        //change image to user photo or placeholder
         if(evaluations.get(i).getThumbnail()!=null) {
             Drawable drawable = new BitmapDrawable(contextCreator.getResources(), BitmapFactory.decodeByteArray(evaluations.get(i).getThumbnail(), 0, evaluations.get(i).getThumbnail().length));
             holder.image.setBackground(drawable);
         }else {
-            holder.image.setImageResource(R.drawable.karen); //todo placeholder
+            holder.image.setImageResource(R.drawable.profile_placeholder);
         }
 
         holder.reviewer.setText(evaluations.get(i).getSubmitted_by());

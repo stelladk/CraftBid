@@ -9,15 +9,16 @@
     android:background="@drawable/border">
 
     <ImageView
-        android:id="@+id/user_profile"
+        android:id="@+id/offer_icon"
         android:layout_width="80dp"
         android:layout_height="80dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/offer_static"
+        android:src="@drawable/auction"
         android:scaleType="centerCrop"
-        android:contentDescription="@string/profile"/>
+        android:contentDescription="@string/auction_icon_by_icons8"/>
 
     <TextView
         android:id="@+id/username"
@@ -25,7 +26,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/offer_static"
-        app:layout_constraintStart_toEndOf="@id/user_profile"
+        app:layout_constraintStart_toEndOf="@id/offer_icon"
         android:layout_marginVertical="10dp"
         android:layout_marginStart="15dp"
         android:layout_marginLeft="15dp"
@@ -38,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/user_profile"
+        app:layout_constraintStart_toEndOf="@id/offer_icon"
         app:layout_constraintEnd_toStartOf="@id/offer"
         android:layout_marginBottom="10dp"
         android:paddingStart="5dp"

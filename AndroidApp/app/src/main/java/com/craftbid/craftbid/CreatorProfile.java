@@ -15,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -115,16 +116,28 @@ public class CreatorProfile extends AppCompatActivity {
 
     }
 
-    /** Go back to previous screen */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.refreshmenu, menu);
+        return true;
+    }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 goBack();
+                break;
+            case R.id.refresh:
+                finish();
+                startActivity(getIntent());
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
+        return true;
     }
+
     private void goBack() {
         this.finish();
         /*

@@ -41,7 +41,6 @@ public class OffersRecyclerAdapter extends RecyclerView.Adapter<OffersRecyclerAd
 
     @Override
     public void onBindViewHolder(@NonNull OffersRecyclerAdapter.ViewHolder holder, int i) {
-        holder.profile.setBackgroundResource(R.drawable.karen);
 
         holder.username.setText(offers.get(i).getSubmitted_by());
         holder.offer.setText(offers.get(i).getPrice()+"");
@@ -74,7 +73,6 @@ public class OffersRecyclerAdapter extends RecyclerView.Adapter<OffersRecyclerAd
 
     class ViewHolder extends RecyclerView.ViewHolder {
         public View itemView;
-        public ImageView profile;
         public TextView username, offer;
         public Button accept_btn, decline_btn;
 
@@ -82,7 +80,6 @@ public class OffersRecyclerAdapter extends RecyclerView.Adapter<OffersRecyclerAd
             super(itemView);
             this.itemView = itemView;
 
-            profile = itemView.findViewById(R.id.user_profile);
             username = itemView.findViewById(R.id.username);
             offer = itemView.findViewById(R.id.offer);
             accept_btn = itemView.findViewById(R.id.accept_btn);
