@@ -109,8 +109,12 @@
     <string name="example_bid">πχ. 50,30</string>
     <string name="notifications_empty">Δεν υπάρχουν ειδοποιήσεις.</string>
     <string name="contact_phone">Τηλέφωνο: </string>
-    <string name="contact_email">Email : </string>
+    <string name="contact_email">Email: </string>
+    <string name="shipping_address">Οδός: </string>
+    <string name="shipping__number">Αριθμός: </string>
+    <string name="shipping_TK">Ταχ. κώδικας: </string>
     <string name="contact_creator_warning">Χρησιμοποιήστε τα παρακάτω για να επικοινωνήσετε. Αφού πατήσετε ΟΚ θα μεταφερθείτε στην οθόνη ειδοποιήσεων, και <b>δεν θα ξαναέχετε πρόσβαση</b> στα στοιχεία αυτά.</string>
+    <string name="shipping_confirm">Παρακαλώ ελέγξτε τα στοιχεία σας. Αφού πατήσετε ΟΚ θα μεταφερθείτε στην οθόνη ειδοποιήσεων, και <b>δεν θα ξαναέχετε πρόσβαση</b> στα στοιχεία αυτά.</string>
     <string name="okay">ΟΚ</string>
     <string name="refresh">Ανανέωση</string>
     <string name="auction_icon_by_icons8">Auction icon by Icons8</string>

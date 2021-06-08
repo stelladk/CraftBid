@@ -2,7 +2,6 @@ package com.craftbid.craftbid;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -33,7 +32,7 @@ public class PurchaseActivity extends AppCompatActivity {
     private TextView purchase_location;
     private EditText address, address_number, address_TK;
     private Listing listing;
-    private Dialog dialog;
+    private Dialog dialog, dialog2;
     private RadioButton courier, handTohand;
 
     @Override
@@ -64,6 +63,7 @@ public class PurchaseActivity extends AppCompatActivity {
 
         new LoadPurchaseScreenTask().execute();
         dialog = new Dialog(this);
+        dialog2 = new Dialog(this);
     }
 
     /** Adds focus listener in input field to check right radiobutton*/
@@ -140,8 +140,24 @@ public class PurchaseActivity extends AppCompatActivity {
     /** For courier delivery, connects to server to store purchase in DB*/
     public void submitPurchase(View view) {
         courier.setChecked(true);
-        // TODO maybe popup for confirmation
-        new PurchaseTask().execute(true);
+        CharSequence addr_num = address_number.getText();
+        CharSequence addr_TK = address_TK.getText();
+        if((address.getText()==null || addr_num==null || addr_TK==null) ||
+                (addr_num.length()==0 || addr_TK.length()==0) ||
+                (Integer.parseInt(addr_num.toString())==0 || Integer.parseInt(addr_TK.toString())==0)) {
+            Snackbar.make(getWindow().getDecorView().getRootView(), "Παρακαλώ συμπληρώστε ορθά όλα τα στοιχεία.", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            return;
+        }
+        dialog2.setContentView(R.layout.popup_shipping);
+        ((TextView)dialog2.findViewById(R.id.shipping_address)).setText(address.getText());
+        ((TextView)dialog2.findViewById(R.id.shipping_number)).setText(addr_num);
+        ((TextView)dialog2.findViewById(R.id.shipping_TK)).setText(addr_TK);
+        dialog2.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
+        dialog2.findViewById(R.id.purchase_okay).setOnClickListener(v -> {
+            new PurchaseTask().execute();
+        });
+        dialog2.show();
     }
 
     /** Opens popup with creator's contact info */
@@ -151,7 +167,8 @@ public class PurchaseActivity extends AppCompatActivity {
         dialog.show();
     }
     public void closePopup(View view) {
-        dialog.dismiss();
+        if(dialog.isShowing()) dialog.dismiss();
+        else dialog2.dismiss();
     }
 
 
@@ -242,7 +259,7 @@ public class PurchaseActivity extends AppCompatActivity {
 
             // TODO same here
             // set hand-to-hand popup parameters
-            if(!listing.getDelivery().equals(getResources().getString(R.string.shipment))) {
+            if(!listing.getDelivery().equalsIgnoreCase(getResources().getString(R.string.shipment))) {
                 String email = basicInfo.get(1);
                 String phone = basicInfo.get(2);
                 dialog.setContentView(R.layout.popup_purchase);
@@ -250,7 +267,7 @@ public class PurchaseActivity extends AppCompatActivity {
                 ((TextView)dialog.findViewById(R.id.contact_email)).setText(email);
                 dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
                 dialog.findViewById(R.id.purchase_okay).setOnClickListener(v -> {
-                    new PurchaseTask().execute(false);
+                    new PurchaseTask().execute();
                 });
             }
         }
@@ -268,7 +285,7 @@ public class PurchaseActivity extends AppCompatActivity {
 
     /** Connects to server to store Purchase in DB.
      * Boolean parameter is needed to determine whether user's input is needed*/
-    private class PurchaseTask extends AsyncTask<Boolean, Void, Void> {
+    private class PurchaseTask extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
         private Socket socket = null;
         private ObjectOutputStream out = null;
@@ -284,19 +301,8 @@ public class PurchaseActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Void doInBackground(Boolean... params) {
+        protected Void doInBackground(Void... params) {
             try {
-                if(params[0]) {
-                    CharSequence addr_num = address_number.getText();
-                    CharSequence addr_TK = address_TK.getText();
-                    if((address.getText()==null || addr_num==null || addr_TK==null) ||
-                            (addr_num.length()==0 || addr_TK.length()==0) ||
-                            (Integer.parseInt(addr_num.toString())==0 || Integer.parseInt(addr_TK.toString())==0)) {
-                        is_successful = false;
-                        resultmsg = "Παρακαλώ συμπληρώστε ορθά όλα τα στοιχεία.";
-                        return null;
-                    }
-                }
                 socket = new Socket(NetInfo.getServer_ip(), NetInfo.getServer_port());
                 in = new ObjectInputStream(socket.getInputStream());
                 out = new ObjectOutputStream(socket.getOutputStream());
