@@ -31,9 +31,6 @@ import java.util.ArrayList;
 
 public class EditListingActivity extends CreateListingActivity implements View.OnClickListener {
     private int listing_id;
-    //Transfered to CreateListing
-//    private Listing listing;
-//    private ArrayList<byte[]> listing_photos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +98,10 @@ public class EditListingActivity extends CreateListingActivity implements View.O
 
         //Set description
         ((EditText)findViewById(R.id.description_edit)).setText(listing.getDescription());
+    }
+
+    private EditListingActivity instance(){
+        return this;
     }
 
     @Override
@@ -214,7 +215,8 @@ public class EditListingActivity extends CreateListingActivity implements View.O
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            progressDialog.dismiss(); //TODO check why this bullshit is not closing
+            if (!instance().isFinishing() && progressDialog != null)
+                progressDialog.dismiss();
             close();
             if(success){
                 goBack();
