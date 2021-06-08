@@ -1,5 +1,8 @@
 package com.craftbid.craftbid.adapters;
 
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +45,15 @@ public class EvaluationsRecyclerAdapter extends RecyclerView.Adapter<Evaluations
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int i) {
-        holder.image.setImageResource(R.drawable.karen);
+        //holder.image.setImageResource(R.drawable.karen);
+        //change image to user photo (not Karen)
+        if(evaluations.get(i).getThumbnail()!=null) {
+            Drawable drawable = new BitmapDrawable(contextCreator.getResources(), BitmapFactory.decodeByteArray(evaluations.get(i).getThumbnail(), 0, evaluations.get(i).getThumbnail().length));
+            holder.image.setBackground(drawable);
+        }else {
+            holder.image.setImageResource(R.drawable.karen); //todo placeholder
+        }
+
         holder.reviewer.setText(evaluations.get(i).getSubmitted_by());
         holder.refered.setText(evaluations.get(i).getRefers_to());
         holder.comments.setText(evaluations.get(i).getComment());

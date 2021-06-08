@@ -143,6 +143,9 @@ public class Server {
                 case "REQUEST_NOTIFICATIONS":
                     request_notifications(db_connect,input,output);
                     break;
+                case "GET_REWARD":
+                    get_reward(db_connect,input,output);
+                    break;
             }
             //after serving request
             db_connect.close();
@@ -1050,6 +1053,30 @@ public class Server {
             stm = db_connect.createStatement();
             stm.executeUpdate(query);
 
+            //add reward points to buyer
+            //get creator username and points of listing
+            query = "SELECT published_by,reward_points FROM Listing WHERE id = "+purchase.getDone_on()+";";
+            stm = db_connect.createStatement();
+            ResultSet res = stm.executeQuery(query);
+            String creator = null;
+            int reward_points = 0;
+            if(res.next()) {
+                creator = res.getString("published_by");
+                reward_points = res.getInt("reward_points");
+            }
+            query = "SELECT * FROM RewardPoint WHERE client ='"+purchase.getDone_by()+"' AND creator ='"+creator+"';";
+            stm = db_connect.createStatement();
+            res = stm.executeQuery(query);
+            if(res.next()) {
+                //update
+                query = "UPDATE RewardPoint SET points = "+reward_points+" WHERE client ='"+purchase.getDone_by()+"' AND creator ='"+creator+"';";
+            }else {
+                //insert
+                query = "INSERT INTO RewardPoint(client,creator,points) VALUES('"+purchase.getDone_by()+"','"+creator+"',"+reward_points+");";
+            }
+            stm = db_connect.createStatement();
+            stm.executeUpdate(query);
+
             //remove the listing
             query = "DELETE FROM Listing WHERE id = "+purchase.getDone_on()+";";
             stm = db_connect.createStatement();
@@ -1132,6 +1159,35 @@ public class Server {
             e.printStackTrace();
         }
     }//request notifications
+
+
+    /** GET REWARD
+     * User buys a reward with points. Decrease the points */
+    public void get_reward(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
+        System.out.println("Received a new GET_REWARD request");
+        try {
+            String username = (String)input.readObject();
+            String creator = (String)input.readObject();
+            int points = (int)input.readObject();
+            //get current points
+            String query = "SELECT * FROM RewardPoint WHERE client ='"+username+"' AND creator ='"+creator+"';";
+            Statement stm = db_connect.createStatement();
+            ResultSet res = stm.executeQuery(query);
+            if(res.next()) {
+                int reward_points = res.getInt("points");
+                reward_points -=points;
+                //update
+                query = "UPDATE RewardPoint SET points = "+reward_points+" WHERE client ='"+username+"' AND creator ='"+creator+"';";
+                stm = db_connect.createStatement();
+                stm.executeUpdate(query);
+            }
+            output.writeObject("REWARD BOUGHT SUCCESSFULLY"); //send confirmation
+            output.flush();
+        }catch(IOException | ClassNotFoundException | SQLException e) {
+            System.err.println("Unable to process get reward request");
+            e.printStackTrace();
+        }
+    }//get reward
 
 
     public static void main(String[] args) throws UnknownHostException{

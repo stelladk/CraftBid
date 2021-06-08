@@ -81,9 +81,12 @@ public class RewardsCustomerActivity extends AppCompatActivity {
         dialog.show();
 
         dialog.findViewById(R.id.yes_btn).setOnClickListener(v -> {
+            //TODO check if user has enough points
+            //TODO new asynctask that sends current username, creator's username and price of reward in points.
+            /*
             Intent purchase = new Intent(RewardsCustomerActivity.this, PurchaseActivity.class);
             purchase.putExtra("listing_id", id);
-            startActivity(purchase);
+            startActivity(purchase); */
         });
     }
 
