@@ -55,6 +55,7 @@ public class CreatorProfile extends AppCompatActivity {
     protected CheckBox freelancer_choice;
     protected ArcLayout profile_pic;
     protected byte[] pfp;
+    protected boolean is_creator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,10 +162,7 @@ public class CreatorProfile extends AppCompatActivity {
 
     /** Open the profile of a user from their evaluation */
     public void openProfile(String username) {
-        //TODO check if he is a creator (creators can add evaluations too)
-        Intent profile = new Intent(CreatorProfile.this, CustomerProfile.class);
-        profile.putExtra("username", username); //Send username of evaluation
-        startActivity(profile);
+        new IsCreatorTask().execute(username);
     }
     public void toggleEditCreator(View view) { }
 
@@ -287,4 +285,54 @@ public class CreatorProfile extends AppCompatActivity {
         }
     }//get info task
 
+
+    /** Connects if user who made the offer is creator */
+    private class IsCreatorTask extends AsyncTask<String, Void, Void> {
+        private ProgressDialog progressDialog;
+        private Socket socket = null;
+        private ObjectOutputStream out = null;
+        private ObjectInputStream in = null;
+        private String username;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(CreatorProfile.this,
+                    "Opening user's profile...",
+                    "Connecting to server...");
+        }
+
+        @Override
+        protected Void doInBackground(String... username) {
+            try {
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("IS_CREATOR");
+                out.writeObject(username[0]);
+                this.username = username[0];
+                is_creator = (boolean) in.readObject();
+            }catch(IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            progressDialog.dismiss();
+            try {
+                if(in!=null) in.close();
+                if(out!=null) out.close();
+                if(socket!=null) socket.close();
+            }catch(IOException e) {
+                e.printStackTrace();
+            }
+            // go to the one's who submitted the evaluation profile
+            Intent profile;
+            if(is_creator) profile = new Intent(CreatorProfile.this, CreatorProfile.class);
+            else profile = new Intent(CreatorProfile.this, CustomerProfile.class);
+            profile.putExtra("username", username); //Send user's username
+            startActivity(profile);
+        }
+    }
 }
