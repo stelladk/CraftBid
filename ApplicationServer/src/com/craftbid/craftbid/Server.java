@@ -160,8 +160,8 @@ public class Server {
     public void login(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
         System.out.println("Received a new LOGIN request");
         try {
-            String username = (String) input.readObject();
-            String password = (String) input.readObject();
+            String username = qt((String) input.readObject());
+            String password = qt((String) input.readObject());
             System.out.println("Username= " + username + ",password = " + password);
             //check if credentials are correct
             String query = "SELECT * FROM UserInfo WHERE username= '" + username + "';";
@@ -204,7 +204,7 @@ public class Server {
     public void is_creator(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
         System.out.println("Received a new IS_CREATOR request");
         try {
-            String username = (String)input.readObject();
+            String username = qt((String)input.readObject());
             boolean is_creator = false;
             String query = "SELECT * FROM Creator WHERE username= '" + username + "';";
             Statement stm = db_connect.createStatement();
@@ -228,12 +228,12 @@ public class Server {
         System.out.println("Received a new SIGNUP_USER request");
         try {
             //get all basic signup information for all users, also if the user is a creator
-            String username = (String)input.readObject();
-            String password = (String)input.readObject();
-            String fullname = (String)input.readObject();
-            String email = (String)input.readObject();
-            String phone = (String)input.readObject(); //send "NULL" if none given
-            String desc = (String)input.readObject(); //send "NULL" if none given
+            String username = qt((String)input.readObject());
+            String password = qt((String)input.readObject());
+            String fullname = qt((String)input.readObject());
+            String email = qt((String)input.readObject());
+            String phone = qt((String)input.readObject()); //send "NULL" if none given
+            String desc = qt((String)input.readObject()); //send "NULL" if none given
             byte[] photo = (byte[])input.readObject(); //send empty byte array if none given
             boolean is_creator = (boolean)input.readObject();
             System.out.println("Username= "+username+",password = "+password+
@@ -349,7 +349,7 @@ public class Server {
         System.out.println("Received a new SEARCH request");
         try {
             boolean search_by_id = (boolean)input.readObject();
-            String search_text = (String)input.readObject();
+            String search_text = qt((String)input.readObject());
             String query;
             if(!search_by_id) {
                 //get a list of all listings, if name, category, or creator username matches
@@ -398,7 +398,7 @@ public class Server {
     public void request_profile(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
         System.out.println("Received a new REQUEST_PROFILE request");
         try {
-            String username = (String) input.readObject();
+            String username = qt((String) input.readObject());
             boolean is_creator = (boolean)input.readObject();
             //FOR ALL USERS: Full name, email,phone number, description, photo
             String query = "SELECT * FROM UserInfo WHERE username= '" + username + "';";
@@ -536,9 +536,9 @@ public class Server {
         System.out.println("Received a new UPDATE_PROFILE request");
         try {
             String resultmsg = null;
-            String username = (String)input.readObject(); //the username
+            String username = qt((String)input.readObject()); //the username
             String field = (String)input.readObject(); //the column to be changed
-            String new_val = (String)input.readObject(); //the new value
+            String new_val = qt((String)input.readObject()); //the new value
             System.out.println("Changing field "+field+" with new value "+new_val+" for user "+username);
             String query = null;
             Statement stm;
@@ -583,7 +583,7 @@ public class Server {
         System.out.println("Received a new CHANGE_PROFILE_PICTURE request");
         try {
             //replace image in bucket with new image
-            String username = (String)input.readObject(); //the username
+            String username = qt((String)input.readObject()); //the username
             byte[] new_img = (byte[])input.readObject(); // the new image
             String bucket_path = username+"/"+username+"_pfp.jpeg";
             //put profile image to the bucket as "username/username_pfp.png"
@@ -610,7 +610,7 @@ public class Server {
         try {
             Listing listing = (Listing)input.readObject(); //android client sends a Listing object with all the info for this Listing
             //check if the user has 2 listings with the same name
-            String query = "SELECT * FROM Listing WHERE name = '"+listing.getName()+"' AND published_by = '"+listing.getPublished_by()+"'";
+            String query = "SELECT * FROM Listing WHERE name = '"+qt(listing.getName())+"' AND published_by = '"+qt(listing.getPublished_by())+"'";
             Statement stm = db_connect.createStatement();
             ResultSet res = stm.executeQuery(query);
             if(res.next()) {
@@ -621,9 +621,9 @@ public class Server {
                 System.out.println("Adding listing");
                 //add the listing to the database
                 query = "INSERT INTO Listing(name,description,category,min_price,reward_points,quantity,is_located,published_by,date_published,delivery,total_photos) "+
-                        "VALUES('"+listing.getName()+"','"+listing.getDescription()+"','"
+                        "VALUES('"+qt(listing.getName())+"','"+qt(listing.getDescription())+"','"
                         +listing.getCategory()+"',"+listing.getMin_price()+","+listing.getReward_points()+","
-                        +listing.getQuantity()+",'"+listing.getLocation()+"','"+listing.getPublished_by()+"','"
+                        +listing.getQuantity()+",'"+listing.getLocation()+"','"+qt(listing.getPublished_by())+"','"
                         +listing.getDatePublished()+"','"+listing.getDelivery()+"',"+listing.getTotal_photos()+");";
                 stm = db_connect.createStatement();
                 stm.executeUpdate(query);
@@ -730,7 +730,7 @@ public class Server {
             int id = (Integer)input.readObject(); // the id of the listing
             String query = null;
             if(field.equals("description") || field.equals("category") || field.equals("delivery") || field.equals("is_located")) {
-                query = "UPDATE Listing SET "+field+" = '"+new_val+"' WHERE id= "+id+";";
+                query = "UPDATE Listing SET "+field+" = '"+qt(new_val)+"' WHERE id= "+id+";";
             }else if(field.equals("reward_points") || field.equals("quantity")){
                 query = "UPDATE Listing SET "+field+" = "+new_val+" WHERE id= "+id+";";
             } else {
@@ -756,7 +756,7 @@ public class Server {
             Offer offer = (Offer)input.readObject(); //android client sends an Offer object with all the info for this Offer
             //add the offer to the database
             String query = "INSERT INTO Offer(price,submitted_by,submitted_for) "+
-                    "VALUES("+offer.getPrice()+",'"+ offer.getSubmitted_by()+"',"+offer.getSubmitted_for()+");";
+                    "VALUES("+offer.getPrice()+",'"+ qt(offer.getSubmitted_by())+"',"+offer.getSubmitted_for()+");";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
             output.writeObject("OFFER ADDED");
@@ -822,8 +822,8 @@ public class Server {
             Evaluation evaluation = (Evaluation)input.readObject(); //android client sends an Evaluation object with all the info for this Evaluation
             //add the evaluation to the database
             String query = "INSERT INTO Evaluation(submitted_by,refers_to,rating,date,comment) "+
-                    "VALUES('"+evaluation.getSubmitted_by()+"','"+evaluation.getRefers_to()+"',"
-                    +evaluation.getRating()+",'"+evaluation.getDate()+"','"+evaluation.getComment()+"');";
+                    "VALUES('"+qt(evaluation.getSubmitted_by())+"','"+qt(evaluation.getRefers_to())+"',"
+                    +evaluation.getRating()+",'"+evaluation.getDate()+"','"+qt(evaluation.getComment())+"');";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
             output.writeObject("EVALUATION ADDED");
@@ -843,8 +843,8 @@ public class Server {
             Report report = (Report)input.readObject(); //android client sends a Report object with all the info for this Report
             //add the report to the database
             String query = "INSERT INTO Report(submitted_by,refers_to,reason,date,description) "+
-                    "VALUES('"+report.getSubmitted_by()+"','"+report.getRefers_to()+"','"
-                    +report.getReason()+"','"+report.getDate()+"','"+report.getDescription()+"');";
+                    "VALUES('"+qt(report.getSubmitted_by())+"','"+qt(report.getRefers_to())+"','"
+                    +report.getReason()+"','"+report.getDate()+"','"+qt(report.getDescription())+"');";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
             output.writeObject("REPORT ADDED");
@@ -863,7 +863,7 @@ public class Server {
         try {
             String username = (String) input.readObject();
             boolean is_creator = (boolean)input.readObject();
-            String query = "SELECT * FROM Reward WHERE offered_by= '" + username + "';";
+            String query = "SELECT * FROM Reward WHERE offered_by= '" + qt(username) + "';";
             Statement stm = db_connect.createStatement();
             ResultSet res = stm.executeQuery(query);
             ArrayList<Reward> rewards =new ArrayList<Reward>();
@@ -891,7 +891,7 @@ public class Server {
             if(!is_creator) {
                 //get the username of the customer
                 String customer = (String)input.readObject();
-                query = "SELECT * FROM RewardPoint WHERE creator= '" + username + "' AND client = '" + customer + "' ;";
+                query = "SELECT * FROM RewardPoint WHERE creator= '" + qt(username) + "' AND client = '" + qt(customer) + "' ;";
                 stm = db_connect.createStatement();
                 res = stm.executeQuery(query);
                 int points = 0;
@@ -916,7 +916,7 @@ public class Server {
             Reward reward = (Reward)input.readObject(); //android client sends a Reward object with all the info for this Reward
             //add the reward to the database
             String query = "INSERT INTO Reward (name,price_in_points,offered_by) "+
-                    "VALUES('"+reward.getName()+"',"+reward.getPrice()+",'"+reward.getOffered_by()+"');";
+                    "VALUES('"+qt(reward.getName())+"',"+reward.getPrice()+",'"+qt(reward.getOffered_by())+"');";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
             //get the reward thumbnail as byte array and add to bucket
@@ -1039,7 +1039,7 @@ public class Server {
             Purchase purchase = (Purchase)input.readObject(); //android client sends a Purchase object with all the info for this Purchase
             //add the reward to the database
             String query = "INSERT INTO Purchase (done_by,done_on,date) "+
-                    "VALUES('"+purchase.getDone_by()+"',"+purchase.getDone_on()+",'"+purchase.getDate()+"');";
+                    "VALUES('"+qt(purchase.getDone_by())+"',"+purchase.getDone_on()+",'"+purchase.getDate()+"');";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
             //remove all other offers and notifications if any exist, remove the listing as well
@@ -1064,15 +1064,17 @@ public class Server {
                 creator = res.getString("published_by");
                 reward_points = res.getInt("reward_points");
             }
-            query = "SELECT * FROM RewardPoint WHERE client ='"+purchase.getDone_by()+"' AND creator ='"+creator+"';";
+            query = "SELECT * FROM RewardPoint WHERE client ='"+purchase.getDone_by()+"' AND creator ='"+qt(creator)+"';";
             stm = db_connect.createStatement();
             res = stm.executeQuery(query);
             if(res.next()) {
+                int p = res.getInt("points");
+                reward_points+=p;
                 //update
-                query = "UPDATE RewardPoint SET points = "+reward_points+" WHERE client ='"+purchase.getDone_by()+"' AND creator ='"+creator+"';";
+                query = "UPDATE RewardPoint SET points = "+reward_points+" WHERE client ='"+qt(purchase.getDone_by())+"' AND creator ='"+qt(creator)+"';";
             }else {
                 //insert
-                query = "INSERT INTO RewardPoint(client,creator,points) VALUES('"+purchase.getDone_by()+"','"+creator+"',"+reward_points+");";
+                query = "INSERT INTO RewardPoint(client,creator,points) VALUES('"+qt(purchase.getDone_by())+"','"+qt(creator)+"',"+reward_points+");";
             }
             stm = db_connect.createStatement();
             stm.executeUpdate(query);
@@ -1100,7 +1102,7 @@ public class Server {
             Notification notification = (Notification)input.readObject(); //android client sends a Notification object with all the info for this Notification
             //add the reward to the database
             String query = "INSERT INTO Notification (listing_id,belongs_to,price) "+
-                    "VALUES("+notification.getListing_id()+",'"+notification.getBelongs_to()+"',"+notification.getPrice()+");";
+                    "VALUES("+notification.getListing_id()+",'"+qt(notification.getBelongs_to())+"',"+notification.getPrice()+");";
             Statement stm = db_connect.createStatement();
             stm.executeUpdate(query);
             output.writeObject("NOTIFICATION ADDED");
@@ -1117,7 +1119,7 @@ public class Server {
     public void request_notifications(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
         System.out.println("Received a new REQUEST_NOTIFICATIONS request");
         try {
-            String username = (String)input.readObject();
+            String username = qt((String)input.readObject());
             //get a list of all expertises
             String query = "SELECT * FROM Notification WHERE belongs_to='"+username+"';";
             Statement stm = db_connect.createStatement();
@@ -1166,8 +1168,8 @@ public class Server {
     public void get_reward(Connection db_connect, ObjectInputStream input, ObjectOutputStream output) {
         System.out.println("Received a new GET_REWARD request");
         try {
-            String username = (String)input.readObject();
-            String creator = (String)input.readObject();
+            String username = qt((String)input.readObject());
+            String creator = qt((String)input.readObject());
             int points = (int)input.readObject();
             //get current points
             String query = "SELECT * FROM RewardPoint WHERE client ='"+username+"' AND creator ='"+creator+"';";
@@ -1189,6 +1191,10 @@ public class Server {
         }
     }//get reward
 
+    //escape ' in all varchar fields
+    private static String qt(String s) {
+        return s.replaceAll("'","''");
+    }
 
     public static void main(String[] args) throws UnknownHostException{
         new Server(Inet4Address.getLocalHost().getHostAddress(), 6501,100);
