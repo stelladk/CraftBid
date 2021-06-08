@@ -103,6 +103,10 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
             case R.id.notif:
                 openNotifications();
                 break;
+            case R.id.refresh:
+                finish();
+                startActivity(getIntent());
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.craftbid.craftbid.adapters.RewardsRecyclerAdapter;
 import com.craftbid.craftbid.model.Listing;
 import com.craftbid.craftbid.model.Reward;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -74,20 +75,25 @@ public class RewardsCustomerActivity extends AppCompatActivity {
         }
     }
 
-    public void openPurchase(int id){
-        dialog.setContentView(R.layout.popup_confirm);
-        ((TextView)dialog.findViewById(R.id.confirm_message)).setText(R.string.get_reward_confirm);
-        dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
-        dialog.show();
+    public void handlePurchase(int pos){
+        int required_points = rewards.get(pos).getPrice();
+        if(reward_points >= required_points) {
+            dialog.setContentView(R.layout.popup_confirm);
+            ((TextView) dialog.findViewById(R.id.confirm_message)).setText(R.string.get_reward_confirm);
+            dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
+            dialog.show();
 
-        dialog.findViewById(R.id.yes_btn).setOnClickListener(v -> {
-            //TODO check if user has enough points
-            //TODO new asynctask that sends current username, creator's username and price of reward in points.
-            /*
-            Intent purchase = new Intent(RewardsCustomerActivity.this, PurchaseActivity.class);
-            purchase.putExtra("listing_id", id);
-            startActivity(purchase); */
-        });
+            dialog.findViewById(R.id.yes_btn).setOnClickListener(v -> {
+                new PurchaseRewardTask().execute(required_points);
+                reward_points -= required_points;
+                TextView claimed_points = findViewById(R.id.reward_points);
+                claimed_points.setText(getResources().getString(R.string.num_claimed_reward_points, reward_points));
+                dialog.dismiss();
+            });
+        }else{
+            Snackbar.make( getWindow().getDecorView().getRootView(), "Δεν εχετε αρκετούς πόντους για αυτό το βραβείο!" , Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
     }
 
     public void closePopup(View view) {
@@ -163,6 +169,63 @@ public class RewardsCustomerActivity extends AppCompatActivity {
                 adapter = new RewardsRecyclerAdapter(rewards, RewardsCustomerActivity.this);
                 recycler.setAdapter(adapter);
             }
+        }
+    }
+
+    private class PurchaseRewardTask extends AsyncTask<Integer, Void, Void>{
+        ProgressDialog progressDialog;
+        Socket socket;
+        ObjectOutputStream out;
+        ObjectInputStream in;
+        int points;
+        String response;
+        boolean success;
+
+        @Override
+        protected Void doInBackground(Integer... integers) {
+            try {
+                points = integers[0];
+
+                socket = new Socket(NetInfo.getServer_ip(),NetInfo.getServer_port());
+                in = new ObjectInputStream(socket.getInputStream());
+                out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("GET_REWARD");
+                out.writeObject(MainActivity.username); //send customer's username
+                out.writeObject(username); //send creator's username
+                out.writeObject(points); //send required points
+                out.flush();
+
+                response = (String)in.readObject();
+                success = response.equals("REWARD BOUGHT SUCCESSFULLY");
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(RewardsCustomerActivity.this,
+                    "Getting Rewards...",
+                    "Connecting to server...");
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            progressDialog.dismiss();
+            try{
+                out.close();
+                in.close();
+                socket.close();
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
+            String msg = "Προέκυψε κάποιο σφάλμα!";
+            if(success){
+                msg = "Η αγορά ολοκληρώθηκε! Θα επικοινωνήσει ο δημιουργός μαζί σας!";
+            }
+            Snackbar.make( getWindow().getDecorView().getRootView(), msg , Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
         }
     }
 }

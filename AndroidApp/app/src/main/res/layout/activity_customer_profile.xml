@@ -44,6 +44,7 @@
                 android:layout_marginLeft="10dp"
                 app:ArcType="inner"
                 app:ArcRadius="75dp"
+                android:background="@drawable/profile_placeholder"
                 android:contentDescription="@string/photo_profile"/>
 
             <LinearLayout

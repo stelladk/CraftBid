@@ -108,7 +108,7 @@ public class RewardsRecyclerAdapter extends RecyclerView.Adapter<RewardsRecycler
                 if(PRIVATE_VIEW){
                     contextCreator.removeReward(i);
                 }else{
-                    contextCustomer.openPurchase(rewards.get(i).getId());
+                    contextCustomer.handlePurchase(i);
                 }
             }
         });

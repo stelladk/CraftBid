@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item android:id="@+id/refresh"
+        android:icon="@drawable/ic_refresh"
+        android:title="@string/refresh"
+        android:contentDescription="@string/refresh"
+        app:showAsAction="always"/>
+
     <item android:id="@+id/notif"
         android:icon="@drawable/ic_notifications"
         android:title="@string/notifications"
@@ -9,20 +15,20 @@
         app:showAsAction="always"/>
 
     <item android:id="@+id/login"
-        android:icon="@drawable/login"
+        android:icon="@drawable/ic_login"
         android:title="@string/login"
         android:contentDescription="@string/login"
         app:showAsAction="always"/>
 
     <item android:id="@+id/logout"
-        android:icon="@drawable/logout"
+        android:icon="@drawable/ic_logout"
         android:title="@string/logout"
         android:contentDescription="@string/logout"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/profile"
-        android:icon="@drawable/profile"
+        android:icon="@drawable/ic_profile"
         android:title="@string/profile"
         android:contentDescription="@string/profile"
         app:showAsAction="always" />
