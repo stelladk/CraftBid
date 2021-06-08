@@ -1,6 +1,5 @@
 package com.craftbid.craftbid.adapters;
 
-import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -14,14 +13,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.craftbid.craftbid.CreatorProfile;
-import com.craftbid.craftbid.MainActivity;
 import com.craftbid.craftbid.NotificationsActivity;
-import com.craftbid.craftbid.PurchaseActivity;
 import com.craftbid.craftbid.R;
 import com.craftbid.craftbid.model.Notification;
-import com.craftbid.craftbid.model.Thumbnail;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -29,11 +23,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
     private List<Notification> notifications;
 
-    public NotificationsAdapter(List<Notification> notifications) {
-        this.notifications = notifications;
-    }
-
-    //Temporary
     private NotificationsActivity context = null;
     public NotificationsAdapter(List<Notification> notifications, NotificationsActivity context) {
         this.notifications = notifications;
@@ -50,13 +39,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     @Override
     public void onBindViewHolder(@NonNull NotificationsAdapter.ViewHolder holder, int i) {
         if(context != null){
-//            holder.thumbnail.setImageResource(context.getDrawable(notifications.get(i).getThumbnail()));
             Drawable drawable = new BitmapDrawable(context.getResources(), BitmapFactory.decodeByteArray(notifications.get(i).getPhoto(), 0, notifications.get(i).getPhoto().length));
             holder.thumbnail.setBackground(drawable);
-        }else{
-            holder.thumbnail.setImageResource(R.drawable.chair1);
         }
-//        holder.notif_text.setText();
         holder.final_price.setText(notifications.get(i).getPrice()+"");
     }
 

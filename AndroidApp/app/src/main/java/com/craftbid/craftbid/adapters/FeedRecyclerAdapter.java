@@ -1,10 +1,8 @@
 package com.craftbid.craftbid.adapters;
 
-import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +12,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.craftbid.craftbid.CreateRewardActivity;
 import com.craftbid.craftbid.CreatorProfile;
-import com.craftbid.craftbid.ListingPrivateActivity;
 import com.craftbid.craftbid.MainActivity;
 import com.craftbid.craftbid.R;
 import com.craftbid.craftbid.model.Thumbnail;
-import com.google.android.material.snackbar.Snackbar;
 import com.stelladk.arclib.ArcLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapter.ViewHolder> {
@@ -58,8 +52,6 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
         }else if(context2!=null){
             Drawable drawable = new BitmapDrawable(context2.getResources(), BitmapFactory.decodeByteArray(thumbnails.get(position).getThumbnail(), 0, thumbnails.get(position).getThumbnail().length));
             holder.image.setBackground(drawable);
-        }else{
-            holder.image.setBackgroundResource(R.drawable.chair1);
         }
         holder.title.setText(thumbnails.get(position).getName());
         holder.category.setText(thumbnails.get(position).getCategory());

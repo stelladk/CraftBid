@@ -12,26 +12,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.craftbid.craftbid.CreateListingActivity;
-import com.craftbid.craftbid.CreatorProfile;
-import com.craftbid.craftbid.MainActivity;
 import com.craftbid.craftbid.R;
-import com.craftbid.craftbid.model.Thumbnail;
 import com.google.android.material.snackbar.Snackbar;
-import com.stelladk.arclib.ArcLayout;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CollectionRecyclerAdapter extends RecyclerView.Adapter<CollectionRecyclerAdapter.ViewHolder> {
 
     ArrayList<byte[]> collection;
     private boolean add_option = true;
 
-    public CollectionRecyclerAdapter(ArrayList<byte[]> collection){
-        this.collection = collection;
-    }
-
-    //Temporary
     private CreateListingActivity context = null;
     public CollectionRecyclerAdapter(ArrayList<byte[]> collection, CreateListingActivity context) {
         this.collection = collection;
@@ -65,8 +55,6 @@ public class CollectionRecyclerAdapter extends RecyclerView.Adapter<CollectionRe
         if(context != null){
             Bitmap thumbnail = BitmapFactory.decodeByteArray(collection.get(i),0, collection.get(i).length);
             holder.image.setImageBitmap(thumbnail);
-        }else{
-            holder.image.setImageResource(R.drawable.chair1);
         }
     }
 

@@ -15,14 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.craftbid.craftbid.CreateRewardActivity;
-import com.craftbid.craftbid.CreatorProfile;
-import com.craftbid.craftbid.MainActivity;
 import com.craftbid.craftbid.R;
 import com.craftbid.craftbid.RewardsCreatorActivity;
 import com.craftbid.craftbid.RewardsCustomerActivity;
 import com.craftbid.craftbid.model.Reward;
-import com.craftbid.craftbid.model.Thumbnail;
-import com.google.android.material.snackbar.Snackbar;
 import com.stelladk.arclib.ArcLayout;
 
 import java.util.List;
@@ -32,11 +28,6 @@ public class RewardsRecyclerAdapter extends RecyclerView.Adapter<RewardsRecycler
     private boolean PRIVATE_VIEW = false;
     private List<Reward> rewards;
 
-    public RewardsRecyclerAdapter(List<Reward> rewards) {
-        this.rewards = rewards;
-    }
-
-    //Temporary
     private RewardsCustomerActivity contextCustomer = null;
     private RewardsCreatorActivity contextCreator = null;
     public RewardsRecyclerAdapter(List<Reward> rewards, RewardsCustomerActivity context) {
@@ -78,20 +69,15 @@ public class RewardsRecyclerAdapter extends RecyclerView.Adapter<RewardsRecycler
             });
             return;
         }
-//        holder.image.setBackgroundResource(thumbnails.get(position).getThumbnail());
+
         if(contextCustomer != null){
-//            holder.image.setBackgroundResource(contextCustomer.getDrawable(rewards.get(i).getPhoto()));
             Drawable drawable = new BitmapDrawable(contextCustomer.getResources(), BitmapFactory.decodeByteArray(rewards.get(i).getPhoto(), 0, rewards.get(i).getPhoto().length));
             holder.image.setBackground(drawable);
             holder.points.setText(contextCustomer.getRewardPointsString(rewards.get(i).getPrice()));
         }else if(contextCreator != null){
-//            holder.image.setBackgroundResource(contextCreator.getDrawable(rewards.get(i).getPhoto()));
             Drawable drawable = new BitmapDrawable(contextCreator.getResources(), BitmapFactory.decodeByteArray(rewards.get(i).getPhoto(), 0, rewards.get(i).getPhoto().length));
             holder.image.setBackground(drawable);
             holder.points.setText(contextCreator.getRewardPointsString(rewards.get(i).getPrice()));
-        }else{
-            holder.image.setBackgroundResource(R.drawable.chair1);
-            holder.points.setText(rewards.get(i).getPrice());
         }
         holder.title.setText(rewards.get(i).getOffered_by());
         holder.description.setText(rewards.get(i).getName());
