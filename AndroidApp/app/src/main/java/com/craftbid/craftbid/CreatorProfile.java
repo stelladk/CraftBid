@@ -187,7 +187,7 @@ public class CreatorProfile extends AppCompatActivity {
             listing_review.putExtra("previous", "@profile");
         }else{
             listing_review = new Intent(CreatorProfile.this, ListingPublicActivity.class);
-            listing_review.putExtra("previous", username); //TODO send creator's username
+            listing_review.putExtra("previous", username);
         }
         listing_review.putExtra("listing_id", listing_id);
         startActivity(listing_review);

@@ -310,7 +310,8 @@ public class CreateListingActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            progressDialog.dismiss();
+            if (!CreateListingActivity.this.isFinishing() && progressDialog != null)
+                progressDialog.dismiss();
             try {
                 if(socket!=null){
                     out.close();

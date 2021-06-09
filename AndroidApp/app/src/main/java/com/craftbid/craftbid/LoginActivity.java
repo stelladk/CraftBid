@@ -51,14 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     public void attemptLogin(View view) {
         username = username_edit.getText().toString();
         String password = password_edit.getText().toString();
-        // TODO after debug uncomment
-        //new AttemptLoginTask().execute(username, password);
-        // after uncomment delete the following
-
-        Intent main = new Intent(LoginActivity.this, MainActivity.class);
-        main.putExtra("username", username);
-        main.putExtra("creator", true); //added true to login as creator
-        startActivity(main);
+        new AttemptLoginTask().execute(username, password);
     }
 
     /** Connects to server to verify user's credentials */

@@ -175,10 +175,8 @@ public class SignupCustomerActivity extends AppCompatActivity {
             Snackbar.make( getWindow().getDecorView().getRootView(), resultmsg , Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             if(is_successful) {
-                Intent mainscreen = new Intent(SignupCustomerActivity.this, MainActivity.class);
-                mainscreen.putExtra("username", username);
-                mainscreen.putExtra("creator", false);
-                startActivity(mainscreen);
+                Intent login = new Intent(SignupCustomerActivity.this, LoginActivity.class);
+                startActivity(login);
             }
         }
     }//signup task

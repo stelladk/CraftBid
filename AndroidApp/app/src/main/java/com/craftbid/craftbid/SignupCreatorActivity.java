@@ -260,14 +260,12 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
             }catch(IOException e) {
                 e.printStackTrace();
             }
-
-            progressDialog.dismiss();
+            if (!SignupCreatorActivity.this.isFinishing() && progressDialog != null)
+                progressDialog.dismiss();
             Snackbar.make( getWindow().getDecorView().getRootView(), resultmsg , Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             if(is_successful) {
-                Intent login = new Intent(SignupCreatorActivity.this, MainActivity.class);
-                login.putExtra("username", username);
-                login.putExtra("creator", true);
+                Intent login = new Intent(SignupCreatorActivity.this, LoginActivity.class);
                 startActivity(login);
             }
         }
