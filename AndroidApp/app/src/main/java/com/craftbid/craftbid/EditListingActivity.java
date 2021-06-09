@@ -50,9 +50,6 @@ public class EditListingActivity extends CreateListingActivity implements View.O
         TextView title = findViewById(R.id.listing_name);
         title.setText(R.string.edit);
 
-        TextView note = findViewById(R.id.note);
-        note.setVisibility(View.VISIBLE);
-
         loadListing();
 
         findViewById(R.id.save_btn).setOnClickListener(this);

@@ -44,15 +44,6 @@ public class SignupCreatorActivity extends AppCompatActivity implements AdapterV
         //Start AsyncTask to get list of expertises from the server
         new LoadExpertisesTask().execute();
 
-        TextView password = findViewById(R.id.password_label);
-        String star = getColoredSpanned("*", String.valueOf(getResources().getColor(R.color.error)));
-        String text = getColoredSpanned(getResources().getString(R.string.password_en), "fff");
-        password.setText(Html.fromHtml(star+text));
-    }
-
-    private String getColoredSpanned(String text, String color) {
-        String input = "<font color=" + color + ">" + text + "</font>";
-        return input;
     }
 
     /** Go back to login screen */
