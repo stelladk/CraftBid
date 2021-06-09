@@ -336,7 +336,7 @@ public class CreateListingActivity extends AppCompatActivity {
 
         private float getEditTextValue(EditText editText, float deflt){
             String value = editText.getText().toString();
-            return value.equals("")? deflt : Integer.parseInt(value);
+            return value.equals("")? deflt : Float.parseFloat(value);
         }
     }
 }

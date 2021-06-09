@@ -67,7 +67,7 @@
         android:hint="@string/init_price_optional"
         android:textSize="25sp"
         android:textColor="?android:attr/textColor"
-        android:inputType="text"
+        android:inputType="numberDecimal"
         android:importantForAutofill="no"/>
     <TextView
         android:id="@+id/note"
