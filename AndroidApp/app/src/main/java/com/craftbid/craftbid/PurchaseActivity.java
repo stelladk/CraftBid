@@ -94,7 +94,7 @@ public class PurchaseActivity extends AppCompatActivity {
             }
             findViewById(R.id.hand_not_offered).setVisibility(View.VISIBLE);
         }
-        else if(delivery.equalsIgnoreCase(getResources().getString(R.string.hand_in_hand))) {
+        else if(delivery.equalsIgnoreCase(", χέρι-με-χέρι")) {
             courier.setTextColor(getResources().getColor(R.color.grey));
             courier.setEnabled(false);
             hand.setChecked(true);
@@ -224,8 +224,7 @@ public class PurchaseActivity extends AppCompatActivity {
                 in.readObject(); //photos
                 close();
 
-                // TODO after DB's collation change, make appropriate changes for delivery options
-                if(!listing.getDelivery().equals(getResources().getString(R.string.shipment))){
+                if(listing.getDelivery().contains("χέρι-με-χέρι")){
                     socket = new Socket(NetInfo.getServer_ip(), NetInfo.getServer_port());
                     in = new ObjectInputStream(socket.getInputStream());
                     out = new ObjectOutputStream(socket.getOutputStream());
@@ -257,9 +256,8 @@ public class PurchaseActivity extends AppCompatActivity {
             purchase_location.setText(listing.getLocation());
             availableDeliveryOptions(listing.getDelivery());
 
-            // TODO same here
             // set hand-to-hand popup parameters
-            if(!listing.getDelivery().equalsIgnoreCase(getResources().getString(R.string.shipment))) {
+            if(listing.getDelivery().contains("χέρι-με-χέρι")) {
                 String email = basicInfo.get(1);
                 String phone = basicInfo.get(2);
                 dialog.setContentView(R.layout.popup_purchase);
