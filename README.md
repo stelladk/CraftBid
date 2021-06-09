@@ -11,5 +11,8 @@ Platform for hand-made art products auctions. An application we created for the 
 ## Libraries 
 All libraries we used for the Application server are [here](https://drive.google.com/drive/folders/1SzQPgZbCtrbroRLx_tySrtQwrGrzyc4_?usp=sharing)
 
+## Before running
+Fill in the correct AWS RDS & AWS S3 credentials in files **Constants.java**
+
 ## The group 
 By [Themelina Kouzoumpasi](https://github.com/themelinaKz), [Konstantina Souvatzidaki](https://github.com/k-souvatzidaki) and [Stella Douka](https://github.com/stelladk) :heart:
