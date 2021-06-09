@@ -105,10 +105,6 @@ public class CustomerProfile extends AppCompatActivity {
 
     private void goBack() {
         this.finish();
-        /*
-        Intent main = new Intent(CustomerProfile.this, MainActivity.class);
-        startActivity(main);
-         */
     }
 
     public void toggleEditCustomer(View view){ }

@@ -92,10 +92,6 @@ public class CreateRewardActivity extends AppCompatActivity {
         }
     }
     private void goBack() {
-        /*
-        Intent creator = new Intent(CreateRewardActivity.this, CreatorProfilePrivate.class);
-        startActivity(creator);
-         */
         this.finish();
     }
 

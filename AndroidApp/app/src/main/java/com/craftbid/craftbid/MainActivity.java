@@ -136,7 +136,6 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         }
         adapter = new FeedRecyclerAdapter(sorted, MainActivity.this);
         recycler.setAdapter(adapter);
-        //adapter.notifyDataSetChanged();
     }
 
     @Override

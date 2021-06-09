@@ -90,11 +90,6 @@ public class OffersActivity extends AppCompatActivity {
     }
     private void goBack() {
         this.finish();
-        /*
-        Intent listing = new Intent(OffersActivity.this, ListingPrivateActivity.class);
-        listing.putExtra("listing_id", listing_id);
-        startActivity(listing);
-        */
     }
 
     /** Shows message if offers list is empty */

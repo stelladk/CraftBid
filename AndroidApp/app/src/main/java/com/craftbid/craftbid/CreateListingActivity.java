@@ -93,10 +93,6 @@ public class CreateListingActivity extends AppCompatActivity {
     }
 
     private void goBack() {
-        /*
-        Intent creator = new Intent(CreateListingActivity.this, CreatorProfilePrivate.class);
-        startActivity(creator);
-         */
         this.finish();
     }
 

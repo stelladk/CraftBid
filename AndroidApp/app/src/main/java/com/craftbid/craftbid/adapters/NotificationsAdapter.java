@@ -67,8 +67,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
         @Override
         public void onClick(View view) {
-            /*Snackbar.make(view, "Clicked on item " + getAbsoluteAdapterPosition(), Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();*/
             final Notification notification = notifications.get(getAbsoluteAdapterPosition());
             context.purchase(notification);
         }

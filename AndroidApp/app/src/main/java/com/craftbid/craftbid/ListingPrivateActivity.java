@@ -69,25 +69,11 @@ public class ListingPrivateActivity extends ListingPublicActivity {
         }
     }
     private void goBack() {
-        /*
-        Intent back;
-        if(previous.equals("@main"))
-            back = new Intent(ListingPrivateActivity.this, MainActivity.class);
-        else
-            back = new Intent(ListingPrivateActivity.this, CreatorProfilePrivate.class);
-        startActivity(back);
-        */
         this.finish();
     }
 
     @Override
-    public void openProfile(View view) {
-//        Intent profile = new Intent(ListingPrivateActivity.this, CreatorProfilePrivate.class);
-//        profile.putExtra("username", MainActivity.username); //private listing only viewed by its creator
-//        profile.putExtra("previous", String.valueOf(listing_id));
-//        //profile.putExtra("previous", listing_id); //Send listing id
-//        startActivity(profile);
-    }
+    public void openProfile(View view) { }
 
     public void seeMore(View view){
         Intent full = new Intent(ListingPrivateActivity.this, FullscreenGalleryActivity.class);

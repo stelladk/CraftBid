@@ -92,16 +92,6 @@ public class ListingPublicActivity extends AppCompatActivity {
         return true;
     }
     private void goBack() {
-        /*
-        Intent back;
-        if(previous.equals(MainActivity.MAIN) || previous.equals(MainActivity.GUEST))
-            back = new Intent(ListingPublicActivity.this, MainActivity.class);
-        else {
-            back = new Intent(ListingPublicActivity.this, CreatorProfile.class);
-            back.putExtra("username", previous);
-        }
-        startActivity(back);
-         */
         this.finish();
     }
 

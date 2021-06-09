@@ -75,9 +75,6 @@ public class EditListingActivity extends CreateListingActivity implements View.O
         TextView init_price_noedit = findViewById(R.id.init_price_noedit);
         init_price_noedit.setText(String.format("%s", listing.getMin_price()));
         init_price_noedit.setVisibility(View.VISIBLE);
-//        if(listing.getMin_price() != 0F) {
-//            ((EditText) findViewById(R.id.init_price_edit)).setText(String.format("%s", listing.getMin_price()));
-//        }
 
         //Set Quantity
         ((EditText)findViewById(R.id.quantity_edit)).setText(listing.getQuantity()+"");
@@ -113,11 +110,6 @@ public class EditListingActivity extends CreateListingActivity implements View.O
     }
 
     private void goBack() {
-        /*
-        Intent listing = new Intent(EditListingActivity.this, ListingPrivateActivity.class);
-        listing.putExtra("listing_id", listing_id);
-        startActivity(listing);
-         */
         this.finish();
     }
 

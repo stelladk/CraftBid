@@ -141,16 +141,6 @@ public class CreatorProfile extends AppCompatActivity {
 
     private void goBack() {
         this.finish();
-        /*
-        Intent back;
-        if(previous.equals(MainActivity.MAIN)){
-            back = new Intent(CreatorProfile.this, MainActivity.class);
-        }else{
-            back = new Intent(CreatorProfile.this, ListingPublicActivity.class);
-            back.putExtra("listing_id", previous); //Send listing id
-        }
-        startActivity(back);
-         */
     }
 
     /** Open page with rewards as viewed by the customers */

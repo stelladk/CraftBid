@@ -59,8 +59,6 @@ public class NotificationsActivity extends AppCompatActivity {
     }
     private void goBack() {
         this.finish();
-        /*Intent main = new Intent(NotificationsActivity.this, MainActivity.class);
-        startActivity(main);*/
     }
 
     /** Shows message if notification list is empty */

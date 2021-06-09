@@ -115,9 +115,6 @@ public class RewardsCustomerActivity extends AppCompatActivity {
 
     private void goBack() {
         this.finish();
-        /*Intent back = new Intent(RewardsCustomerActivity.this, CreatorProfile.class);
-        back.putExtra("username", username);
-        startActivity(back);*/
     }
 
     //Temporary

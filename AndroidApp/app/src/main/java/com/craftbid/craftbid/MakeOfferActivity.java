@@ -42,7 +42,7 @@ public class MakeOfferActivity extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
         if(b!=null){
-            listing_id = b.getInt("listing_id"); //Do we need this?
+            listing_id = b.getInt("listing_id");
         }
 
         toolbar = findViewById(R.id.toolbar);
@@ -79,11 +79,6 @@ public class MakeOfferActivity extends AppCompatActivity {
     }
     private void goBack() {
         this.finish();
-        /*
-        Intent listing = new Intent(MakeOfferActivity.this, ListingPublicActivity.class);
-        listing.putExtra("listing_id", listing_id);
-        startActivity(listing);
-        */
     }
 
     private void loadListing(){

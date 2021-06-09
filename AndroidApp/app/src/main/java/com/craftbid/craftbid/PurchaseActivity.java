@@ -131,10 +131,6 @@ public class PurchaseActivity extends AppCompatActivity {
     }
     private void goBack() {
         this.finish();
-        /*
-        Intent notifications = new Intent(PurchaseActivity.this, NotificationsActivity.class);
-        startActivity(notifications);
-         */
     }
 
     /** For courier delivery, connects to server to store purchase in DB*/
